@@ -1,3 +1,5 @@
+import json
+
 class LoopHelper():
     """
     Class to perform all looping activities: looping through samples,
@@ -25,5 +27,23 @@ class LoopHelper():
             print("[LoopHelper] Creating LoopHelper instance with options:")
             print("\n".join(["{0}={1!r}".format(a, b) for a, b in kwargs.items()]))
 
+        self.load_samples()
+
+    def load_samples(self):
+        with open(self.samples, "r") as f_in:
+            self.samples_dict = json.load(f_in)
+
+        if self.debug > 0:
+            print("[LoopHelper] Running over the following samples:")
+            print("\n".join(["{0}={1!r}".format(a, b) for a, b in self.samples_dict.items()]))
+
     def run(self):
+        for sample, info in self.samples_dict.items():
+            if self.debug > 0:
+                print("[LoopHelper] Running over sample: %s" % sample)
+                print("[LoopHelper] details: ", info)
+
+            self.loop_sample(sample, info)
+
+    def loop_sample(self, sample, info):
         return

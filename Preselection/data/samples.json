@@ -1,0 +1,19 @@
+{
+    "HH_ggTauTau" : { 
+        "sample_2016" : {
+            "paths" : ["/hadoop/cms/store/user/path1/", "/hadoop/cms/store/user/path2"],
+            "metadata" : { "scale1fb" : 1.0, "xs" : 1.0, "nEvents" : 1000, "year" : 2016 }
+        },
+        "sample_2017" : {
+            "paths" : ["/hadoop/cms/store/user/path1/", "/hadoop/cms/store/user/path2"],
+            "metadata" : { "scale1fb" : 1.0, "xs" : 1.0, "nEvents" : 1000, "year" : 2017 }
+        },
+        "sample_2018" : {
+            "paths" : ["/hadoop/cms/store/user/path1/", "/hadoop/cms/store/user/path2"],
+            "metadata" : { "scale1fb" : 1.0, "xs" : 1.0, "nEvents" : 1000, "year" : 2018 }
+        } 
+    },
+    "Data" : {
+    
+    }
+}
