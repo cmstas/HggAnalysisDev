@@ -1,4 +1,5 @@
 import h5py
+from . import utils
 
 class MVAHelper():
     """
@@ -17,4 +18,19 @@ class MVAHelper():
             print("\n".join(["{0}={1!r}".format(a, b) for a, b in kwargs.items()]))
 
     def run(self):
+        self.train()
+        self.predict()
+        self.evaluate_performance()
+        self.save_weights()
+
+    def train(self):
+        return
+
+    def predict(self):
+        return
+
+    def evaluate_performance(self):
+        return
+
+    def save_weights(self):
         return
