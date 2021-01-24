@@ -3,6 +3,15 @@ import argparse
 
 from helpers import loop_helper
 
+"""
+This script is an all-purpose looper. Can perform any subset of the
+following tasks:
+    - loop over events and write to histograms/ntuple
+    - make data/MC plots from histograms/ntuple
+    - make yield tables from histograms/ntuple
+"""
+
+
 parser = argparse.ArgumentParser()
 
 # Physics content
