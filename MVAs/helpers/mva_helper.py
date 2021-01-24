@@ -1,6 +1,6 @@
 import h5py
 
-class PrepHelper():
+class MVAHelper():
     """
     Class to read events in from an ntuple and perform necessary
     preprocessing, sample labeling, etc and then write them
@@ -9,11 +9,11 @@ class PrepHelper():
 
     def __init__(self, **kwargs):
         self.input = kwargs.get("input")
-        self.output = kwargs.get("output")
+        self.output_tag = kwargs.get("output_tag")
         self.debug = kwargs.get("debug")
 
         if self.debug > 0:
-            print("[PrepHelper] Creating PrepHelper instance with options:")
+            print("[MVAHelper] Creating MVAHelper instance with options:")
             print("\n".join(["{0}={1!r}".format(a, b) for a, b in kwargs.items()]))
 
     def run(self):

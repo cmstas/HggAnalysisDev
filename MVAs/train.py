@@ -1,6 +1,6 @@
 import argparse
 
-from helpers import prep_helper
+from helpers import mva_helper
 
 """
 This script writes events to an hdf5 file for BDT/DNN training.
@@ -9,7 +9,7 @@ This script writes events to an hdf5 file for BDT/DNN training.
 parser = argparse.ArgumentParser()
 parser.add_argument(
     "--input",
-    help = "path to input ntuple",
+    help = "path to input hdf5",
     type = str,
 )
 parser.add_argument(
@@ -19,13 +19,13 @@ parser.add_argument(
     default = 0
 )
 parser.add_argument(
-    "--output",
-    help = "name of output hdf5 file",
+    "--output_tag",
+    help = "tag to identify this training",
     type = str,
-    default = "test.hdf5"
+    default = "test"
 )
 
 args = parser.parse_args()
 
-prepper = prep_helper.PrepHelper(**vars(args))
-prepper.run()
+trainer = mva_helper.MVAHelper(**vars(args))
+trainer.run()
