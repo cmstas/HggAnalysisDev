@@ -31,7 +31,7 @@
 - To use this set of code/notebook, follow the setup instruction from here: https://github.com/aminnj/daskucsd
     + Some scripts from daskucsd (condor_utils.py, utils.py, condor_executable_jobqueue.sh, cachepreload.py) are copied to this repo
     + If there is a version conflict, use the latest from daskucsd and you might be careful to sort out package dependencies 
-- Change daskworkerenv2.tar.gz in condor_utils.py to whatever name you have when creating environment package following steps in daskucsd readme
+- Change daskworkerenv2.tar.gz in condor_utils.py and condor_executable_jobqueue.sh to whatever name you have when creating environment package following steps in daskucsd readme
 - If you want to use these notebooks and scripts with condor workers, be careful one needs to supply local scripts in "input_files" in make_htcondor_cluster function from condor_utils.py 
 
 # Other needed packages
