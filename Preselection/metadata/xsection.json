@@ -1,0 +1,16 @@
+{
+    "DYJets": 5941.0,
+    "ttbar": 831.76,
+    "ZG": 55.6,
+    "WG": 191.4,
+    "GJets_HT40To100": 23100.0,
+    "GJets_HT100To200": 8631.0,
+    "GJets_HT200To400": 2280.0,
+    "GJets_HT400To600": 273.0,
+    "GJets_HT600ToInf": 94.5,
+    "QCD_pT30To40": 24810.0,
+    "QCD_pT40ToInf": 113400.0,
+    "Diphoton": 84.4,
+    "ZH": 0.002006453,
+    "signal": 0.0098
+}
