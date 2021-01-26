@@ -82,10 +82,16 @@
             ]
         }, 
         "2018": {
+            "comment": "using 2017 sample in place of 2018 for now", 
             "metadata": {
+                "n_events": 998000, 
+                "scale1fb": 9.820642991568276e-09, 
+                "sumWeights": 997898.0, 
                 "xs": 9.8e-06
             }, 
-            "paths": []
+            "paths": [
+                "/hadoop/cms/store/user/legianni/ProjectMetis/HHggtautau_Era2017____x3"
+            ]
         }
     }, 
     "TTbar": {
