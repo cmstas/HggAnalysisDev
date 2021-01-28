@@ -1,7 +1,7 @@
 import awkward
 import numpy
 
-import selection_utils as utils
+import selections.selection_utils as utils
 
 def diphoton_preselection(events, debug):
     cut_diagnostics = utils.CutDiagnostics(n_events_initial = len(events), debug = debug, cut_set = "[photon_selections.py : diphoton_preselection]")
