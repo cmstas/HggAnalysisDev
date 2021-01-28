@@ -5,6 +5,8 @@ import pandas
 import numpy
 import awkward
 
+import selections.photon_selections as photon_selections
+
 class LoopHelper():
     """
     Class to perform all looping activities: looping through samples,
@@ -29,12 +31,21 @@ class LoopHelper():
         self.do_tables = kwargs.get("do_tables")
         self.do_ntuple = kwargs.get("do_ntuple")
 
-        self.branches = numpy.array(["ggMass", "nJet", "MET_pt", "genWeight"])
-        self.branches_data = numpy.array([branch for branch in self.branches if "genWeight" not in branch])
-
         if self.debug > 0:
             print("[LoopHelper] Creating LoopHelper instance with options:")
             print("\n".join(["{0}={1!r}".format(a, b) for a, b in kwargs.items()]))
+
+        with open(self.options, "r") as f_in:
+            options = json.load(f_in)
+            for key, info in options.items():
+                setattr(self, key, info)
+
+        self.branches_data = numpy.array([branch for branch in self.branches if "gen" not in branch])
+
+        if self.debug > 0:
+            print("[LoopHelper] Opening options file: %s" % self.options)
+            print("[LoopHelper] Options loaded as:")
+            print("\n".join(["{0}={1!r}".format(a, b) for a, b in options.items()]))
 
         self.load_samples()
 
@@ -51,8 +62,10 @@ class LoopHelper():
 
     def get_mask(self, events):
        if self.selections == "HHggTauTau_InclusivePresel":
-           mgg_mask = numpy.array(events.ggMass > 100) & numpy.array(events.ggMass < 180)
-           return mgg_mask
+           events = photon_selections.diphoton_preselection(events, self.debug)
+           return events 
+           #mgg_mask = numpy.array(events.ggMass > 100) & numpy.array(events.ggMass < 180)
+           #return mgg_mask
 
     def select_events(self, events):
         mask = self.get_mask(events)    
@@ -72,6 +85,7 @@ class LoopHelper():
             print("\n".join(["{0}={1!r}".format(a, b) for a, b in self.samples_dict.items()]))
 
     def run(self):
+        events = []
         for sample, info in self.samples_dict.items():
             if self.debug > 0:
                 print("[LoopHelper] Running over sample: %s" % sample)
@@ -80,7 +94,15 @@ class LoopHelper():
             if not ("HH" in sample or sample == "Data"):
                 continue
 
-            self.loop_sample(sample, info)
+            events_sample = self.loop_sample(sample, info)
+            events.append(events_sample)   
+
+        events_full = awkward.concatenate(events)
+        self.write_to_df(events_full)
+
+    def write_to_df(self, events):
+        df = awkward.to_pandas(events)
+        df.to_pickle("output/events_%s_%s.pkl" % (args.selections, args.output_tag))
 
     def loop_sample(self, sample, info):
         if sample == "Data":
@@ -102,16 +124,14 @@ class LoopHelper():
                 if self.debug > 0:
                     print("[LoopHelper] Sample %s, year %s, has 0 input files, skipping." % (sample, year))
             
-            counter = 0
             for file in files:
-                counter += 1
-                if counter > 2:
-                    continue
                 if self.debug > 0:
                     print("[LoopHelper] Loading file %s" % file)
+
                 events = self.load_file(file, data = data)
-                selected_events = self.select_events(events)
+                selected_events = self.get_mask(events) #self.select_events(events)
                 selected_events["process_id"] = numpy.ones(len(selected_events)) * process_id
+
                 if data:
                     selected_events["weight"] = numpy.ones(len(selected_events))
                 else:
@@ -120,5 +140,4 @@ class LoopHelper():
             process_id += 1
 
         selected_events_full = awkward.concatenate(sel_evts)
-        selected_events_df = awkward.to_pandas(selected_events_full) 
-        selected_events_df.to_pickle("output/%s_%s.pkl" % (sample, self.output_tag)) 
+        return selected_events_full

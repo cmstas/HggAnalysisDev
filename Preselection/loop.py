@@ -11,7 +11,6 @@ following tasks:
     - make yield tables from histograms/ntuple
 """
 
-
 parser = argparse.ArgumentParser()
 
 # Physics content
@@ -41,7 +40,7 @@ parser.add_argument(
     "--options",
     help = "path to json file containing looping options",
     type = str,
-    default = "data/default.json"
+    default = "data/HH_ggTauTau_default.json"
 )
 parser.add_argument(
     "--systematics",
