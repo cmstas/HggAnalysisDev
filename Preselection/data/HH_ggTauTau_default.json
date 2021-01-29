@@ -5,6 +5,10 @@
         "Muon_pt", "Muon_eta", "Muon_phi", "Muon_mass", "Muon_charge", "Muon_mvaId",
         "Electron_pt", "Electron_eta", "Electron_phi", "Electron_mass", "Electron_charge", "Electron_mvaFall17V2Iso",
         "Jet_pt", "Jet_eta", "Jet_phi", "Jet_mass", "Jet_btagDeepFlavB",
-        "ggMass", "nJet", "MET_pt", "genWeight"
+        "ggMass", "nJet", "MET_pt", "genWeight", "gHidx"
+    ],
+    "save_branches" : [
+        "lead_pho_ptmgg", "sublead_pho_ptmgg",
+        "ggMass", "nJet", "MET_pt"
     ]
 }

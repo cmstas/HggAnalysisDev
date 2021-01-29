@@ -39,4 +39,28 @@ def diphoton_preselection(events, debug):
 
     return events
 
+def set_photons(events, debug):
+    """
+    Creates branches for photon-related variables
+    """
 
+    # Identify photons associated to diphoton pair
+    pho1_idx = events.gHidx[:,0]
+    pho2_idx = events.gHidx[:,1]
+
+    #pho1_idx = numpy.array(events.gHidx[:,0]).reshape((-1,1))
+    #pho2_idx = numpy.array(events.gHidx[:,1]).reshape((-1,1))
+
+
+    #pick_lead_as1 = events.Photon_pt[pho1_idx] > events.Photon_pt[pho2_idx]
+    #pick_sublead_as1 = events.Photon_pt[pho1_idx] < events.Photon_pt[pho2_idx]
+    #lead_idx = numpy.where(pick_lead_as1, pho1_idx, pho2_idx)
+    #sublead_idx = numpy.where(pick_sublead_as1, pho1_idx, pho2_idx)
+
+    lead_idx = pho1_idx # FIXME: need to actually make these correspond to lead/sublead
+    sublead_idx = pho2_idx
+
+    events["lead_pho_ptmgg"] = events.Photon_pt[lead_idx] / events.ggMass
+    events["sublead_pho_ptmgg"] = events.Photon_pt[sublead_idx] / events.ggMass
+
+    return events

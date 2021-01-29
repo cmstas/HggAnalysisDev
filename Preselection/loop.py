@@ -75,6 +75,11 @@ parser.add_argument(
     type = int,
     default = 0
 )
+parser.add_argument(
+    "--fast",
+    help = "loop over minimal set of samples (for debugging purposes)",
+    action = "store_true"
+)
 
 # Output options
 parser.add_argument(
