@@ -11,7 +11,6 @@ following tasks:
     - make yield tables from histograms/ntuple
 """
 
-
 parser = argparse.ArgumentParser()
 
 # Physics content
@@ -19,7 +18,7 @@ parser.add_argument(
     "--samples",
     help = "path to json file containing samples & metadata",
     type = str,
-    default = "data/samples.json"
+    default = "data/samples_and_scale1fb.json"
 )
 parser.add_argument(
     "--selections",
@@ -27,6 +26,13 @@ parser.add_argument(
     type = str,
     default = "HHggTauTau_InclusivePresel"
 )
+parser.add_argument(
+    "--years",
+    help = "csv list of years",
+    type = str,
+    default = "2018"
+)
+
 # --options points to a json file containing options for looping
 # this could include things like additional scaling of bkg samples,
 # application of reweighting procedures, etc
@@ -34,13 +40,12 @@ parser.add_argument(
     "--options",
     help = "path to json file containing looping options",
     type = str,
-    default = "data/default.json"
+    default = "data/HH_ggTauTau_default.json"
 )
 parser.add_argument(
     "--systematics",
-    help = "include systematics variations (True/False)",
-    type = bool,
-    default = False
+    help = "include systematics variations", 
+    action = "store_true"
 )
 
 # Book-keeping
@@ -70,28 +75,28 @@ parser.add_argument(
     type = int,
     default = 0
 )
+parser.add_argument(
+    "--fast",
+    help = "loop over minimal set of samples (for debugging purposes)",
+    action = "store_true"
+)
 
 # Output options
 parser.add_argument(
     "--do_plots",
-    help = "make data/MC plots (True/False)",
-    type = bool,
-    default = True
+    help = "make data/MC plots", 
+    action = "store_true"
 )
 parser.add_argument(
     "--do_tables",
-    help = "make yield tables (True/False)",
-    type = bool,
-    default = True
+    help = "make yield tables", 
+    action = "store_true"
 )
 parser.add_argument(
     "--do_ntuple",
     help = "make single ntuple with all events",
-    type = bool,
-    default = True
+    action = "store_true"
 )
-
-
 
 args = parser.parse_args()
 
