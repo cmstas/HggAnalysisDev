@@ -49,36 +49,24 @@ def diphoton_preselection(events, debug):
     events = events[eveto_cut]
     cut_diagnostics.add_cut(len(events), cut_name = "eveto cut")
 
-    return events
-
-def photon_selection(events, debug):
-    pt_mgg_cut = (events.Photon.pt / events.ggMass) >= 0.25
-    idmva_cut = events.Photon.mvaID > -0.7
-    eveto_cut = events.Photon.electronVeto == 1
-    photon_cut = pt_mgg_cut & idmva_cut & eveto_cut
-
-    # Select events with at least two good photons
-    event_cut = awkward.num(events.Photon[photon_cut]) >= 2
-    nEvents = len(events)
-    events = events[event_cut]
-    if debug > 0:
-        print("Number of events before/after requiring two good photons: %d/%d" % (nEvents, len(events)))
+    ### 2 good photons ###
+    photon_requirements = select_photons(events, debug)
+    photon_cut = awkward.num(photon_requirements) >= 2
+    events = events[photon_cut]
+    cut_diagnostics.add_cut(len(events), cut_name = "2 good photons cut")
     
-    # Select photons
-    # TODO: we have to perform the photon level cuts twice because it is not currently guaranteed that the
-    # photons we select are those used in the ggMass calculation. Need to implement proper selection.
+    return events
+
+def select_photons(events, debug):
+    cut_diagnostics = utils.ObjectCutDiagnostics(objects = events.Photon, cut_set = "[photon_selections.py : select_photons]", debug = debug)
+    
     pt_mgg_cut = (events.Photon.pt / events.ggMass) >= 0.25
     idmva_cut = events.Photon.mvaID > -0.7
     eveto_cut = events.Photon.electronVeto == 1
     photon_cut = pt_mgg_cut & idmva_cut & eveto_cut
 
-    if debug > 0:
-        print("Number of photons before mask %d" % awkward.sum(awkward.num(events.Photon)))
-    events.Photon = events.Photon[photon_cut]
-    if debug > 0:
-        print("Number of photons after mask %d" % awkward.sum(awkward.num(events.Photon)))
-
-    return events
+    cut_diagnostics.add_cuts([pt_mgg_cut, idmva_cut, eveto_cut, photon_cut], ["pt/mgg", "idmva", "eveto", "all"])
+    return photon_cut
 
 def set_photons(events, debug):
     events["lead_pho_ptmgg"] = events.Photon.pt[:,0] / events.ggMass

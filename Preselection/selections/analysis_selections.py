@@ -12,11 +12,16 @@ def ggTauTau_inclusive_preselection(events, debug):
     cut_diagnostics = utils.CutDiagnostics(n_events_initial = len(events), debug = debug, cut_set = "[analysis_selections.py : ggTauTau_inclusive_preselection]")
 
     # Get number of electrons, muons, taus
-    n_electrons = awkward.num(lepton_selections.select_electrons(events, debug))
+    n_electrons = awkward.num(events.Electron[lepton_selections.select_electrons(events, debug)])
+    n_muons = awkward.num(events.Muon[lepton_selections.select_muons(events, debug)])
 
-    lep_cut = n_electrons >= 1
-    events = events[lep_cut]
-    cut_diagnostics.add_cut(len(events), cut_name = "electron >= 1 cut")
+    n_taus = awkward.num(events.Tau[tau_selections.select_taus(events, debug)])
+
+    n_leptons_and_taus = n_electrons + n_muons + n_taus
+
+    lep_tau_cut = n_leptons_and_taus >= 1
+    events = events[lep_tau_cut]
+    cut_diagnostics.add_cut(len(events), cut_name = "leptons and taus >= 1 cut")
 
     return events
 

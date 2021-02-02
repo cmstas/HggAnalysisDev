@@ -74,7 +74,8 @@ class LoopHelper():
     def select_events(self, events):
         # Dipho preselection
         events = photon_selections.diphoton_preselection(events, self.debug)
-        events = photon_selections.photon_selection(events, self.debug)
+        events.Photon = events.Photon[photon_selections.select_photons(events, self.debug)]
+
         if self.selections == "HHggTauTau_InclusivePresel":
             events = analysis_selections.ggTauTau_inclusive_preselection(events, self.debug)
             return events 

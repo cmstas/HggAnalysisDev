@@ -1,4 +1,5 @@
 import numpy
+import awkward
 
 class CutDiagnostics():
     def __init__(self, **kwargs):
@@ -10,32 +11,21 @@ class CutDiagnostics():
         if self.debug:
             print("%s CutDiagnostics: %d events before any cuts" % (self.cut_set, self.n_events_initial)) 
 
-    #TODO: add way to keep track of object-level cuts
-    #def add_object_cut(self, objects)
-
     def add_cut(self, n_events, cut_name = "cut"):
         self.cuts.append(float(n_events))
         if self.debug:
             print("%s CutDiagnostics: After cut %s, %d events (eff_cut: %.4f, eff_total: %.4f)" % (self.cut_set, cut_name, n_events, self.cuts[-1] / self.cuts[-2], self.cuts[-1] / self.cuts[0])) 
 
+class ObjectCutDiagnostics():
+    def __init__(self, **kwargs):
+        self.objects = kwargs.get("objects")
+        self.debug = kwargs.get("debug")
+        self.cut_set = kwargs.get("cut_set", "cut")
 
-def convert_object_cuts_to_listOffset(object_cuts):
-    """
-    Takes as input an awkward array of bools (True = keep object, False = cut object)
-    and transforms it to an awkward ListOffsetArray so that events can be cut
-    """
+        self.n_objects_initial = awkward.sum(awkward.num(self.objects))
 
-    nEvents = len(object_cuts)
-    nObjects = numpy.int64(0)
-
-    for i in range(nEvents):
-        nObjects += len(object_cuts[i])
-
-    mask_offsets = numpy.empty(nEvents + 1, numpy.int64)
-    mask_offsets[0] = 0
-    mask_contents = numpy.empty(nObjects, numpy.bool)
-
-    for i in range(nEvents):
-        mask_offsets[i+1] = mask_offsets[i]
-    
-    return
+    def add_cuts(self, cuts, names):
+        for cut, name in zip(cuts, names):
+            if self.debug > 0:
+                n_objects_cut = awkward.sum(awkward.num(self.objects[cut]))
+                print("%s ObjectCutDiagnostics: Applying cut %s would have an eff of %.4f" % (self.cut_set, name, float(n_objects_cut) / float(self.n_objects_initial)))

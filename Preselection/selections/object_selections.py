@@ -57,6 +57,9 @@ def select_deltaR(events, obj1, obj2, threshold, debug):
         elapsed_time = time.time() - start
         print("[object_selections.py] PERFORMANCE: time to execute select_deltaR: %.6f" % (elapsed_time)) 
 
-    mask = awkward.layout.ListOffsetArray64(awkward.layout.Index64(mask_offsets), awkward.layout.NumpyArray(mask_contents))
+    mask = awkward.Array(awkward.layout.ListOffsetArray64(awkward.layout.Index64(mask_offsets), awkward.layout.NumpyArray(mask_contents)))
 
-    return awkward.Array(mask)
+    #if debug > 0:
+    #    print("[object_selections.py] Number of objects before/after dR cut: %d/%d (%.3f)" % (awkward.sum(awkward.num(obj1)), awkward.sum(awkward.num(obj1[mask])), float(awkward.sum(awkward.num(obj1[mask]))) / float(awkward.sum(awkward.num(obj1)))))
+
+    return mask 
