@@ -1,66 +1,90 @@
 import awkward
 import numpy
+import numba
 
 import selections.selection_utils as utils
 
+"""
+Notes: for some reason, event-level and object-level cuts seem to interfere with each other.
+E.g. if I do
+events = events[event_cut1]
+events.Photon = events.Photon[object_cut1]
+events = events[event_cut2]
+
+events will regain some of the photons that were eliminated in object_cut1
+
+For this reason, all selections should be done in the following way:
+    1. Perform event-level selections (may include object-level quantities, e.g. 2 photons with pt/mgg > 0.25)
+    2. Trim objects with object-level selections afterwards
+"""
+
 def diphoton_preselection(events, debug):
+    # Initialize cut diagnostics tool for debugging
     cut_diagnostics = utils.CutDiagnostics(n_events_initial = len(events), debug = debug, cut_set = "[photon_selections.py : diphoton_preselection]")
-    
-    # mgg cut
+
+    ### mgg cut ###
     mgg_mask = numpy.array(events.ggMass > 100) & numpy.array(events.ggMass < 180)
     events = events[mgg_mask]
     cut_diagnostics.add_cut(len(events), cut_name = "mgg cut")
 
-    # pt/mgg cuts
-    pt_mgg_cut1 = (events.Photon_pt / events.ggMass) > 0.33
-    pt_mgg_cut2 = (events.Photon_pt / events.ggMass) > 0.25
+    ### pt/mgg cuts ###
+    lead_pt_mgg_requirement = (events.Photon.pt / events.ggMass) > 0.33
+    sublead_pt_mgg_requirement = (events.Photon.pt / events.ggMass) > 0.25
 
-    n_pho1 = awkward.num(events.Photon_pt[pt_mgg_cut1])
-    n_pho2 = awkward.num(events.Photon_pt[pt_mgg_cut2])
-    pt_mgg_mask = numpy.array(n_pho1 >= 1) & numpy.array(n_pho2 >= 2)
-
-    events = events[pt_mgg_mask]
+    lead_pt_mgg_cut = awkward.num(events.Photon[lead_pt_mgg_requirement]) >= 1 # at least 1 photon passing lead requirement
+    sublead_pt_mgg_cut = awkward.num(events.Photon[sublead_pt_mgg_requirement]) >= 2 # at least 2 photon passing sublead requirement
+    pt_mgg_cut = lead_pt_mgg_cut & sublead_pt_mgg_cut
+    events = events[pt_mgg_cut]
     cut_diagnostics.add_cut(len(events), cut_name = "pt/mgg cut")
 
-    # pho id mva cuts
-    pho_idmva_cut = events.Photon_mvaID > -0.7
-    n_pho = awkward.num(events.Photon_pt[pho_idmva_cut])
-    pho_idmva_mask = numpy.array(n_pho >= 2)
+    ### pho ID MVA cuts ###
+    pho_idmva_requirement = events.Photon.mvaID > -0.7
+    pho_idmva_cut = awkward.num(events.Photon[pho_idmva_requirement]) >= 2 # both photons must pass id mva requirement
+    events = events[pho_idmva_cut]
+    cut_diagnostics.add_cut(len(events), cut_name = "pho ID MVA cut")
 
-    events = events[pho_idmva_mask]
-    cut_diagnostics.add_cut(len(events), cut_name = "photon id mva cut")
+    ### electron veto cut ###
+    eveto_requirement = events.Photon.electronVeto == 1
+    eveto_cut = awkward.num(events.Photon[eveto_requirement]) >= 2 # both photons must pass eveto requirement
+    events = events[eveto_cut]
+    cut_diagnostics.add_cut(len(events), cut_name = "eveto cut")
 
-    # electron veto cuts
-    eveto_cut = events.Photon_electronVeto == 1
-    n_pho = awkward.num(events.Photon_pt[eveto_cut])
-    eveto_mask = numpy.array(n_pho >= 2)
-    events = events[eveto_mask]
-    cut_diagnostics.add_cut(len(events), cut_name = "electron veto cut")
+    return events
+
+def photon_selection(events, debug):
+    pt_mgg_cut = (events.Photon.pt / events.ggMass) >= 0.25
+    idmva_cut = events.Photon.mvaID > -0.7
+    eveto_cut = events.Photon.electronVeto == 1
+    photon_cut = pt_mgg_cut & idmva_cut & eveto_cut
+
+    # Select events with at least two good photons
+    event_cut = awkward.num(events.Photon[photon_cut]) >= 2
+    nEvents = len(events)
+    events = events[event_cut]
+    if debug > 0:
+        print("Number of events before/after requiring two good photons: %d/%d" % (nEvents, len(events)))
+    
+    # Select photons
+    # TODO: we have to perform the photon level cuts twice because it is not currently guaranteed that the
+    # photons we select are those used in the ggMass calculation. Need to implement proper selection.
+    pt_mgg_cut = (events.Photon.pt / events.ggMass) >= 0.25
+    idmva_cut = events.Photon.mvaID > -0.7
+    eveto_cut = events.Photon.electronVeto == 1
+    photon_cut = pt_mgg_cut & idmva_cut & eveto_cut
+
+    if debug > 0:
+        print("Number of photons before mask %d" % awkward.sum(awkward.num(events.Photon)))
+    events.Photon = events.Photon[photon_cut]
+    if debug > 0:
+        print("Number of photons after mask %d" % awkward.sum(awkward.num(events.Photon)))
 
     return events
 
 def set_photons(events, debug):
-    """
-    Creates branches for photon-related variables
-    """
-
-    # Identify photons associated to diphoton pair
-    pho1_idx = events.gHidx[:,0]
-    pho2_idx = events.gHidx[:,1]
-
-    #pho1_idx = numpy.array(events.gHidx[:,0]).reshape((-1,1))
-    #pho2_idx = numpy.array(events.gHidx[:,1]).reshape((-1,1))
-
-
-    #pick_lead_as1 = events.Photon_pt[pho1_idx] > events.Photon_pt[pho2_idx]
-    #pick_sublead_as1 = events.Photon_pt[pho1_idx] < events.Photon_pt[pho2_idx]
-    #lead_idx = numpy.where(pick_lead_as1, pho1_idx, pho2_idx)
-    #sublead_idx = numpy.where(pick_sublead_as1, pho1_idx, pho2_idx)
-
-    lead_idx = pho1_idx # FIXME: need to actually make these correspond to lead/sublead
-    sublead_idx = pho2_idx
-
-    events["lead_pho_ptmgg"] = events.Photon_pt[lead_idx] / events.ggMass
-    events["sublead_pho_ptmgg"] = events.Photon_pt[sublead_idx] / events.ggMass
-
+    events["lead_pho_ptmgg"] = events.Photon.pt[:,0] / events.ggMass
+    events["sublead_pho_ptmgg"] = events.Photon.pt[:,1] / events.ggMass
+    events["lead_pho_eta"] = events.Photon.eta[:,0]
+    events["sublead_pho_eta"] = events.Photon.eta[:,1]
+    events["lead_pho_idmva"] = events.Photon.mvaID[:,0]
+    events["sublead_pho_idmva"] = events.Photon.mvaID[:,1]
     return events

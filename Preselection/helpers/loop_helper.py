@@ -6,6 +6,7 @@ import numpy
 import awkward
 
 import selections.photon_selections as photon_selections
+import selections.analysis_selections as analysis_selections
 
 class LoopHelper():
     """
@@ -41,8 +42,11 @@ class LoopHelper():
             for key, info in options.items():
                 setattr(self, key, info)
 
-        self.branches_data = numpy.array([branch for branch in self.branches if "gen" not in branch])
-        self.save_branches_data = numpy.array([branch for branch in self.save_branches if "gen" not in branch])
+        self.save_branches.append("process_id")
+        self.save_branches.append("weight")
+
+        self.branches_data = [branch for branch in self.branches if "gen" not in branch]
+        self.save_branches_data = [branch for branch in self.save_branches if "gen" not in branch]
         
 
         if self.debug > 0:
@@ -54,31 +58,39 @@ class LoopHelper():
 
     
     def load_file(self, file, tree_name = "Events", data = False):
-        f = uproot.open(file)
-        tree = f[tree_name]
-        if data:
-            branches = self.branches_data
-        else:
-            branches = self.branches
-        events = tree.arrays(branches, library = "ak")
+        with uproot.open(file) as f:
+            tree = f[tree_name]
+            if data:
+                branches = self.branches_data
+            else:
+                branches = self.branches
+            print(branches)
+            events = tree.arrays(branches, library = "ak", how = "zip") 
+            #events = tree.arrays(branches, entry_start = 0, entry_stop = 10000, library = "ak", how = "zip") 
+            # library = "ak" to load arrays as awkward arrays for best performance
+            # how = "zip" allows us to access arrays as records, e.g. events.Photon
         return events
 
-    def get_mask(self, events):
+    def select_events(self, events):
         # Dipho preselection
         events = photon_selections.diphoton_preselection(events, self.debug)
+        events = photon_selections.photon_selection(events, self.debug)
         if self.selections == "HHggTauTau_InclusivePresel":
-           return events 
-
-    def select_events(self, events):
-        mask = self.get_mask(events)    
-        selected_events = events[mask]
-
-        if self.debug > 0:
-            print("[LoopHelper] %d events before selection, %d events after selection" % (len(events["ggMass"]), len(selected_events)))
-
-        return selected_events
+            events = analysis_selections.ggTauTau_inclusive_preselection(events, self.debug)
+            return events 
 
     def trim_events(self, events, data):
+        events = photon_selections.set_photons(events, self.debug)
+        if data:
+            branches = self.save_branches_data
+        else:
+            branches = self.save_branches
+        trimmed_events = events[branches]
+        return trimmed_events
+
+
+        # TODO: figure out how to trim object branches
+        """
         events = photon_selections.set_photons(events, self.debug)
 
         if data:
@@ -86,8 +98,13 @@ class LoopHelper():
         else:
             branches = self.save_branches
 
-        trimmed_events = events[branches] 
+        trimmed_events = events
+        #trimmed_events = events[branches] 
+        #a = events[["ggMass", "MET_pt"]]
+        #b = events.Photon[["pt", "eta"]]
+        #trimmed_events = awkward.zip([a,b])
         return trimmed_events
+        """
 
     def load_samples(self):
         with open(self.samples, "r") as f_in:
@@ -148,7 +165,7 @@ class LoopHelper():
                     print("[LoopHelper] Loading file %s" % file)
 
                 events = self.load_file(file, data = data)
-                selected_events = self.get_mask(events) #self.select_events(events)
+                selected_events = self.select_events(events) #self.select_events(events)
 
                 selected_events["process_id"] = numpy.ones(len(selected_events)) * process_id
 
