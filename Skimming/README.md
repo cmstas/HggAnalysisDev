@@ -12,8 +12,14 @@ in order to use the tools for skimming samples (working under CMSSW):
 cmsrel CMSSW_10_2_22
 cd CMSSW_10_2_22/src/
 cmsenv
+
+# add nanoAOD-tools package
 git clone https://github.com/cms-nanoAOD/nanoAOD-tools.git PhysicsTools/NanoAODTools
-cd PhysicsTools/NanoAODTools
+
+# add SVFit packages (using latest version under CMSSW, reference here https://github.com/SVfit/ClassicSVfit/tree/fastMTT_19_02_2019)
+git clone https://github.com/SVfit/ClassicSVfit TauAnalysis/ClassicSVfit -b fastMTT_19_02_2019
+git clone https://github.com/SVfit/SVfitTF TauAnalysis/SVfitTF
+
 scram b
 ```
 
