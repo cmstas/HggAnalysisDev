@@ -139,3 +139,7 @@ cython_debug/
 
 # nfs files
 .nfs*
+
+# output dirs
+*/output/
+*/output/*

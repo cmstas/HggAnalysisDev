@@ -1,11 +1,17 @@
+import os
 import json
 import glob
 import uproot
 import pandas
 import numpy
 import awkward
+import multiprocessing
+import time
 
 import selections.photon_selections as photon_selections
+import selections.analysis_selections as analysis_selections
+import selections.lepton_selections as lepton_selections
+import selections.tau_selections as tau_selections
 
 class LoopHelper():
     """
@@ -41,8 +47,11 @@ class LoopHelper():
             for key, info in options.items():
                 setattr(self, key, info)
 
-        self.branches_data = numpy.array([branch for branch in self.branches if "gen" not in branch])
-        self.save_branches_data = numpy.array([branch for branch in self.save_branches if "gen" not in branch])
+        self.save_branches.append("process_id")
+        self.save_branches.append("weight")
+
+        self.branches_data = [branch for branch in self.branches if "gen" not in branch]
+        self.save_branches_data = [branch for branch in self.save_branches if "gen" not in branch]
         
 
         if self.debug > 0:
@@ -54,31 +63,44 @@ class LoopHelper():
 
     
     def load_file(self, file, tree_name = "Events", data = False):
-        f = uproot.open(file)
-        tree = f[tree_name]
-        if data:
-            branches = self.branches_data
-        else:
-            branches = self.branches
-        events = tree.arrays(branches, library = "ak")
+        with uproot.open(file) as f:
+            tree = f[tree_name]
+            if data:
+                branches = self.branches_data
+            else:
+                branches = self.branches
+            events = tree.arrays(branches, library = "ak", how = "zip") 
+            #events = tree.arrays(branches, entry_start = 0, entry_stop = 10000, library = "ak", how = "zip") 
+            # library = "ak" to load arrays as awkward arrays for best performance
+            # how = "zip" allows us to access arrays as records, e.g. events.Photon
         return events
 
-    def get_mask(self, events):
+    def select_events(self, events):
         # Dipho preselection
         events = photon_selections.diphoton_preselection(events, self.debug)
+        events.Photon = events.Photon[photon_selections.select_photons(events, self.debug)]
+
         if self.selections == "HHggTauTau_InclusivePresel":
-           return events 
-
-    def select_events(self, events):
-        mask = self.get_mask(events)    
-        selected_events = events[mask]
-
-        if self.debug > 0:
-            print("[LoopHelper] %d events before selection, %d events after selection" % (len(events["ggMass"]), len(selected_events)))
-
-        return selected_events
+            events = analysis_selections.ggTauTau_inclusive_preselection(events, self.debug)
+            events.Electron = lepton_selections.select_electrons(events, self.debug)
+            events.Muon = lepton_selections.select_muons(events, self.debug)
+            events.Tau = tau_selections.select_taus(events, self.debug)
+            return events 
 
     def trim_events(self, events, data):
+        events = photon_selections.set_photons(events, self.debug)
+        #events = lepton_selections.set_electrons(events, self.debug)
+        #events = lepton_selections.set_muons(events, self.debug)
+        if data:
+            branches = self.save_branches_data
+        else:
+            branches = self.save_branches
+        trimmed_events = events[branches]
+        return trimmed_events
+
+
+        # TODO: figure out how to trim object branches
+        """
         events = photon_selections.set_photons(events, self.debug)
 
         if data:
@@ -86,8 +108,13 @@ class LoopHelper():
         else:
             branches = self.save_branches
 
-        trimmed_events = events[branches] 
+        trimmed_events = events
+        #trimmed_events = events[branches] 
+        #a = events[["ggMass", "MET_pt"]]
+        #b = events.Photon[["pt", "eta"]]
+        #trimmed_events = awkward.zip([a,b])
         return trimmed_events
+        """
 
     def load_samples(self):
         with open(self.samples, "r") as f_in:
@@ -97,27 +124,111 @@ class LoopHelper():
             print("[LoopHelper] Running over the following samples:")
             print("\n".join(["{0}={1!r}".format(a, b) for a, b in self.samples_dict.items()]))
 
+    def chunks(self, files, fpo):
+        for i in range(0, len(files), fpo):
+            yield files[i : i + fpo]
+
     def run(self):
-        events = []
+        lumi_map = { "2016" : 35.9, "2017" : 41.5, "2018" : 59 } # FIXME: do in a more configurable way
+
+        self.jobs_manager = []
+
         for sample, info in self.samples_dict.items():
             if self.debug > 0:
                 print("[LoopHelper] Running over sample: %s" % sample)
                 print("[LoopHelper] details: ", info)
 
-            if not ("HH" in sample or sample == "Data"):
-                continue
+            files = []
+            for year, year_info in info.items():
+                if year not in self.years:
+                    continue
+                for path in year_info["paths"]:
+                    files += glob.glob(path + "/*.root")
 
-            events_sample = self.loop_sample(sample, info)
-            events.append(events_sample)   
+                if len(files) == 0:
+                    continue
 
-        events_full = awkward.concatenate(events)
-        self.write_to_df(events_full)
+                job_info = { 
+                    "sample" : sample,
+                    "process_id" : info["process_id"],
+                    "year" : year,
+                    "scale1fb" : 1 if sample == "Data" else year_info["metadata"]["scale1fb"],
+                    "lumi" : lumi_map[year]
+                }
 
-    def write_to_df(self, events):
+                file_splits = self.chunks(files, info["fpo"])
+                job_id = 0
+                for file_split in file_splits:
+                    job_id += 1
+                    self.jobs_manager.append({
+                        "info" : job_info,
+                        "ext" : job_id,
+                        "files" : file_split
+                    })
+                
+        if self.batch == "local":
+            start = time.time()
+            if self.debug > 0:
+                print("[LoopHelper] Submitting %d jobs locally on %d cores" % (len(self.jobs_manager), self.nCores))
+        
+            manager = multiprocessing.Manager()
+            running_procs = []
+            for job in self.jobs_manager:
+                print(job)
+                running_procs.append(multiprocessing.Process(target = self.loop_sample, args = (job,)))
+                running_procs[-1].start()
+
+                while True:
+                    do_break = False
+                    for i in range(len(running_procs)):
+                        if not running_procs[i].is_alive():
+                            running_procs.pop(i)
+                            do_break = True
+                            break
+                        if len(running_procs) < self.nCores: # if we have less than nCores jobs running, break infinite loop and add another
+                            do_break = True
+                            break
+                        else:
+                            os.system("sleep 5s")
+                    if do_break:
+                        break
+
+            while len(running_procs) > 0:
+                for i in range(len(running_procs)):
+                    try:
+                        if not running_procs[i].is_alive():
+                            running_procs.pop(i)
+                    except:
+                        continue
+
+            if self.debug > 0:
+                elapsed_time = time.time() - start
+                print("[LoopHelper] Total time to run %d jobs on %d cores: %.2f minutes" % (len(self.jobs_manager), self.nCores, elapsed_time/60.))
+            
+
+        elif self.batch == "dask":
+            return
+            #TODO
+        elif self.batch == "condor":
+            return
+            #TODO
+
+        return
+
+    def write_to_df(self, events, output_tag):
         df = awkward.to_pandas(events)
-        df.to_pickle("output/events_%s_%s.pkl" % (self.selections, self.output_tag))
+        df.to_pickle("output/events_%s_%s.pkl" % (self.selections, output_tag))
+        return
 
-    def loop_sample(self, sample, info):
+    def loop_sample(self, job): 
+        info = job["info"]
+        sample = info["sample"]
+        files = job["files"]
+        output_tag = self.output_tag + "_" + info["year"] + "_" + str(job["ext"])
+
+        if self.debug > 0:
+            print("[LoopHelper] Running job with parameters", job)
+
         if sample == "Data":
             data = True
         else:
@@ -126,39 +237,22 @@ class LoopHelper():
         sel_evts = []
         process_id = info["process_id"]
 
-        for year, year_info in info.items():
-            if year not in self.years:
-                continue
+        for file in files:
+            if self.debug > 0:
+                print("[LoopHelper] Loading file %s" % file)
 
-            files = []
-            for path in year_info["paths"]:
-                files += glob.glob(path + "/*.root")
-
-            if len(files) == 0:
-                if self.debug > 0:
-                    print("[LoopHelper] Sample %s, year %s, has 0 input files, skipping." % (sample, year))
-                continue
+            events = self.load_file(file, data = data)
+            events = self.select_events(events) 
             
-            counter = 0
-            for file in files:
-                counter += 1
-                if self.fast and counter >= 2:
-                    continue
-                if self.debug > 0:
-                    print("[LoopHelper] Loading file %s" % file)
+            events["process_id"] = numpy.ones(len(events)) * process_id
+            if data:
+                events["weight"] = numpy.ones(len(events))
+            else:
+                events["weight"] = events.genWeight * info["scale1fb"] * info["lumi"]
 
-                events = self.load_file(file, data = data)
-                selected_events = self.get_mask(events) #self.select_events(events)
+            events = self.trim_events(events, data)
+            sel_evts.append(events)
 
-                selected_events["process_id"] = numpy.ones(len(selected_events)) * process_id
-
-                if data:
-                    selected_events["weight"] = numpy.ones(len(selected_events))
-                else:
-                    selected_events["weight"] = selected_events.genWeight * year_info["metadata"]["scale1fb"]
-
-                selected_events_trimmed = self.trim_events(selected_events, data)
-                sel_evts.append(selected_events_trimmed)
-
-        selected_events_full = awkward.concatenate(sel_evts)
-        return selected_events_full
+        events_full = awkward.concatenate(sel_evts)
+        self.write_to_df(events_full, output_tag)
+        return
