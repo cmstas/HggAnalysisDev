@@ -27,6 +27,15 @@ scram b
 
 1.local tests
 
+a local test of the postprocessor modules can be run using https://github.com/leonardogiannini/nanoAOD-tools/blob/hhggtautau_skim/crab/local_test.py
+
+the modules used are 
+
+- puAutoWeight_2018(),jetmetUncertainties2018(),muonScaleRes2018() -->  centrally maintained
+- gammaSF(), HggModule2018(), gammaWeightSF() -> Hgg specific, need to use the custom nanoaod, to check consistency with flashgg
+- HHggtautaulep2018() -> categories by leptons decay for HHggtautau
+- HHggtautauModule2018LVVV(), HHggtautauModule2018LL(), HHggtautauModule2018MM() -> possible selections of HHggtautau, with SVFit mass computation included
+
 2.submission via crab
 
 3.submission via [ProjectMetis](https://github.com/aminnj/ProjectMetis) 
