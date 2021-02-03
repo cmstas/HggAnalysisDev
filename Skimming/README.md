@@ -43,3 +43,12 @@ the modules used are
 first checkout the repository https://github.com/aminnj/ProjectMetis and set up environment via ```source setup.sh```
 
 then use the example you find in this repository.
+
+<h2>Content of the modules</h2>
+
+- gammaSF()
+- HggModule2018()
+- gammaWeightSF()
+
+etc.
+
