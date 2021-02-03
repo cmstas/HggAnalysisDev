@@ -30,7 +30,7 @@ parser.add_argument(
     "--years",
     help = "csv list of years",
     type = str,
-    default = "2018"
+    default = "2016,2017,2018"
 )
 
 # --options points to a json file containing options for looping
@@ -55,6 +55,14 @@ parser.add_argument(
     type = str,
     default = "test"
 )
+parser.add_argument(
+    "--output_dir",
+    help = "dir to place outputs in", 
+    type = str,
+    default = "output/"
+)
+
+
 
 # Technical
 parser.add_argument(

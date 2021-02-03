@@ -28,6 +28,7 @@ class LoopHelper():
         self.years = kwargs.get("years").split(",")
 
         self.output_tag = kwargs.get("output_tag")
+        self.output_dir = kwargs.get("output_dir")
         
         self.batch = kwargs.get("batch")
         self.nCores = kwargs.get("nCores")
@@ -37,6 +38,8 @@ class LoopHelper():
         self.do_plots = kwargs.get("do_plots")
         self.do_tables = kwargs.get("do_tables")
         self.do_ntuple = kwargs.get("do_ntuple")
+
+        self.outputs = []
 
         if self.debug > 0:
             print("[LoopHelper] Creating LoopHelper instance with options:")
@@ -82,15 +85,16 @@ class LoopHelper():
 
         if self.selections == "HHggTauTau_InclusivePresel":
             events = analysis_selections.ggTauTau_inclusive_preselection(events, self.debug)
-            events.Electron = lepton_selections.select_electrons(events, self.debug)
-            events.Muon = lepton_selections.select_muons(events, self.debug)
-            events.Tau = tau_selections.select_taus(events, self.debug)
+            events.Electron = events.Electron[lepton_selections.select_electrons(events, self.debug)]
+            events.Muon = events.Muon[lepton_selections.select_muons(events, self.debug)]
+            events.Tau = events.Tau[tau_selections.select_taus(events, self.debug)]
             return events 
 
     def trim_events(self, events, data):
         events = photon_selections.set_photons(events, self.debug)
-        #events = lepton_selections.set_electrons(events, self.debug)
-        #events = lepton_selections.set_muons(events, self.debug)
+        events = lepton_selections.set_electrons(events, self.debug)
+        events = lepton_selections.set_muons(events, self.debug)
+        events = tau_selections.set_taus(events, self.debug)
         if data:
             branches = self.save_branches_data
         else:
@@ -160,11 +164,18 @@ class LoopHelper():
                 job_id = 0
                 for file_split in file_splits:
                     job_id += 1
+                    if self.fast:
+                        if job_id > 1:
+                            if self.debug > 0:
+                                print("[LoopHelper] --fast option selected, only looping over 1 file for sample: %s (%s)" % (sample, year))
+                            break
+                    output = self.output_dir + self.selections + "_" + self.output_tag + "_" + sample + "_" + year + "_" + str(job_id) + ".pkl"
                     self.jobs_manager.append({
                         "info" : job_info,
-                        "ext" : job_id,
+                        "output" : output, 
                         "files" : file_split
                     })
+                    self.outputs.append(output)
                 
         if self.batch == "local":
             start = time.time()
@@ -213,18 +224,19 @@ class LoopHelper():
             return
             #TODO
 
+        self.merge_outputs()
         return
 
-    def write_to_df(self, events, output_tag):
+    def write_to_df(self, events, output_name):
         df = awkward.to_pandas(events)
-        df.to_pickle("output/events_%s_%s.pkl" % (self.selections, output_tag))
+        df.to_pickle(output_name)
         return
 
     def loop_sample(self, job): 
         info = job["info"]
         sample = info["sample"]
         files = job["files"]
-        output_tag = self.output_tag + "_" + info["year"] + "_" + str(job["ext"])
+        output = job["output"]
 
         if self.debug > 0:
             print("[LoopHelper] Running job with parameters", job)
@@ -254,5 +266,15 @@ class LoopHelper():
             sel_evts.append(events)
 
         events_full = awkward.concatenate(sel_evts)
-        self.write_to_df(events_full, output_tag)
+        self.write_to_df(events_full, output)
         return
+
+    def merge_outputs(self):
+        master_file = self.output_dir + self.selections + "_" + self.output_tag +  ".pkl"
+        master_df = pandas.DataFrame()
+        for file in self.outputs:
+            df = pandas.read_pickle(file)
+            master_df = pandas.concat([master_df, df], ignore_index=True)
+
+        master_df.to_pickle(master_file)
+            
