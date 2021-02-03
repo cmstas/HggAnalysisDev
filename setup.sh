@@ -4,3 +4,4 @@ source env/bin/activate
 
 pip install uproot awkward
 pip install pandas
+pip install numba==0.50.1
