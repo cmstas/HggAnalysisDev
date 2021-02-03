@@ -7,6 +7,8 @@ import awkward
 
 import selections.photon_selections as photon_selections
 import selections.analysis_selections as analysis_selections
+import selections.lepton_selections as lepton_selections
+import selections.tau_selections as tau_selections
 
 class LoopHelper():
     """
@@ -64,7 +66,6 @@ class LoopHelper():
                 branches = self.branches_data
             else:
                 branches = self.branches
-            print(branches)
             events = tree.arrays(branches, library = "ak", how = "zip") 
             #events = tree.arrays(branches, entry_start = 0, entry_stop = 10000, library = "ak", how = "zip") 
             # library = "ak" to load arrays as awkward arrays for best performance
@@ -78,10 +79,15 @@ class LoopHelper():
 
         if self.selections == "HHggTauTau_InclusivePresel":
             events = analysis_selections.ggTauTau_inclusive_preselection(events, self.debug)
+            events.Electron = lepton_selections.select_electrons(events, self.debug)
+            events.Muon = lepton_selections.select_muons(events, self.debug)
+            events.Tau = tau_selections.select_taus(events, self.debug)
             return events 
 
     def trim_events(self, events, data):
         events = photon_selections.set_photons(events, self.debug)
+        #events = lepton_selections.set_electrons(events, self.debug)
+        #events = lepton_selections.set_muons(events, self.debug)
         if data:
             branches = self.save_branches_data
         else:
@@ -121,9 +127,6 @@ class LoopHelper():
             if self.debug > 0:
                 print("[LoopHelper] Running over sample: %s" % sample)
                 print("[LoopHelper] details: ", info)
-
-            if not ("HH" in sample or sample == "Data"):
-                continue
 
             events_sample = self.loop_sample(sample, info)
             events.append(events_sample)   

@@ -39,4 +39,36 @@ def select_muons(events, debug):
 
     return muon_cut
 
+def set_electrons(events, debug):
+    events["n_electrons"] = awkward.num(events.Electron)
+
+    electron_pt_padded = utils.pad_awkward_array(events.Electron.pt, 2, -9)
+    electron_eta_padded = utils.pad_awkward_array(events.Electron.eta, 2, -9)
+    electron_phi_padded = utils.pad_awkward_array(events.Electron.phi, 2, -9)
+
+    events["ele1_pt"] = electron_pt_padded[:,0]
+    events["ele2_pt"] = electron_pt_padded[:,1]
+    events["ele1_eta"] = electron_eta_padded[:,0]
+    events["ele2_eta"] = electron_eta_padded[:,1]
+    events["ele1_phi"] = electron_phi_padded[:,0]
+    events["ele2_phi"] = electron_phi_padded[:,1]
+
+    return events
+
+def set_muons(events, debug):
+    events["n_muons"] = awkward.num(events.Muon)
+
+    muon_pt_padded = utils.pad_awkward_array(events.Muon.pt, 2, -9)
+    muon_eta_padded = utils.pad_awkward_array(events.Muon.eta, 2, -9)
+    muon_phi_padded = utils.pad_awkward_array(events.Muon.phi, 2, -9)
+    
+    events["ele1_pt"] = muon_pt_padded[:,0]
+    events["ele2_pt"] = muon_pt_padded[:,1]
+    events["ele1_eta"] = muon_eta_padded[:,0]
+    events["ele2_eta"] = muon_eta_padded[:,1]
+    events["ele1_phi"] = muon_phi_padded[:,0]
+    events["ele2_phi"] = muon_phi_padded[:,1]
+
+    return events
+
 #TODO: implement varying definitions for leptons (e.g. "Loose", "Medium", "Tight") 
