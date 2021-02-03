@@ -40,6 +40,6 @@ the modules used are
 
 3.submission via [ProjectMetis](https://github.com/aminnj/ProjectMetis)
 
-first checkout the repository https://github.com/aminnj/ProjectMetis and set up environment via ```console source setup.sh```
+first checkout the repository https://github.com/aminnj/ProjectMetis and set up environment via ```source setup.sh```
 
 then use the example you find in this repository.
