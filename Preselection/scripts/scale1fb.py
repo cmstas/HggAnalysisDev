@@ -54,8 +54,8 @@ def calculate_metadata(files, xs, debug):
         f = uproot.open(file)
         runs = f["Runs"]
 
-        nEvents_file = numpy.sum(runs["genEventCount"].array())
-        sumWeights_file = numpy.sum(runs["genEventSumw"].array())
+        nEvents_file = int(numpy.sum(runs["genEventCount"].array()))
+        sumWeights_file = int(numpy.sum(runs["genEventSumw"].array()))
 
         nEvents += nEvents_file 
         sumWeights += sumWeights_file 
@@ -98,6 +98,8 @@ for sample, info in samples.items():
         continue
 
     for year, year_info in info.items():
+        if "201" not in year:
+            continue # skip non-year sample metadata
         # Grab metadata
         files = []
         for path in year_info["paths"]:
