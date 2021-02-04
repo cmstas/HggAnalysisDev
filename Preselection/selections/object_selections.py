@@ -14,8 +14,11 @@ def deltaR(phi1, phi2, eta1, eta2):
     d_phi = float(0)
     d_eta = float(0)
 
-    
-    d_phi = numpy.abs(phi1 - phi2) % (2*PI)
+    d_phi = phi1 - phi2
+    if d_phi > PI:
+        d_phi = d_phi - (2*PI)
+    elif d_phi < -PI:
+        d_phi = d_phi + (2*PI)
 
     d_eta = numpy.abs(eta1 - eta2)
     dR = ((d_eta)**2 + (d_phi)**2)**(0.5)
