@@ -1,5 +1,6 @@
 {
     "HH_ggTauTau" : { 
+        "resonant" : true,
         "fpo" : 1,
         "process_id" : -1,
         "2016" : {
@@ -17,6 +18,7 @@
         } 
     },
     "Data" : {
+        "resonant" : false,
         "fpo" : 10,
         "process_id" : 0,
         "2016" : {
@@ -33,6 +35,7 @@
         }
     },
     "ZGamma" : {
+        "resonant" : false,
         "fpo" : 1,
         "process_id" : 2,
         "2016" : {
@@ -49,6 +52,7 @@
         }
     },
     "DiPhoton" : {
+        "resonant" : false,
         "fpo" : 5,
         "process_id" : 3,
         "2016" : {
@@ -65,6 +69,7 @@
         }
     },
     "WGamma" : {
+        "resonant" : false,
         "fpo" : 1,
         "process_id" : 4,
         "2016" : {
@@ -81,6 +86,7 @@
         }
     },
     "TTbar" : {
+        "resonant" : false,
         "fpo" : 5,
         "process_id" : 5,
         "2016" : {
@@ -97,6 +103,7 @@
         }
     },
     "TTGamma" : {
+        "resonant" : false,
         "fpo" : 1,
         "process_id" : 6,
         "2016" : {
@@ -113,6 +120,7 @@
         }
     },
     "TTGG" : {
+        "resonant" : false,
         "fpo" : 1,
         "process_id" : 7,
         "2016" : {
@@ -129,6 +137,7 @@
         }
     },
     "GJets_HT40To100" : {
+        "resonant" : false,
         "fpo" : 5,
         "process_id" : 8,
         "2016" : {
@@ -145,6 +154,7 @@
         }
     },
     "GJets_HT-100To200" : {
+        "resonant" : false,
         "fpo" : 5,
         "process_id" : 8,
         "2016" : {
@@ -161,6 +171,7 @@
         }
     },
     "GJets_HT-200To400" : {
+        "resonant" : false,
         "fpo" : 5,
         "process_id" : 8,
         "2016" : {
@@ -177,6 +188,7 @@
         }
     },
     "GJets_HT-400To600" : {
+        "resonant" : false,
         "fpo" : 5,
         "process_id" : 8,
         "2016" : {
@@ -193,6 +205,7 @@
         }
     },
     "GJets_HT-600ToInf" : {
+        "resonant" : false,
         "fpo" : 5,
         "process_id" : 8,
         "2016" : {
@@ -209,6 +222,7 @@
         }
     },
     "VH" : {
+        "resonant" : true,
         "fpo" : 1,
         "process_id" : 9,
         "2016" : {

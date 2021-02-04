@@ -89,6 +89,8 @@ if args.fast and os.path.exists(args.output):
     for sample, info in output.items():
         if sample in original_output.keys():
             for year, year_info in original_output[sample].items():
+                if "201" not in year:
+                    continue
                 if "metadata" in year_info.keys():
                     if "scale1fb" in year_info["metadata"].keys():
                         output[sample][year] = original_output[sample][year]

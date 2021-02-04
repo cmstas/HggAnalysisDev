@@ -29,6 +29,12 @@ parser.add_argument(
     type = str,
     default = "2016,2017,2018"
 )
+parser.add_argument(
+    "--select_samples",
+    help = "csv list of samples to run over (should be a subset of samples in args.samples)",
+    type = str,
+    default = "all"
+)
 
 # --options points to a json file containing options for looping
 # this could include things like additional scaling of bkg samples,

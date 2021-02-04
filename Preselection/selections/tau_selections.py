@@ -6,9 +6,9 @@ import selections.selection_utils as utils
 import selections.object_selections as object_selections
 
 DR_TAU_PHO = 0.2
-DR_TAU_LEP = 0.4
+DR_TAU_LEP = 0.2
 
-def select_taus(events, debug):
+def select_taus(events, photons, muons, electrons, debug):
     cut_diagnostics = utils.ObjectCutDiagnostics(objects = events.Tau, cut_set = "[tau_selections.py : select_taus]", debug = debug)
 
     pt_cut = events.Tau.pt > 20
@@ -20,9 +20,9 @@ def select_taus(events, debug):
     id_muon_cut = events.Tau.idDeepTau2017v2p1VSmu >= 1
     id_jet_cut = events.Tau.idDeepTau2017v2p1VSjet >= 8
 
-    dR_pho_cut = object_selections.select_deltaR(events, events.Tau, events.Photon, DR_TAU_PHO, debug) 
-    dR_muon_cut = object_selections.select_deltaR(events, events.Tau, events.Muon, DR_TAU_LEP, debug) 
-    dR_ele_cut = object_selections.select_deltaR(events, events.Tau, events.Electron, DR_TAU_LEP, debug) 
+    dR_pho_cut = object_selections.select_deltaR(events, events.Tau, photons, DR_TAU_PHO, debug) 
+    dR_muon_cut = object_selections.select_deltaR(events, events.Tau, muons, DR_TAU_LEP, debug) 
+    dR_ele_cut = object_selections.select_deltaR(events, events.Tau, electrons, DR_TAU_LEP, debug) 
 
     tau_cut = pt_cut & eta_cut & decay_mode_cut & dz_cut & id_electron_cut & id_muon_cut & id_jet_cut & dR_pho_cut & dR_muon_cut & dR_ele_cut
 

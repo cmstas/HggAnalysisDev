@@ -7,7 +7,7 @@ import selections.object_selections as object_selections
 
 DR_LEP_PHO = 0.2
 
-def select_electrons(events, debug):
+def select_electrons(events, photons, debug):
     cut_diagnostics = utils.ObjectCutDiagnostics(objects = events.Electron, cut_set = "[lepton_selections.py : select_electrons]", debug = debug)
 
     pt_cut = events.Electron.pt > 10
@@ -15,7 +15,7 @@ def select_electrons(events, debug):
     ip_xy_cut = abs(events.Electron.dxy) < 0.045
     ip_z_cut = abs(events.Electron.dz) < 0.2
     id_cut = (events.Electron.mvaFall17V2Iso_WP90 == True | ((events.Electron.mvaFall17V2noIso_WP90 == True) & (events.Electron.pfRelIso03_all < 0.3)))
-    dR_cut = object_selections.select_deltaR(events, events.Electron, events.Photon, DR_LEP_PHO, debug)
+    dR_cut = object_selections.select_deltaR(events, events.Electron, photons, DR_LEP_PHO, debug)
 
     electron_cut = pt_cut & eta_cut & ip_xy_cut & ip_z_cut & id_cut & dR_cut
 
@@ -23,7 +23,7 @@ def select_electrons(events, debug):
 
     return electron_cut
 
-def select_muons(events, debug):
+def select_muons(events, photons, debug):
     cut_diagnostics = utils.ObjectCutDiagnostics(objects = events.Muon, cut_set = "[lepton_selections.py : select_muons]", debug = debug)
 
     pt_cut = events.Muon.pt > 10
@@ -31,7 +31,7 @@ def select_muons(events, debug):
     ip_xy_cut = abs(events.Muon.dxy) < 0.045
     ip_z_cut = abs(events.Muon.dz) < 0.2
     iso_cut = events.Muon.pfRelIso03_all < 0.3
-    dR_cut = object_selections.select_deltaR(events, events.Muon, events.Photon, DR_LEP_PHO, debug)
+    dR_cut = object_selections.select_deltaR(events, events.Muon, photons, DR_LEP_PHO, debug)
 
     muon_cut = pt_cut & eta_cut & ip_xy_cut & ip_z_cut & iso_cut & dR_cut
 

@@ -26,6 +26,9 @@ class LoopHelper():
         self.options = kwargs.get("options")
         self.systematics = kwargs.get("systematics")
         self.years = kwargs.get("years").split(",")
+        self.select_samples = kwargs.get("select_samples")
+        if self.select_samples != "all":
+            self.select_samples = self.select_samples.split(",")
 
         self.output_tag = kwargs.get("output_tag")
         self.output_dir = kwargs.get("output_dir")
@@ -98,6 +101,10 @@ class LoopHelper():
         self.jobs_manager = []
 
         for sample, info in self.samples_dict.items():
+            if self.select_samples != "all":
+                if sample not in self.select_samples:
+                    continue
+            
             if self.debug > 0:
                 print("[LoopHelper] Running over sample: %s" % sample)
                 print("[LoopHelper] details: ", info)
@@ -117,7 +124,8 @@ class LoopHelper():
                     "process_id" : info["process_id"],
                     "year" : year,
                     "scale1fb" : 1 if sample == "Data" else year_info["metadata"]["scale1fb"],
-                    "lumi" : lumi_map[year]
+                    "lumi" : lumi_map[year],
+                    "resonant" : info["resonant"]
                 }
 
                 file_splits = self.chunks(files, info["fpo"])
@@ -207,21 +215,21 @@ class LoopHelper():
     ### Physics: selections, etc ###
     ################################
 
-    def select_events(self, events):
+    def select_events(self, events, metadata):
         # Dipho preselection
-        events = photon_selections.diphoton_preselection(events, self.debug)
+        events = photon_selections.diphoton_preselection(events, metadata["resonant"], self.debug)
         events.Photon = events.Photon[photon_selections.select_photons(events, self.debug)]
 
         if self.selections == "HHggTauTau_InclusivePresel":
             events = analysis_selections.ggTauTau_inclusive_preselection(events, self.debug)
-            events.Electron = events.Electron[lepton_selections.select_electrons(events, self.debug)]
-            events.Muon = events.Muon[lepton_selections.select_muons(events, self.debug)]
-            events.Tau = events.Tau[tau_selections.select_taus(events, self.debug)]
+            events.Electron = events.Electron[lepton_selections.select_electrons(events, events.Photon, self.debug)]
+            events.Muon = events.Muon[lepton_selections.select_muons(events, events.Photon, self.debug)]
+            events.Tau = events.Tau[tau_selections.select_taus(events, events.Photon, events.Muon, events.Electron, self.debug)]
 
         elif self.selections == "ttH_LeptonicPresel":
             events = analysis_selections.tth_leptonic_preselection(events, self.debug)
-            events.Electron = events.Electron[lepton_selections.select_electrons(events, self.debug)]
-            events.Muon = events.Muon[lepton_selections.select_muons(events, self.debug)]
+            events.Electron = events.Electron[lepton_selections.select_electrons(events, events.Photon, self.debug)]
+            events.Muon = events.Muon[lepton_selections.select_muons(events, events.Photon, self.debug)]
 
         return events
 
@@ -243,6 +251,10 @@ class LoopHelper():
         files = job["files"]
         output = job["output"]
 
+        selection_metadata = {
+            "resonant" : info["resonant"]
+        }
+
         if self.debug > 0:
             print("[LoopHelper] Running job with parameters", job)
 
@@ -262,7 +274,7 @@ class LoopHelper():
             if events is None:
                 self.outputs.pop(output)
                 return
-            events = self.select_events(events)
+            events = self.select_events(events, selection_metadata)
 
             events["process_id"] = numpy.ones(len(events)) * process_id
             if data:

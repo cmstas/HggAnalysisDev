@@ -3,20 +3,19 @@ import awkward
 
 class CutDiagnostics():
     def __init__(self, **kwargs):
-        self.n_events_initial = kwargs.get("n_events_initial")
         self.debug = kwargs.get("debug")
         self.cut_set = kwargs.get("cut_set", "cut")
-        self.cuts = [float(self.n_events_initial)]
+        self.events = kwargs.get("events")
 
-        if self.debug:
-            print("%s CutDiagnostics: %d events before any cuts" % (self.cut_set, self.n_events_initial)) 
+        self.n_events_initial = len(self.events)
 
-    def add_cut(self, n_events, cut_name = "cut"):
-        self.cuts.append(float(n_events))
-        if self.debug:
-            if n_events == 0 or self.cuts[-2] == 0:
-                return
-            print("%s CutDiagnostics: After cut %s, %d events (eff_cut: %.4f, eff_total: %.4f)" % (self.cut_set, cut_name, n_events, self.cuts[-1] / self.cuts[-2], self.cuts[-1] / self.cuts[0])) 
+    def add_cuts(self, cuts, names): 
+        for cut, name in zip(cuts, names):
+            if self.debug > 0:
+                n_events_cut = len(self.events[cut])
+                if self.n_events_initial == 0:
+                    return
+                print("%s EventCutDiagnostics: Cut %s has an eff of %.4f" % (self.cut_set, name, float(n_events_cut) / float(self.n_events_initial)))
 
 class ObjectCutDiagnostics():
     def __init__(self, **kwargs):
