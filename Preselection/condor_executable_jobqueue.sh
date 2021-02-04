@@ -17,19 +17,19 @@ fi
 
 mkdir temp ; cd temp
 
-#mv ../{analysisenv.tar.*,*.py} .
-mv ../{daskworkerenv2.tar.*,*.py} .
+mv ../{analysisenv.tar.*,*.py} .
+#mv ../{daskworkerenv2.tar.*,*.py} .
 echo "started extracting at $(date +%s)"
-#tar xf analysisenv.tar.*
-tar xf daskworkerenv2.tar.* 
+tar xf analysisenv.tar.*
+#tar xf daskworkerenv2.tar.* 
 echo "finished extracting at $(date +%s)"
 
-#source analysisenv/bin/activate
-source daskworkerenv2/bin/activate
+source analysisenv/bin/activate
+#source daskworkerenv2/bin/activate
 
 ls -lrth
 export PYTHONPATH=`pwd`:$PYTHONPATH
-#export PATH=`pwd`/analysisenv/bin:$PATH
-export PATH=`pwd`/daskworkerenv2/bin:$PATH
+export PATH=`pwd`/analysisenv/bin:$PATH
+#export PATH=`pwd`/daskworkerenv2/bin:$PATH
 
 $@
