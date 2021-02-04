@@ -19,7 +19,8 @@ bin_njet = np.linspace(0,5,6)
 bin_nbjet = np.linspace(0,3,4)
 bin_mZ = np.linspace(0,150,30)
 bin_dR = np.linspace(0,5,20)
-bins_pixelSeed = np.linspace(0,1,2)
+bins_pixelSeed = np.linspace(0,2,3)
+bin_jet_pt = np.linspace(0,1000,201)
 
 def process_event(weights, evt_vars): #, bjets):
     out_hists = {}
@@ -168,17 +169,18 @@ def process_electron(electrons_all, genWeight_all):
             return out_hists
 
 def process_jets(jets, genWeight):
+    out_hists = {}
     nJets = ak.num(jets)
-    out_hists["njets"] = Hist1D(ak.to_numpy(nJet), bins = bin_njet, label="njet", weights = ak.to_numpy(genWeight))
+    out_hists["njets"] = Hist1D(ak.to_numpy(nJets), bins = bin_njet, label="njet", weights = ak.to_numpy(genWeight))
 
-    out_hists["jet_1_pt"] = Hist1D(ak.to_numpy(jets[nJet >= 1].pt[:,0]), bins = bin_jet_pt, label = "jet_1_pt", weights = ak.to_numpy(genWeight[nJet >= 1]))
-    out_hists["jet_1_eta"] = Hist1D(ak.to_numpy(jets[nJet >= 1].eta[:,0]), bins = bin_jet_pt, label = "jet_1_eta", weights = ak.to_numpy(genWeight[nJet >= 1]))
+    out_hists["jet_1_pt"] = Hist1D(ak.to_numpy(jets[nJets >= 1].pt[:,0]), bins = bin_jet_pt, label = "jet_1_pt", weights = ak.to_numpy(genWeight[nJets >= 1]))
+    out_hists["jet_1_eta"] = Hist1D(ak.to_numpy(jets[nJets >= 1].eta[:,0]), bins = bin_eta, label = "jet_1_eta", weights = ak.to_numpy(genWeight[nJets >= 1]))
 
-    out_hists["jet_2_pt"] = Hist1D(ak.to_numpy(jets[nJet >= 2].pt[:,1]), bins = bin_jet_pt, label = "jet_2_pt", weights = ak.to_numpy(genWeight[nJet >= 2]))
-    out_hists["jet_2_eta"] = Hist1D(ak.to_numpy(jets[nJet >= 2].eta[:,1]), bins = bin_jet_pt, label = "jet_2_eta", weights = ak.to_numpy(genWeight[nJet >= 2]))
+    out_hists["jet_2_pt"] = Hist1D(ak.to_numpy(jets[nJets >= 2].pt[:,1]), bins = bin_jet_pt, label = "jet_2_pt", weights = ak.to_numpy(genWeight[nJets >= 2]))
+    out_hists["jet_2_eta"] = Hist1D(ak.to_numpy(jets[nJets >= 2].eta[:,1]), bins = bin_eta, label = "jet_2_eta", weights = ak.to_numpy(genWeight[nJets >= 2]))
 
-    out_hists["jet_3_pt"] = Hist1D(ak.to_numpy(jets[nJet >= 3].pt[:,2]), bins = bin_jet_pt, label = "jet_3_pt", weights = ak.to_numpy(genWeight[nJet >= 3]))
-    out_hists["jet_3_eta"] = Hist1D(ak.to_numpy(jets[nJet >= 3].eta[:,2]), bins = bin_jet_pt, label = "jet_3_eta", weights = ak.to_numpy(genWeight[nJet >= 3]))
+    out_hists["jet_3_pt"] = Hist1D(ak.to_numpy(jets[nJets >= 3].pt[:,2]), bins = bin_jet_pt, label = "jet_3_pt", weights = ak.to_numpy(genWeight[nJets >= 3]))
+    out_hists["jet_3_eta"] = Hist1D(ak.to_numpy(jets[nJets >= 3].eta[:,2]), bins = bin_eta, label = "jet_3_eta", weights = ak.to_numpy(genWeight[nJets >= 3]))
 
     return out_hists
 
