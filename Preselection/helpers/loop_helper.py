@@ -92,7 +92,13 @@ class LoopHelper():
             events.Electron = events.Electron[lepton_selections.select_electrons(events, self.debug)]
             events.Muon = events.Muon[lepton_selections.select_muons(events, self.debug)]
             events.Tau = events.Tau[tau_selections.select_taus(events, self.debug)]
-            return events 
+
+        elif self.selections == "ttH_LeptonicPresel":
+            events = analysis_selections.tth_leptonic_preselection(events, self.debug)
+            events.Electron = events.Electron[lepton_selections.select_electrons(events, self.debug)]
+            events.Muon = events.Muon[lepton_selections.select_muons(events, self.debug)]
+
+        return events 
 
     def trim_events(self, events, data):
         events = photon_selections.set_photons(events, self.debug)

@@ -11,7 +11,7 @@ DR_TAU_LEP = 0.4
 def select_taus(events, debug):
     cut_diagnostics = utils.ObjectCutDiagnostics(objects = events.Tau, cut_set = "[tau_selections.py : select_taus]", debug = debug)
 
-    pt_cut = events.Tau.pt > 10
+    pt_cut = events.Tau.pt > 20
     eta_cut = abs(events.Tau.eta) < 2.3
     decay_mode_cut = events.Tau.idDecayModeNewDMs == True
     dz_cut = abs(events.Tau.dz) < 0.2
