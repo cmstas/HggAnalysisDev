@@ -139,3 +139,14 @@ cython_debug/
 
 # nfs files
 .nfs*
+
+#tar gz files
+*.tar.gz
+
+#dask areas
+dask-worker-space/
+.singularity*
+
+#result files
+hists/
+logs/

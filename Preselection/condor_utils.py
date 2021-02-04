@@ -106,7 +106,7 @@ def make_htcondor_cluster(
         dashboard_address=8787,
         ):
 
-    input_files = [os.path.join(BASEDIR, x) for x in ["utils.py","cachepreload.py","daskworkerenv2.tar.gz", "event_selector.py", "looper_utils.py", "make_plots.py"]]
+    input_files = [os.path.join(BASEDIR, x) for x in ["utils.py","cachepreload.py","analysisenv.tar.gz", "event_selector.py", "looper_utils.py", "make_plots.py"]]
     log_directory = os.path.join(BASEDIR, "logs/")
     proxy_file = "/tmp/x509up_u{0}".format(os.getuid())
 

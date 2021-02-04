@@ -45,11 +45,14 @@ def prepare_inputs(args, obj_list, isData=False):
     if "category" in obj_list:
         category_keys  = t.keys(filter_name="Category_*")
         keys_to_save += category_keys
+    if "jet" in obj_list:
+        jets_keys = t.keys(filter_name = "Jet_*")
+        keys_to_save += jets_keys
     #if "idx" in obj_list:
     #    idx_keys = t.keys(filter_name="gHidx")
     #    keys_to_save += idx_keys
     if "others" in obj_list:
-        evt_vars_keys = t.keys(filter_name=["nJet", "MET_pt", "ggMass"]) 
+        evt_vars_keys = t.keys(filter_name=["MET_pt", "ggMass"]) 
         keys_to_save +=  evt_vars_keys
 
     events = t.arrays( keys_to_save , entry_start=entrystart, entry_stop=entrystop, library="ak", how="zip" )
