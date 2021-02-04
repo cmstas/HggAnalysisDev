@@ -34,6 +34,7 @@ class LoopHelper():
         self.nCores = kwargs.get("nCores")
         self.debug = kwargs.get("debug")
         self.fast = kwargs.get("fast")
+        self.dry_run = kwargs.get("dry_run")
 
         self.do_plots = kwargs.get("do_plots")
         self.do_tables = kwargs.get("do_tables")
@@ -67,6 +68,9 @@ class LoopHelper():
     
     def load_file(self, file, tree_name = "Events", data = False):
         with uproot.open(file) as f:
+            if not f:
+                print("[LoopHelper] Problem opening file %s" % file)
+                return None
             tree = f[tree_name]
             if data:
                 branches = self.branches_data
@@ -102,24 +106,6 @@ class LoopHelper():
         trimmed_events = events[branches]
         return trimmed_events
 
-
-        # TODO: figure out how to trim object branches
-        """
-        events = photon_selections.set_photons(events, self.debug)
-
-        if data:
-            branches = self.save_branches_data
-        else:
-            branches = self.save_branches
-
-        trimmed_events = events
-        #trimmed_events = events[branches] 
-        #a = events[["ggMass", "MET_pt"]]
-        #b = events.Photon[["pt", "eta"]]
-        #trimmed_events = awkward.zip([a,b])
-        return trimmed_events
-        """
-
     def load_samples(self):
         with open(self.samples, "r") as f_in:
             self.samples_dict = json.load(f_in)
@@ -142,8 +128,8 @@ class LoopHelper():
                 print("[LoopHelper] Running over sample: %s" % sample)
                 print("[LoopHelper] details: ", info)
 
-            files = []
             for year, year_info in info.items():
+                files = []
                 if year not in self.years:
                     continue
                 for path in year_info["paths"]:
@@ -185,6 +171,8 @@ class LoopHelper():
             manager = multiprocessing.Manager()
             running_procs = []
             for job in self.jobs_manager:
+                if self.dry_run:
+                    continue
                 print(job)
                 running_procs.append(multiprocessing.Process(target = self.loop_sample, args = (job,)))
                 running_procs[-1].start()
@@ -254,6 +242,9 @@ class LoopHelper():
                 print("[LoopHelper] Loading file %s" % file)
 
             events = self.load_file(file, data = data)
+            if events is None:
+                self.outputs.pop(output)
+                return
             events = self.select_events(events) 
             
             events["process_id"] = numpy.ones(len(events)) * process_id
@@ -273,6 +264,10 @@ class LoopHelper():
         master_file = self.output_dir + self.selections + "_" + self.output_tag +  ".pkl"
         master_df = pandas.DataFrame()
         for file in self.outputs:
+            if self.debug > 0:
+                print("[LoopHelper] Loading file %s" % file)
+            if not os.path.exists(file):
+                continue
             df = pandas.read_pickle(file)
             master_df = pandas.concat([master_df, df], ignore_index=True)
 

@@ -88,6 +88,12 @@ parser.add_argument(
     help = "loop over minimal set of samples (for debugging purposes)",
     action = "store_true"
 )
+parser.add_argument(
+    "--dry_run",
+    help = "don't submit jobs",
+    action = "store_true"
+)
+
 
 # Output options
 parser.add_argument(
