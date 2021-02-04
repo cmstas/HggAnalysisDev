@@ -14,5 +14,36 @@
         "muon1_pt", "muon1_eta", "muon2_pt", "muon2_eta",
         "tau1_pt", "tau1_eta", "tau2_pt", "tau2_eta", "tau1_id_vs_e", "tau1_id_vs_m", "tau1_id_vs_j", "tau2_id_vs_e", "tau2_id_vs_m", "tau2_id_vs_j",
         "n_tau", "n_electrons", "n_muons"
-    ]
+    ],
+    "selection_options" : {
+        "photons" : {
+            "idmva_cut" : -0.7
+        },
+        "electrons" : {
+            "pt" : 10.0,
+            "eta" : 2.4,
+            "ip_xy" : 0.045,
+            "ip_z" : 0.2,
+            "dR_pho" : 0.2
+        },
+        "muons" : {
+            "pt" : 10.0,
+            "eta" : 2.4,
+            "ip_xy" : 0.045,
+            "ip_z" : 0.2,
+            "rel_iso" : 0.3,
+            "dR_pho" : 0.2
+        },
+        "taus" : {
+            "pt" : 20.0,
+            "eta" : 2.3,
+            "dz" : 0.2,
+            "DeepTau_vs_e" : 2,
+            "DeepTau_vs_mu" : 1,
+            "DeepTau_vs_jet" : 8,
+            "dR_pho" : 0.2,
+            "dR_lep" : 0.2
+        },
+        "n_leptons_and_taus" : 1
+    }
 }

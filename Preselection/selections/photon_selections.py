@@ -18,13 +18,14 @@ For this reason, all selections should be done in the following way:
     2. Trim objects with object-level selections afterwards
 """
 
-def diphoton_preselection(events, resonant, debug):
+def diphoton_preselection(events, options, debug):
     # Initialize cut diagnostics tool for debugging
     cut_diagnostics = utils.CutDiagnostics(events = events, debug = debug, cut_set = "[photon_selections.py : diphoton_preselection]")
 
-    photons = events.Photon[select_photons(events, debug)]
+    photons = events.Photon[select_photons(events, options, debug)]
 
     ### mgg cut ###
+    resonant = options["resonant"]
     if resonant:
         mgg_mask = numpy.array(events.ggMass > 100) & numpy.array(events.ggMass < 180)
     else:
@@ -41,7 +42,7 @@ def diphoton_preselection(events, resonant, debug):
     pt_mgg_cut = lead_pt_mgg_cut & sublead_pt_mgg_cut
 
     ### pho ID MVA cuts ###
-    pho_idmva_requirement = photons.mvaID > -0.7
+    pho_idmva_requirement = photons.mvaID > options["photons"]["idmva_cut"]
     pho_idmva_cut = awkward.num(photons[pho_idmva_requirement]) >= 2 # both photons must pass id mva requirement
 
     ### electron veto cut ###
@@ -58,13 +59,13 @@ def diphoton_preselection(events, resonant, debug):
 
     return events
 
-def select_photons(events, debug):
+def select_photons(events, options, debug):
     cut_diagnostics = utils.ObjectCutDiagnostics(objects = events.Photon, cut_set = "[photon_selections.py : select_photons]", debug = debug)
     
     pt_cut = events.Photon.pt > 25
     eta_cut = abs(events.Photon.eta) < 2.5
     pt_mgg_cut = (events.Photon.pt / events.ggMass) >= 0.25
-    idmva_cut = events.Photon.mvaID > -0.7
+    idmva_cut = events.Photon.mvaID > options["photons"]["idmva_cut"] 
     eveto_cut = events.Photon.electronVeto == 1
     photon_cut = pt_cut & eta_cut & pt_mgg_cut & idmva_cut & eveto_cut
 

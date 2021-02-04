@@ -7,15 +7,17 @@ import selections.object_selections as object_selections
 
 DR_LEP_PHO = 0.2
 
-def select_electrons(events, photons, debug):
+def select_electrons(events, photons, options, debug):
     cut_diagnostics = utils.ObjectCutDiagnostics(objects = events.Electron, cut_set = "[lepton_selections.py : select_electrons]", debug = debug)
 
-    pt_cut = events.Electron.pt > 10
-    eta_cut = abs(events.Electron.eta) < 2.5
-    ip_xy_cut = abs(events.Electron.dxy) < 0.045
-    ip_z_cut = abs(events.Electron.dz) < 0.2
+    pt_cut = events.Electron.pt > options["electrons"]["pt"]
+    eta_cut = abs(events.Electron.eta) < options["electrons"]["eta"]
+    ip_xy_cut = abs(events.Electron.dxy) < options["electrons"]["ip_xy"]
+    ip_z_cut = abs(events.Electron.dz) < options["electrons"]["ip_z"]
     id_cut = (events.Electron.mvaFall17V2Iso_WP90 == True | ((events.Electron.mvaFall17V2noIso_WP90 == True) & (events.Electron.pfRelIso03_all < 0.3)))
-    dR_cut = object_selections.select_deltaR(events, events.Electron, photons, DR_LEP_PHO, debug)
+    # TODO: make ID cut configurable
+    # also: ID cut has pretty low efficiency on signal, loosen?
+    dR_cut = object_selections.select_deltaR(events, events.Electron, photons, options["electrons"]["dR_pho"], debug)
 
     electron_cut = pt_cut & eta_cut & ip_xy_cut & ip_z_cut & id_cut & dR_cut
 
@@ -23,15 +25,15 @@ def select_electrons(events, photons, debug):
 
     return electron_cut
 
-def select_muons(events, photons, debug):
+def select_muons(events, photons, options, debug):
     cut_diagnostics = utils.ObjectCutDiagnostics(objects = events.Muon, cut_set = "[lepton_selections.py : select_muons]", debug = debug)
 
-    pt_cut = events.Muon.pt > 10
-    eta_cut = abs(events.Muon.eta) < 2.4
-    ip_xy_cut = abs(events.Muon.dxy) < 0.045
-    ip_z_cut = abs(events.Muon.dz) < 0.2
-    iso_cut = events.Muon.pfRelIso03_all < 0.3
-    dR_cut = object_selections.select_deltaR(events, events.Muon, photons, DR_LEP_PHO, debug)
+    pt_cut = events.Muon.pt > options["muons"]["pt"]
+    eta_cut = abs(events.Muon.eta) < options["muons"]["eta"]
+    ip_xy_cut = abs(events.Muon.dxy) < options["muons"]["ip_xy"]
+    ip_z_cut = abs(events.Muon.dz) < options["muons"]["ip_z"]
+    iso_cut = events.Muon.pfRelIso03_all < options["muons"]["rel_iso"]
+    dR_cut = object_selections.select_deltaR(events, events.Muon, photons, options["muons"]["dR_pho"], debug)
 
     muon_cut = pt_cut & eta_cut & ip_xy_cut & ip_z_cut & iso_cut & dR_cut
 

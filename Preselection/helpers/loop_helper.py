@@ -7,6 +7,7 @@ import numpy
 import awkward
 import multiprocessing
 import time
+import copy
 
 import selections.photon_selections as photon_selections
 import selections.analysis_selections as analysis_selections
@@ -217,19 +218,22 @@ class LoopHelper():
 
     def select_events(self, events, metadata):
         # Dipho preselection
-        events = photon_selections.diphoton_preselection(events, metadata["resonant"], self.debug)
-        events.Photon = events.Photon[photon_selections.select_photons(events, self.debug)]
+        options = copy.deepcopy(self.selection_options)
+        for key, value in metadata.items(): # add sample-specific options to selection options
+            options[key] = value
+        events = photon_selections.diphoton_preselection(events, options, self.debug)
+        events.Photon = events.Photon[photon_selections.select_photons(events, options, self.debug)]
 
         if self.selections == "HHggTauTau_InclusivePresel":
-            events = analysis_selections.ggTauTau_inclusive_preselection(events, self.debug)
-            events.Electron = events.Electron[lepton_selections.select_electrons(events, events.Photon, self.debug)]
-            events.Muon = events.Muon[lepton_selections.select_muons(events, events.Photon, self.debug)]
-            events.Tau = events.Tau[tau_selections.select_taus(events, events.Photon, events.Muon, events.Electron, self.debug)]
+            events = analysis_selections.ggTauTau_inclusive_preselection(events, options, self.debug)
+            events.Electron = events.Electron[lepton_selections.select_electrons(events, events.Photon, options, self.debug)]
+            events.Muon = events.Muon[lepton_selections.select_muons(events, events.Photon, options, self.debug)]
+            events.Tau = events.Tau[tau_selections.select_taus(events, events.Photon, events.Muon, events.Electron, options, self.debug)]
 
         elif self.selections == "ttH_LeptonicPresel":
-            events = analysis_selections.tth_leptonic_preselection(events, self.debug)
-            events.Electron = events.Electron[lepton_selections.select_electrons(events, events.Photon, self.debug)]
-            events.Muon = events.Muon[lepton_selections.select_muons(events, events.Photon, self.debug)]
+            events = analysis_selections.tth_leptonic_preselection(events, options, self.debug)
+            events.Electron = events.Electron[lepton_selections.select_electrons(events, events.Photon, options, self.debug)]
+            events.Muon = events.Muon[lepton_selections.select_muons(events, events.Photon, options, self.debug)]
 
         return events
 
