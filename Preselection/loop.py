@@ -4,11 +4,8 @@ import argparse
 from helpers import loop_helper
 
 """
-This script is an all-purpose looper. Can perform any subset of the
-following tasks:
-    - loop over events and write to histograms/ntuple
-    - make data/MC plots from histograms/ntuple
-    - make yield tables from histograms/ntuple
+This script is an all-purpose looper which performs a selection and writes
+all events passing this selection to a pandas dataframe
 """
 
 parser = argparse.ArgumentParser()
@@ -42,7 +39,7 @@ parser.add_argument(
     type = str,
     default = "data/HH_ggTauTau_default.json"
 )
-parser.add_argument(
+parser.add_argument( #TODO
     "--systematics",
     help = "include systematics variations", 
     action = "store_true"
@@ -61,8 +58,6 @@ parser.add_argument(
     type = str,
     default = "output/"
 )
-
-
 
 # Technical
 parser.add_argument(
@@ -91,24 +86,6 @@ parser.add_argument(
 parser.add_argument(
     "--dry_run",
     help = "don't submit jobs",
-    action = "store_true"
-)
-
-
-# Output options
-parser.add_argument(
-    "--do_plots",
-    help = "make data/MC plots", 
-    action = "store_true"
-)
-parser.add_argument(
-    "--do_tables",
-    help = "make yield tables", 
-    action = "store_true"
-)
-parser.add_argument(
-    "--do_ntuple",
-    help = "make single ntuple with all events",
     action = "store_true"
 )
 

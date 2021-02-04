@@ -36,10 +36,6 @@ class LoopHelper():
         self.fast = kwargs.get("fast")
         self.dry_run = kwargs.get("dry_run")
 
-        self.do_plots = kwargs.get("do_plots")
-        self.do_tables = kwargs.get("do_tables")
-        self.do_ntuple = kwargs.get("do_ntuple")
-
         self.outputs = []
 
         if self.debug > 0:
@@ -65,53 +61,6 @@ class LoopHelper():
 
         self.load_samples()
 
-    
-    def load_file(self, file, tree_name = "Events", data = False):
-        with uproot.open(file) as f:
-            if not f:
-                print("[LoopHelper] Problem opening file %s" % file)
-                return None
-            tree = f[tree_name]
-            if data:
-                branches = self.branches_data
-            else:
-                branches = self.branches
-            events = tree.arrays(branches, library = "ak", how = "zip") 
-            #events = tree.arrays(branches, entry_start = 0, entry_stop = 10000, library = "ak", how = "zip") 
-            # library = "ak" to load arrays as awkward arrays for best performance
-            # how = "zip" allows us to access arrays as records, e.g. events.Photon
-        return events
-
-    def select_events(self, events):
-        # Dipho preselection
-        events = photon_selections.diphoton_preselection(events, self.debug)
-        events.Photon = events.Photon[photon_selections.select_photons(events, self.debug)]
-
-        if self.selections == "HHggTauTau_InclusivePresel":
-            events = analysis_selections.ggTauTau_inclusive_preselection(events, self.debug)
-            events.Electron = events.Electron[lepton_selections.select_electrons(events, self.debug)]
-            events.Muon = events.Muon[lepton_selections.select_muons(events, self.debug)]
-            events.Tau = events.Tau[tau_selections.select_taus(events, self.debug)]
-
-        elif self.selections == "ttH_LeptonicPresel":
-            events = analysis_selections.tth_leptonic_preselection(events, self.debug)
-            events.Electron = events.Electron[lepton_selections.select_electrons(events, self.debug)]
-            events.Muon = events.Muon[lepton_selections.select_muons(events, self.debug)]
-
-        return events 
-
-    def trim_events(self, events, data):
-        events = photon_selections.set_photons(events, self.debug)
-        events = lepton_selections.set_electrons(events, self.debug)
-        events = lepton_selections.set_muons(events, self.debug)
-        events = tau_selections.set_taus(events, self.debug)
-        if data:
-            branches = self.save_branches_data
-        else:
-            branches = self.save_branches
-        trimmed_events = events[branches]
-        return trimmed_events
-
     def load_samples(self):
         with open(self.samples, "r") as f_in:
             self.samples_dict = json.load(f_in)
@@ -120,13 +69,32 @@ class LoopHelper():
             print("[LoopHelper] Running over the following samples:")
             print("\n".join(["{0}={1!r}".format(a, b) for a, b in self.samples_dict.items()]))
 
-    def chunks(self, files, fpo):
-        for i in range(0, len(files), fpo):
-            yield files[i : i + fpo]
+    ##########################
+    ### Main function: run ###
+    ##########################
 
     def run(self):
-        lumi_map = { "2016" : 35.9, "2017" : 41.5, "2018" : 59 } # FIXME: do in a more configurable way
+        self.prepare_jobs()     # split files for each job, prepare relevants inputs (scale1fb, isData, etc)
 
+        start = time.time()
+        self.submit_jobs()      # actually submit the jobs (local, Dask, condor) 
+        elapsed_time = time.time() - start
+        print("[LoopHelper] Total time to run %d jobs on %d cores: %.2f minutes" % (len(self.jobs_manager), self.nCores, elapsed_time/60.)) 
+
+        start = time.time()
+        self.merge_outputs()    # merge individual pkl files into a single master pkl
+        elapsed_time = time.time() - start
+        print("[LoopHelper] Total time to merge %d outputs: %.2f minutes" % (len(self.outputs), elapsed_time/60.))
+
+        self.write_summary()    # write a json file containing run options
+
+    ##################
+    ### Core tasks ###
+    ##################
+
+    def prepare_jobs(self):
+        lumi_map = { "2016" : 35.9, "2017" : 41.5, "2018" : 59 } # FIXME: do in a more configurable way
+        
         self.jobs_manager = []
 
         for sample, info in self.samples_dict.items():
@@ -144,7 +112,7 @@ class LoopHelper():
                 if len(files) == 0:
                     continue
 
-                job_info = { 
+                job_info = {
                     "sample" : sample,
                     "process_id" : info["process_id"],
                     "year" : year,
@@ -164,16 +132,17 @@ class LoopHelper():
                     output = self.output_dir + self.selections + "_" + self.output_tag + "_" + sample + "_" + year + "_" + str(job_id) + ".pkl"
                     self.jobs_manager.append({
                         "info" : job_info,
-                        "output" : output, 
+                        "output" : output,
                         "files" : file_split
                     })
                     self.outputs.append(output)
-                
+        return
+
+    def submit_jobs(self):
         if self.batch == "local":
-            start = time.time()
             if self.debug > 0:
                 print("[LoopHelper] Submitting %d jobs locally on %d cores" % (len(self.jobs_manager), self.nCores))
-        
+
             manager = multiprocessing.Manager()
             running_procs = []
             for job in self.jobs_manager:
@@ -206,10 +175,7 @@ class LoopHelper():
                     except:
                         continue
 
-            if self.debug > 0:
-                elapsed_time = time.time() - start
-                print("[LoopHelper] Total time to run %d jobs on %d cores: %.2f minutes" % (len(self.jobs_manager), self.nCores, elapsed_time/60.))
-            
+            return
 
         elif self.batch == "dask":
             return
@@ -217,54 +183,6 @@ class LoopHelper():
         elif self.batch == "condor":
             return
             #TODO
-
-        self.merge_outputs()
-        return
-
-    def write_to_df(self, events, output_name):
-        df = awkward.to_pandas(events)
-        df.to_pickle(output_name)
-        return
-
-    def loop_sample(self, job): 
-        info = job["info"]
-        sample = info["sample"]
-        files = job["files"]
-        output = job["output"]
-
-        if self.debug > 0:
-            print("[LoopHelper] Running job with parameters", job)
-
-        if sample == "Data":
-            data = True
-        else:
-            data = False
-        
-        sel_evts = []
-        process_id = info["process_id"]
-
-        for file in files:
-            if self.debug > 0:
-                print("[LoopHelper] Loading file %s" % file)
-
-            events = self.load_file(file, data = data)
-            if events is None:
-                self.outputs.pop(output)
-                return
-            events = self.select_events(events) 
-            
-            events["process_id"] = numpy.ones(len(events)) * process_id
-            if data:
-                events["weight"] = numpy.ones(len(events))
-            else:
-                events["weight"] = events.genWeight * info["scale1fb"] * info["lumi"]
-
-            events = self.trim_events(events, data)
-            sel_evts.append(events)
-
-        events_full = awkward.concatenate(sel_evts)
-        self.write_to_df(events_full, output)
-        return
 
     def merge_outputs(self):
         master_file = self.output_dir + self.selections + "_" + self.output_tag +  ".pkl"
@@ -278,4 +196,116 @@ class LoopHelper():
             master_df = pandas.concat([master_df, df], ignore_index=True)
 
         master_df.to_pickle(master_file)
-            
+
+    def write_summary(self):
+        summary_file = self.output_dir + self.selections + "_" + self.output_tag + ".json"
+        summary = vars(self)
+        with open(summary_file, "w") as f_out:
+            json.dump(summary, f_out, sort_keys = True, indent = 4)
+    
+    ################################
+    ### Physics: selections, etc ###
+    ################################
+
+    def select_events(self, events):
+        # Dipho preselection
+        events = photon_selections.diphoton_preselection(events, self.debug)
+        events.Photon = events.Photon[photon_selections.select_photons(events, self.debug)]
+
+        if self.selections == "HHggTauTau_InclusivePresel":
+            events = analysis_selections.ggTauTau_inclusive_preselection(events, self.debug)
+            events.Electron = events.Electron[lepton_selections.select_electrons(events, self.debug)]
+            events.Muon = events.Muon[lepton_selections.select_muons(events, self.debug)]
+            events.Tau = events.Tau[tau_selections.select_taus(events, self.debug)]
+
+        elif self.selections == "ttH_LeptonicPresel":
+            events = analysis_selections.tth_leptonic_preselection(events, self.debug)
+            events.Electron = events.Electron[lepton_selections.select_electrons(events, self.debug)]
+            events.Muon = events.Muon[lepton_selections.select_muons(events, self.debug)]
+
+        return events
+
+    def trim_events(self, events, data):
+        events = photon_selections.set_photons(events, self.debug)
+        events = lepton_selections.set_electrons(events, self.debug)
+        events = lepton_selections.set_muons(events, self.debug)
+        events = tau_selections.set_taus(events, self.debug)
+        if data:
+            branches = self.save_branches_data
+        else:
+            branches = self.save_branches
+        trimmed_events = events[branches]
+        return trimmed_events
+
+    def loop_sample(self, job):
+        info = job["info"]
+        sample = info["sample"]
+        files = job["files"]
+        output = job["output"]
+
+        if self.debug > 0:
+            print("[LoopHelper] Running job with parameters", job)
+
+        if sample == "Data":
+            data = True
+        else:
+            data = False
+
+        sel_evts = []
+        process_id = info["process_id"]
+
+        for file in files:
+            if self.debug > 0:
+                print("[LoopHelper] Loading file %s" % file)
+
+            events = self.load_file(file, data = data)
+            if events is None:
+                self.outputs.pop(output)
+                return
+            events = self.select_events(events)
+
+            events["process_id"] = numpy.ones(len(events)) * process_id
+            if data:
+                events["weight"] = numpy.ones(len(events))
+            else:
+                events["weight"] = events.genWeight * info["scale1fb"] * info["lumi"]
+
+            events = self.trim_events(events, data)
+            sel_evts.append(events)
+
+        events_full = awkward.concatenate(sel_evts)
+        self.write_to_df(events_full, output)
+        return
+
+    ########################
+    ### Helper functions ###
+    ########################
+
+    def load_file(self, file, tree_name = "Events", data = False):
+        with uproot.open(file) as f:
+            if not f:
+                print("[LoopHelper] Problem opening file %s" % file)
+                return None
+            tree = f[tree_name]
+            if not tree:
+                print("[LoopHelper] Problem opening file %s" % file)
+                return None
+
+            if data:
+                branches = self.branches_data
+            else:
+                branches = self.branches
+            events = tree.arrays(branches, library = "ak", how = "zip") 
+            #events = tree.arrays(branches, entry_start = 0, entry_stop = 10000, library = "ak", how = "zip") 
+            # library = "ak" to load arrays as awkward arrays for best performance
+            # how = "zip" allows us to access arrays as records, e.g. events.Photon
+        return events
+
+    def chunks(self, files, fpo):
+        for i in range(0, len(files), fpo):
+            yield files[i : i + fpo]
+
+    def write_to_df(self, events, output_name):
+        df = awkward.to_pandas(events)
+        df.to_pickle(output_name)
+        return
