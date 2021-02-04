@@ -25,3 +25,22 @@ def ggTauTau_inclusive_preselection(events, debug):
 
     return events
 
+def tth_leptonic_preselection(events, debug):
+    cut_diagnostics = utils.CutDiagnostics(n_events_initial = len(events), debug = debug, cut_set = "[analysis_selections.py : tth_leptonic_preselection]")
+    
+    # Get number of electrons, muons
+    n_electrons = awkward.num(events.Electron[lepton_selections.select_electrons(events, debug)])
+    n_muons = awkward.num(events.Muon[lepton_selections.select_muons(events, debug)])
+    
+    n_leptons = n_electrons + n_muons
+    
+    
+    # Get number of jets
+    #TODO
+    
+    lep_cut = n_leptons >= 1
+    
+    events = events[lep_cut]
+    cut_diagnostics.add_cut(len(events), cut_name = "leptons >= 1 cut")
+    
+    return events
