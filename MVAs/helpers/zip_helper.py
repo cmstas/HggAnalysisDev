@@ -64,8 +64,6 @@ class ZipHelper():
     def calculate_scores(self):
         for name, mva in self.mvas.items():
             scores = mva.predict_from_df(self.df)
-            for i in range(10):
-                print(scores[i])
             self.df[name] = scores
 
         return
