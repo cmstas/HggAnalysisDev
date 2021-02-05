@@ -5,8 +5,6 @@ import numba
 import selections.selection_utils as utils
 import selections.object_selections as object_selections
 
-DR_LEP_PHO = 0.2
-
 def select_electrons(events, photons, options, debug):
     cut_diagnostics = utils.ObjectCutDiagnostics(objects = events.Electron, cut_set = "[lepton_selections.py : select_electrons]", debug = debug)
 

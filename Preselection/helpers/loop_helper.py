@@ -13,6 +13,7 @@ import selections.photon_selections as photon_selections
 import selections.analysis_selections as analysis_selections
 import selections.lepton_selections as lepton_selections
 import selections.tau_selections as tau_selections
+import selections.jet_selections as jet_selections
 
 class LoopHelper():
     """
@@ -234,14 +235,17 @@ class LoopHelper():
             events = analysis_selections.tth_leptonic_preselection(events, options, self.debug)
             events.Electron = events.Electron[lepton_selections.select_electrons(events, events.Photon, options, self.debug)]
             events.Muon = events.Muon[lepton_selections.select_muons(events, events.Photon, options, self.debug)]
+            events.Jet = events.Jet[jet_selections.select_jets(events, events.Photon, events.Electron, events.Muon, None, options, self.debug)]
 
         return events
 
     def trim_events(self, events, data):
         events = photon_selections.set_photons(events, self.debug)
-        events = lepton_selections.set_electrons(events, self.debug)
-        events = lepton_selections.set_muons(events, self.debug)
-        events = tau_selections.set_taus(events, self.debug)
+        if self.selections == "HHggTauTau_InclusivePresel" or self.selections == "ttH_LeptonicPresel":
+            events = lepton_selections.set_electrons(events, self.debug)
+            events = lepton_selections.set_muons(events, self.debug)
+        if self.selections == "HHggTauTau_InclusivePresel":
+            events = tau_selections.set_taus(events, self.debug)
         if data:
             branches = self.save_branches_data
         else:

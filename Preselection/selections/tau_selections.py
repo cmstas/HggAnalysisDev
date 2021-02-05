@@ -5,9 +5,6 @@ import numba
 import selections.selection_utils as utils
 import selections.object_selections as object_selections
 
-DR_TAU_PHO = 0.2
-DR_TAU_LEP = 0.2
-
 def select_taus(events, photons, muons, electrons, options, debug):
     cut_diagnostics = utils.ObjectCutDiagnostics(objects = events.Tau, cut_set = "[tau_selections.py : select_taus]", debug = debug)
 
