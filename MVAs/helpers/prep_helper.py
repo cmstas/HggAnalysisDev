@@ -4,6 +4,8 @@ import json
 import numpy
 import random
 
+from helpers import utils
+
 class PrepHelper():
     """
     Class to read events in from an ntuple and perform necessary
@@ -115,13 +117,8 @@ class PrepHelper():
         optimizing hyperparameters, but this ensures consistency in knowing what is
         train/test/validation throughout the workflow
         """
-        
-        mgg = self.df["ggMass"].tolist()
-        digits = numpy.array([int(str(m).split(".")[1]) for m in mgg])
 
-        idx_train = numpy.argwhere(digits % 3 == 0).ravel() # ravel() to make it the right shape for slicing df
-        idx_test = numpy.argwhere(digits % 3 == 1).ravel()
-        idx_validation = numpy.argwhere(digits % 3 == 2).ravel()
+        self.df, idx_train, idx_test, idx_validation = utils.make_train_test_validation_split(self.df)
 
         self.X_train = self.X.iloc[idx_train]
         self.y_train = self.y.iloc[idx_train]
@@ -133,10 +130,6 @@ class PrepHelper():
         self.y_validation = self.y.iloc[idx_validation] 
         self.weight_validation = self.weight.iloc[idx_validation]
 
-        # Record the test/train/validation split
-        train_label = list(numpy.zeros(len(self.df)))
-        self.df["train_label"] = train_label
-        
         self.df.iloc[idx_train, self.df.columns.get_loc("train_label")] = 0
         self.df.iloc[idx_test, self.df.columns.get_loc("train_label")] = 1
         self.df.iloc[idx_validation, self.df.columns.get_loc("train_label")] = 2

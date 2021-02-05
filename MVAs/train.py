@@ -11,6 +11,13 @@ parser.add_argument(
     "--input",
     help = "path to input hdf5",
     type = str,
+    default = "output/test.hdf5"
+)
+parser.add_argument(
+    "--config",
+    help = "path to json config file",
+    type = str,
+    default = "data/HH_ggTauTau_BaselineBDT.json"
 )
 parser.add_argument(
     "--debug",

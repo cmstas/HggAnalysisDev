@@ -1,6 +1,6 @@
 import argparse
 
-from helpers import mva_helper, tree_helper 
+from helpers import zip_helper 
 
 """
 This script takes in an ntuple and one or more mvas and
@@ -11,25 +11,27 @@ retaining a specified subset of branches from the original ntuple.
 parser = argparse.ArgumentParser()
 parser.add_argument(
     "--input",
-    help = "path to input ntuple",
-    type = str
+    help = "path to input dataframe",
+    type = str,
+    default = "../Preselection/output/HHggTauTau_InclusivePresel_v0.2_4Feb2021_SyncWithFranny.pkl"
 )
 parser.add_argument(
     "--mvas",
-    help = "path to json containing mvas to zip in ntuple",
+    help = "csv list of path to jsons containing mvas to zip in ntuple",
     type = str,
+    default = "output/test.json"
 )
 parser.add_argument(
-    "--branches",
-    help = "csv list of branches to store in output ntuple",
+    "--names",
+    help = "csv list of names to save mva scores as",
     type = str,
-    default = "weight,process_idx,process_name,event,run,lumi,year"
+    default = "mva_score"
 )
 parser.add_argument(
     "--output",
-    help = "name of output ntuple",
+    help = "name of output dataframe",
     type = str,
-    default = "test.root"
+    default = "output/test_finalfit_df.pkl"
 )
 parser.add_argument(
     "--debug",
@@ -39,6 +41,6 @@ parser.add_argument(
 )
 
 args = parser.parse_args()
-tree_maker = tree_helper.TreeHelper(**vars(args))
-tree_maker.run()
+zipper = zip_helper.ZipHelper(**vars(args))
+zipper.run()
 
