@@ -34,7 +34,8 @@ class LoopHelper():
 
         self.output_tag = kwargs.get("output_tag")
         self.output_dir = kwargs.get("output_dir")
-        
+        os.system("mkdir -p %s" % self.output_dir)
+
         self.batch = kwargs.get("batch")
         self.nCores = kwargs.get("nCores")
         self.debug = kwargs.get("debug")
