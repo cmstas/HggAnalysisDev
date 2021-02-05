@@ -11,13 +11,13 @@ parser.add_argument(
     "--input",
     help = "path to input dataframe",
     type = str,
-    default = "../Preselection/output/HHggTauTau_InclusivePresel_v0.1_3Feb2021.pkl"
+    default = "../Preselection/output/HHggTauTau_InclusivePresel_v0.2_4Feb2021_SyncWithFranny.pkl"
 )
 parser.add_argument(
     "--debug",
     help = "debug level",
     type = int,
-    default = 0
+    default = 1
 )
 parser.add_argument(
     "--config",
@@ -29,7 +29,7 @@ parser.add_argument(
     "--output",
     help = "name of output hdf5 file",
     type = str,
-    default = "test.hdf5"
+    default = "output/test.hdf5"
 )
 
 args = parser.parse_args()
