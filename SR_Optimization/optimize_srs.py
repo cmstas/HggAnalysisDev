@@ -9,8 +9,9 @@ This script takes an ntuple with
 parser = argparse.ArgumentParser()
 parser.add_argument(
     "--input",
-    help = "path to input ntuple",
-    type = str
+    help = "path to input dataframe",
+    type = str,
+    default = "../MVAs/output/test_finalfit_df.pkl"
 )
 parser.add_argument(
     "--debug",
@@ -20,7 +21,7 @@ parser.add_argument(
 )
 parser.add_argument(
     "--output_tag",
-    help = "tag to identify this training",
+    help = "tag to identify this optimization",
     type = str,
     default = "test"
 )
@@ -35,6 +36,20 @@ parser.add_argument(
     help = "metric to optimize (significance, upper limit, etc)",
     type = str,
     default = "significance"
+)
+
+# Technical
+parser.add_argument(
+    "--batch",
+    help = "run locally vs. on dask vs. condor",
+    type = str,
+    default = "local"
+)
+parser.add_argument(
+    "--nCores",
+    help = "number of cores to run locally on",
+    type = int,
+    default = 8
 )
 
 args = parser.parse_args()
