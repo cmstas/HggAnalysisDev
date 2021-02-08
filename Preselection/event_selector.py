@@ -45,14 +45,11 @@ def prepare_inputs(args, obj_list, isData=False):
     if "category" in obj_list:
         category_keys  = t.keys(filter_name="Category_*")
         keys_to_save += category_keys
-    if "jet" in obj_list:
-        jets_keys = t.keys(filter_name = "Jet_*")
-        keys_to_save += jets_keys
     #if "idx" in obj_list:
     #    idx_keys = t.keys(filter_name="gHidx")
     #    keys_to_save += idx_keys
     if "others" in obj_list:
-        evt_vars_keys = t.keys(filter_name=["MET_pt", "ggMass"]) 
+        evt_vars_keys = t.keys(filter_name=["nJet", "MET_pt", "ggMass",'tautauMass_SVFit', 'tautauMassAll_SVFit', 'tautauMassLoose_SVFit']) 
         keys_to_save +=  evt_vars_keys
 
     events = t.arrays( keys_to_save , entry_start=entrystart, entry_stop=entrystop, library="ak", how="zip" )
@@ -61,7 +58,7 @@ def prepare_inputs(args, obj_list, isData=False):
     return events
     
 @nb.jit
-def select_photon_byEvent(photon, gHIdx, mgg):
+def select_photon_byEvent(photon, gHIdx, mgg, sig_like ):
     nEvents = len(photon)
     mask_init = np.zeros(nEvents, dtype=np.int64)
     mask_dipho =  mask_init > 0 # all False
@@ -73,6 +70,9 @@ def select_photon_byEvent(photon, gHIdx, mgg):
         if (pho1.mvaID < -0.7) | (pho2.mvaID < -0.7): continue
         if (pho1.pt/mgg[i] < 0.3) | (pho2.pt/mgg[i] < 0.25): continue
         if mgg[i] < 100: continue
+        if sig_like == False :
+            if mgg[i] > 180: continue
+            if mgg[i] > 120 and mgg[i] < 130 : continue
         mask_dipho[i] = True 
     return mask_dipho
 
