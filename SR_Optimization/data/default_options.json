@@ -1,0 +1,17 @@
+{
+    "metric" : "z_a",
+    "non_resonant" : {
+        "data" : false,
+        "fit" : "exponential"
+    },
+    "resonant" : {
+        "fit" : "dcb"
+    },
+    "n_bins" : 2,
+    "n_points" : 20,
+    "mvas" : ["mva_score"],
+    "branches" : ["ggMass", "weight", "train_label", "process_id"],
+    "signal" : ["HH_ggTauTau"],
+    "resonant_background" : ["VH"],
+    "background" : ["DiPhoton", "TTGG", "TTGamma", "TTbar", "WGamma", "ZGamma"]
+}

@@ -3,7 +3,8 @@ import argparse
 from helpers import optimization_helper
 
 """
-This script takes an ntuple with  
+This script takes a dataframe and scans N-d cuts on n signal regions to optimize
+a specified metric (significance, upper limit, etc)
 """
 
 parser = argparse.ArgumentParser()
@@ -30,6 +31,12 @@ parser.add_argument(
     help = "options for the SR optimization",
     type = str,
     default = "data/default_options.json"
+)
+parser.add_argument(
+    "--samples",
+    help = "json file containing list of samples (so we can match names to process id)",
+    type = str,
+    default = "../Preselection/data/samples_and_scale1fb.json"
 )
 parser.add_argument(
     "--metric",
