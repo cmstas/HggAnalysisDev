@@ -97,7 +97,7 @@ def select_photon_nb(photon, gHIdx, mgg):
                 mask_contents[mask_offsets[i+1]] = False
             elif ((j == leadidx) and (pho.pt/mgg[i] < 0.3)):
                 mask_contents[mask_offsets[i+1]] = False
-            elif ((j == subleadidx) and (pho.pt/mgg[i] < 0.3)):
+            elif ((j == subleadidx) and (pho.pt/mgg[i] < 0.25)):		#changed 0.3 to 0.25 for sub-leading pho
                 mask_contents[mask_offsets[i+1]] = False
             else:
                 mask_contents[mask_offsets[i+1]] = True 
