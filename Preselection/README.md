@@ -1,18 +1,31 @@
 # Instructions for running looper tool `loop.py`
 1a. If you want to run over a set of samples that are not already in one of the `data/samples...` files, create a `json` file with your desired samples, adding them with the following fields:  
 `"sample_name" : { # sample name will be used to identify this sample later in MVA training/SR optimization  
+
       "resonant" : true/false, # the looper will treat resonant and non-resonant samples slightly differently, blinding non-resonant samples in the [120,130] GeV region  
+
       "fpo" : N, # number of input nanoAOD skims for each job that the looper submits  
+
       "process_id" : N, # this is will be stored as a column in the output dataframe to distinguish which process this is -- usually, make sure you pick a different process_id from all other samples (sometimes you might want to identify multiple samples with the same process_id, e.g. HT-binned samples of the same process)  
+
       "2016" : {  
+
           "paths" : ["/path1", "/path2"],  
+
           "metadata" : { "xs" : xs in pb }  
+
       }   
+
       "2017" : {  
+
       . . .  
+
       }  
+
  }`  
+
 1b. Calculate `scale1fb` for your new samples with `scripts/scale1fb.py`  
+
 2. Run `loop.py` -- arguments:  
     - `samples`: give the path to the json file containing your samples  
     - `selections`: string identifying which selection you want to perform (make sure it is implemented in `helpers/loop_helper.py:select_events`  
