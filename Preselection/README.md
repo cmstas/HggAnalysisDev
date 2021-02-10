@@ -1,6 +1,7 @@
 # Instructions for running looper tool `loop.py`
-1a. If you want to run over a set of samples that are not already in one of the `data/samples...` files, create a `json` file with your desired samples, adding them with the following fields:  
-`"sample_name" : { # sample name will be used to identify this sample later in MVA training/SR optimization  
+1a. If you want to run over a set of samples that are not already in one of the `data/samples...` files, create a `json` file with your desired samples, adding them with the following fields: 
+ 
+ `"sample_name" : { # sample name will be used to identify this sample later in MVA training/SR optimization 
 
       "resonant" : true/false, # the looper will treat resonant and non-resonant samples slightly differently, blinding non-resonant samples in the [120,130] GeV region  
 
