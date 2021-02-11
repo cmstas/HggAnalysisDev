@@ -427,9 +427,9 @@
         "2016": {
             "metadata": {
                 "n_events": 23382192,
-                "scale1fb": 8.50337056371383e-06,
+                "scale1fb": 2.2684540281255388e-05,
                 "sumWeights": 22508721520,
-                "xs": 191.4
+                "xs": 510.6
             },
             "paths": [
                 "/hadoop/cms/store/user/legianni/ProjectMetis/WGToLNuG_TuneCUETP8M1_13TeV-amcatnloFXFX-pythia8_16_2____v4",
@@ -467,9 +467,9 @@
         "2016": {
             "metadata": {
                 "n_events": 13502686,
-                "scale1fb": 1.7299984676849723e-05,
+                "scale1fb": 3.852046947830927e-05,
                 "sumWeights": 3213875679,
-                "xs": 55.6
+                "xs": 123.8
             },
             "paths": [
                 "/hadoop/cms/store/user/legianni/ProjectMetis/ZGTo2LG_TuneCUETP8M1_13TeV-amcatnloFXFX-pythia8_16____v4/"
