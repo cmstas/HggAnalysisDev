@@ -40,7 +40,7 @@
         "process_id" : 2,
         "2016" : {
             "paths" : ["/hadoop/cms/store/user/legianni/ProjectMetis/ZGTo2LG_TuneCUETP8M1_13TeV-amcatnloFXFX-pythia8_16____v4/"],
-            "metadata" : { "xs" : 55.6 }
+            "metadata" : { "xs" : 123.8 }
         },
         "2017" : {
             "paths" : ["/hadoop/cms/store/user/legianni/ProjectMetis/ZGToLLG_01J_5f_TuneCP5_13TeV-amcatnloFXFX-pythia8_17____v4/"],
@@ -74,7 +74,7 @@
         "process_id" : 4,
         "2016" : {
             "paths" : ["/hadoop/cms/store/user/legianni/ProjectMetis/WGToLNuG_TuneCUETP8M1_13TeV-amcatnloFXFX-pythia8_16_2____v4", "/hadoop/cms/store/user/legianni/ProjectMetis/WGToLNuG_TuneCUETP8M1_13TeV-amcatnloFXFX-pythia8_16_3____v4", "/hadoop/cms/store/user/legianni/ProjectMetis/WGToLNuG_TuneCUETP8M1_13TeV-amcatnloFXFX-pythia8_16____v4"], 
-            "metadata" : { "xs" : 191.4 }
+            "metadata" : { "xs" : 510.6 }
         },
         "2017" : {
             "paths" : ["/hadoop/cms/store/user/legianni/ProjectMetis/WGToLNuG_01J_5f_TuneCP5_13TeV-amcatnloFXFX-pythia8_17____v4"], 

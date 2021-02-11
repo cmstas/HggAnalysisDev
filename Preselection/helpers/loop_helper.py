@@ -89,6 +89,7 @@ class LoopHelper():
 
         start = time.time()
         self.merge_outputs()    # merge individual pkl files into a single master pkl
+        self.clean_up()
         elapsed_time = time.time() - start
         print("[LoopHelper] Total time to merge %d outputs: %.2f minutes" % (len(self.outputs), elapsed_time/60.))
 
@@ -208,6 +209,12 @@ class LoopHelper():
 
         master_df.to_pickle(master_file)
 
+    def clean_up(self):
+        for file in self.outputs:
+            if not os.path.exists(file):
+                continue
+            os.system("rm %s" % file)
+
     def write_summary(self):
         summary_file = self.output_dir + self.selections + "_" + self.output_tag + ".json"
         summary = vars(self)
@@ -247,6 +254,8 @@ class LoopHelper():
             events = lepton_selections.set_muons(events, self.debug)
         if self.selections == "HHggTauTau_InclusivePresel":
             events = tau_selections.set_taus(events, self.debug)
+        if self.selections == "ttH_LeptonicPresel":
+            events = jet_selections.set_jets(events, self.selection_options, self.debug)
         if data:
             branches = self.save_branches_data
         else:
