@@ -58,7 +58,7 @@ def prepare_inputs(args, obj_list, isData=False):
     return events
     
 @nb.jit
-def select_photon_byEvent(photon, gHIdx, mgg, sig_like ):
+def select_photon_byEvent( photon, gHIdx, mgg, sig_like ):
     nEvents = len(photon)
     mask_init = np.zeros(nEvents, dtype=np.int64)
     mask_dipho =  mask_init > 0 # all False
@@ -69,10 +69,22 @@ def select_photon_byEvent(photon, gHIdx, mgg, sig_like ):
         pho2 = photon[i][phoidx2]
         if (pho1.mvaID < -0.7) | (pho2.mvaID < -0.7): continue
         if (pho1.pt/mgg[i] < 0.3) | (pho2.pt/mgg[i] < 0.25): continue
-        if mgg[i] < 100: continue
+        if ( mgg[i] < 100 ) | ( mgg[i] > 180 ): continue
         if sig_like == False :
-            if mgg[i] > 180: continue
             if mgg[i] > 120 and mgg[i] < 130 : continue
+        mask_dipho[i] = True 
+    return mask_dipho
+
+
+@nb.jit
+def select_photon_byEvent_v1( photon, mgg, sig_like ):
+    nEvents = len(photon)
+    mask_init = np.zeros(nEvents, dtype=np.int64)
+    mask_dipho =  mask_init > 0 # all False
+    for i in range(nEvents):
+        if ( mgg[i] < 100 ) | ( mgg[i] > 180 ): continue
+        if sig_like == False :
+            if ( mgg[i] > 120 ) & ( mgg[i] < 130 ) : continue
         mask_dipho[i] = True 
     return mask_dipho
 
@@ -95,7 +107,7 @@ def select_photon_nb(photon, gHIdx, mgg):
             pho = phos[j] 
             if (pho.mvaID < -0.7) or ((j != leadidx ) and (j != subleadidx)):
                 mask_contents[mask_offsets[i+1]] = False
-            elif ((j == leadidx) and (pho.pt/mgg[i] < 0.3)):
+            elif ((j == leadidx) and (pho.pt/mgg[i] < 0.33)):
                 mask_contents[mask_offsets[i+1]] = False
             elif ((j == subleadidx) and (pho.pt/mgg[i] < 0.25)):		#changed 0.3 to 0.25 for sub-leading pho
                 mask_contents[mask_offsets[i+1]] = False
