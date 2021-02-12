@@ -41,6 +41,7 @@ def calculate_za(signal_events, resonant_background_events, background_events, d
 
     idx = 0
     results["Z_A_combined"] = 0
+    results["Z_A_combined_data"] = 0
     for sig, res_bkg, bkg, data in zip(signal_events, resonant_background_events, background_events, data_events):
         idx += 1
         #sig_model = make_resonant_model(sig, options["resonant"])
@@ -51,18 +52,24 @@ def calculate_za(signal_events, resonant_background_events, background_events, d
         n_sig = sig["weight"].loc[sig["ggMass"].between(122, 128, inclusive=True)].sum()
         n_res_bkg = res_bkg["weight"].loc[res_bkg["ggMass"].between(122, 128, inclusive=True)].sum()
         n_bkg = bkg["weight"].sum() * (6./70.) # scale by [122,128] / [100, 120] U [130, 180]
+        n_bkg_data = data["weight"].sum() * (6./70.) # scale by [122,128] / [100, 120] U [130, 180]
 
         za = Z_A(n_sig, n_res_bkg + n_bkg)
+        za_data = Z_A(n_sig, n_res_bkg + n_bkg_data)
 
         results["Bin_%d" % idx] = {
             "n_signal" : n_sig,
             "n_resonant_background" : n_res_bkg,
             "n_bkg" : n_bkg,
+            "n_bkg_data" : n_bkg_data,
+            "Z_A_data" : za_data,
             "Z_A" : za
         }
         results["Z_A_combined"] += za**2
+        results["Z_A_combined_data"] += za_data**2
 
     results["Z_A_combined"] = math.sqrt(results["Z_A_combined"])
+    results["Z_A_combined_data"] = math.sqrt(results["Z_A_combined_data"])
     return results
 
 def Z_A(s, b):

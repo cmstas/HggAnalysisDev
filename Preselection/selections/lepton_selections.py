@@ -5,17 +5,17 @@ import numba
 import selections.selection_utils as utils
 import selections.object_selections as object_selections
 
-def select_electrons(events, photons, options, debug):
-    cut_diagnostics = utils.ObjectCutDiagnostics(objects = events.Electron, cut_set = "[lepton_selections.py : select_electrons]", debug = debug)
+def select_electrons(events, photons, electrons, options, debug):
+    cut_diagnostics = utils.ObjectCutDiagnostics(objects = electrons, cut_set = "[lepton_selections.py : select_electrons]", debug = debug)
 
-    pt_cut = events.Electron.pt > options["electrons"]["pt"]
-    eta_cut = abs(events.Electron.eta) < options["electrons"]["eta"]
-    ip_xy_cut = abs(events.Electron.dxy) < options["electrons"]["ip_xy"]
-    ip_z_cut = abs(events.Electron.dz) < options["electrons"]["ip_z"]
-    id_cut = (events.Electron.mvaFall17V2Iso_WP90 == True | ((events.Electron.mvaFall17V2noIso_WP90 == True) & (events.Electron.pfRelIso03_all < 0.3)))
+    pt_cut = electrons.pt > options["electrons"]["pt"]
+    eta_cut = abs(electrons.eta) < options["electrons"]["eta"]
+    ip_xy_cut = abs(electrons.dxy) < options["electrons"]["ip_xy"]
+    ip_z_cut = abs(electrons.dz) < options["electrons"]["ip_z"]
+    id_cut = (electrons.mvaFall17V2Iso_WP90 == True | ((electrons.mvaFall17V2noIso_WP90 == True) & (electrons.pfRelIso03_all < 0.3)))
     # TODO: make ID cut configurable
     # also: ID cut has pretty low efficiency on signal, loosen?
-    dR_cut = object_selections.select_deltaR(events, events.Electron, photons, options["electrons"]["dR_pho"], debug)
+    dR_cut = object_selections.select_deltaR(events, electrons, photons, options["electrons"]["dR_pho"], debug)
 
     electron_cut = pt_cut & eta_cut & ip_xy_cut & ip_z_cut & id_cut & dR_cut
 
@@ -23,15 +23,15 @@ def select_electrons(events, photons, options, debug):
 
     return electron_cut
 
-def select_muons(events, photons, options, debug):
-    cut_diagnostics = utils.ObjectCutDiagnostics(objects = events.Muon, cut_set = "[lepton_selections.py : select_muons]", debug = debug)
+def select_muons(events, photons, muons, options, debug):
+    cut_diagnostics = utils.ObjectCutDiagnostics(objects = muons, cut_set = "[lepton_selections.py : select_muons]", debug = debug)
 
-    pt_cut = events.Muon.pt > options["muons"]["pt"]
-    eta_cut = abs(events.Muon.eta) < options["muons"]["eta"]
-    ip_xy_cut = abs(events.Muon.dxy) < options["muons"]["ip_xy"]
-    ip_z_cut = abs(events.Muon.dz) < options["muons"]["ip_z"]
-    iso_cut = events.Muon.pfRelIso03_all < options["muons"]["rel_iso"]
-    dR_cut = object_selections.select_deltaR(events, events.Muon, photons, options["muons"]["dR_pho"], debug)
+    pt_cut = muons.pt > options["muons"]["pt"]
+    eta_cut = abs(muons.eta) < options["muons"]["eta"]
+    ip_xy_cut = abs(muons.dxy) < options["muons"]["ip_xy"]
+    ip_z_cut = abs(muons.dz) < options["muons"]["ip_z"]
+    iso_cut = muons.pfRelIso03_all < options["muons"]["rel_iso"]
+    dR_cut = object_selections.select_deltaR(events, muons, photons, options["muons"]["dR_pho"], debug)
 
     muon_cut = pt_cut & eta_cut & ip_xy_cut & ip_z_cut & iso_cut & dR_cut
 
@@ -39,13 +39,13 @@ def select_muons(events, photons, options, debug):
 
     return muon_cut
 
-def set_electrons(events, debug):
-    events["n_electrons"] = awkward.num(events.Electron)
+def set_electrons(events, electrons, debug):
+    events["n_electrons"] = awkward.num(electrons)
 
-    electron_pt_padded = utils.pad_awkward_array(events.Electron.pt, 2, -9)
-    electron_eta_padded = utils.pad_awkward_array(events.Electron.eta, 2, -9)
-    electron_phi_padded = utils.pad_awkward_array(events.Electron.phi, 2, -9)
-    electron_mass_padded = utils.pad_awkward_array(events.Electron.mass, 2, -9)
+    electron_pt_padded = utils.pad_awkward_array(electrons.pt, 2, -9)
+    electron_eta_padded = utils.pad_awkward_array(electrons.eta, 2, -9)
+    electron_phi_padded = utils.pad_awkward_array(electrons.phi, 2, -9)
+    electron_mass_padded = utils.pad_awkward_array(electrons.mass, 2, -9)
 
     events["ele1_pt"] = electron_pt_padded[:,0]
     events["ele2_pt"] = electron_pt_padded[:,1]
@@ -58,13 +58,13 @@ def set_electrons(events, debug):
 
     return events
 
-def set_muons(events, debug):
-    events["n_muons"] = awkward.num(events.Muon)
+def set_muons(events, muons, debug):
+    events["n_muons"] = awkward.num(muons)
 
-    muon_pt_padded = utils.pad_awkward_array(events.Muon.pt, 2, -9)
-    muon_eta_padded = utils.pad_awkward_array(events.Muon.eta, 2, -9)
-    muon_phi_padded = utils.pad_awkward_array(events.Muon.phi, 2, -9)
-    muon_mass_padded = utils.pad_awkward_array(events.Muon.mass, 2, -9)
+    muon_pt_padded = utils.pad_awkward_array(muons.pt, 2, -9)
+    muon_eta_padded = utils.pad_awkward_array(muons.eta, 2, -9)
+    muon_phi_padded = utils.pad_awkward_array(muons.phi, 2, -9)
+    muon_mass_padded = utils.pad_awkward_array(muons.mass, 2, -9)
     
     events["muon1_pt"] = muon_pt_padded[:,0]
     events["muon2_pt"] = muon_pt_padded[:,1]

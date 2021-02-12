@@ -172,7 +172,7 @@ class OptimizationHelper():
         if self.options["metric"] == "z_a":
             best = {"Z_A_combined" : 0}
             for key, result in self.results.items():
-                if result["Z_A_combined"] >= best["Z_A_combined"]:
+                if result["Z_A_combined"] >= best["Z_A_combined"] and result["Bin_1"]["n_bkg"] > 0 and result["Bin_1"]["n_resonant_background"] > 0:
                     best = result
 
             self.results[-1] = best

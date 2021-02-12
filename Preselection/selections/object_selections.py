@@ -62,7 +62,4 @@ def select_deltaR(events, obj1, obj2, threshold, debug):
 
     mask = awkward.Array(awkward.layout.ListOffsetArray64(awkward.layout.Index64(mask_offsets), awkward.layout.NumpyArray(mask_contents)))
 
-    #if debug > 0:
-    #    print("[object_selections.py] Number of objects before/after dR cut: %d/%d (%.3f)" % (awkward.sum(awkward.num(obj1)), awkward.sum(awkward.num(obj1[mask])), float(awkward.sum(awkward.num(obj1[mask]))) / float(awkward.sum(awkward.num(obj1)))))
-
     return mask 

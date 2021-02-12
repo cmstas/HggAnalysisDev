@@ -140,7 +140,6 @@ cython_debug/
 # nfs files
 .nfs*
 
-<<<<<<< HEAD
 #tar gz files
 *.tar.gz
 
@@ -155,4 +154,6 @@ logs/
 # output dirs
 */output/
 */output/*
->>>>>>> 470c56a231e48ac742c62fb8c32814d497de1627
+
+# CMSSW
+*CMSSW*
