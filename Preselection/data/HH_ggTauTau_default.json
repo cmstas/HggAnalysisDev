@@ -16,12 +16,24 @@
         "n_tau", "n_electrons", "n_muons"
     ],
     "selection_options" : {
+        "diphotons" : {
+            "mgg_lower" : 100,
+            "mgg_upper" : 180,
+            "mgg_sideband_lower" : 120,
+            "mgg_sideband_upper" : 130
+        },
         "photons" : {
-            "idmva_cut" : -0.7
+            "pt" : 25,
+            "eta" : 2.5,
+            "transition_region_eta": [1.442, 1.566],
+            "idmva_cut" : -0.7,
+            "lead_pt_mgg_cut" : 0.33,
+            "sublead_pt_mgg_cut" : 0.25,
+            "eveto_cut" : 0.5
         },
         "electrons" : {
             "pt" : 10.0,
-            "eta" : 2.4,
+            "eta" : 2.5,
             "ip_xy" : 0.045,
             "ip_z" : 0.2,
             "dR_pho" : 0.2

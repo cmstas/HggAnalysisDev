@@ -9,11 +9,8 @@ import multiprocessing
 import time
 import copy
 
-import selections.photon_selections as photon_selections
-import selections.analysis_selections as analysis_selections
-import selections.lepton_selections as lepton_selections
-import selections.tau_selections as tau_selections
-import selections.jet_selections as jet_selections
+from selections import diphoton_selections, analysis_selections
+from selections import photon_selections, lepton_selections, tau_selections, jet_selections
 
 class LoopHelper():
     """
@@ -42,6 +39,8 @@ class LoopHelper():
         self.fast = kwargs.get("fast")
         self.dry_run = kwargs.get("dry_run")
 
+        self.lumi_map = { "2016" : 35.9, "2017" : 41.5, "2018" : 59.8 } 
+
         self.outputs = []
 
         if self.debug > 0:
@@ -58,7 +57,6 @@ class LoopHelper():
 
         self.branches_data = [branch for branch in self.branches if "gen" not in branch]
         self.save_branches_data = [branch for branch in self.save_branches if "gen" not in branch]
-        
 
         if self.debug > 0:
             print("[LoopHelper] Opening options file: %s" % self.options)
@@ -100,8 +98,6 @@ class LoopHelper():
     ##################
 
     def prepare_jobs(self):
-        lumi_map = { "2016" : 35.9, "2017" : 41.5, "2018" : 59 } # FIXME: do in a more configurable way
-        
         self.jobs_manager = []
 
         for sample, info in self.samples_dict.items():
@@ -128,7 +124,7 @@ class LoopHelper():
                     "process_id" : info["process_id"],
                     "year" : year,
                     "scale1fb" : 1 if sample == "Data" else year_info["metadata"]["scale1fb"],
-                    "lumi" : lumi_map[year],
+                    "lumi" : self.lumi_map[year],
                     "resonant" : info["resonant"]
                 }
 
@@ -231,7 +227,7 @@ class LoopHelper():
             options[key] = value
 
         # Diphoton preselection
-        diphoton_events, selected_photons = photon_selections.diphoton_preselection(events, events.Photon, options, self.debug)
+        diphoton_events, selected_photons = diphoton_selections.diphoton_preselection(events, events.Photon, options, self.debug)
 
         events_and_objects = {}
 
@@ -343,7 +339,6 @@ class LoopHelper():
             else:
                 branches = self.branches
             events = tree.arrays(branches, library = "ak", how = "zip") 
-            #events = tree.arrays(branches, entry_start = 0, entry_stop = 10000, library = "ak", how = "zip") 
             # library = "ak" to load arrays as awkward arrays for best performance
             # how = "zip" allows us to access arrays as records, e.g. events.Photon
         return events
