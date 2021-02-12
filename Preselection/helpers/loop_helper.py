@@ -226,41 +226,57 @@ class LoopHelper():
     ################################
 
     def select_events(self, events, metadata):
-        # Dipho preselection
         options = copy.deepcopy(self.selection_options)
         for key, value in metadata.items(): # add sample-specific options to selection options
             options[key] = value
-        events = photon_selections.diphoton_preselection(events, options, self.debug)
-        events.Photon = events.Photon[photon_selections.select_photons(events, options, self.debug)]
+
+        # Diphoton preselection
+        diphoton_events, selected_photons = photon_selections.diphoton_preselection(events, events.Photon, options, self.debug)
+
+        events_and_objects = {}
 
         if self.selections == "HHggTauTau_InclusivePresel":
-            events = analysis_selections.ggTauTau_inclusive_preselection(events, options, self.debug)
-            events.Electron = events.Electron[lepton_selections.select_electrons(events, events.Photon, options, self.debug)]
-            events.Muon = events.Muon[lepton_selections.select_muons(events, events.Photon, options, self.debug)]
-            events.Tau = events.Tau[tau_selections.select_taus(events, events.Photon, events.Muon, events.Electron, options, self.debug)]
+            selected_events, selected_photons, selected_electrons, selected_muons, selected_taus = analysis_selections.ggTauTau_inclusive_preselection(diphoton_events, selected_photons, diphoton_events.Electron, diphoton_events.Muon, diphoton_events.Tau, options, self.debug)
+
+            events_and_objects = {
+                "events" : selected_events,
+                "photons" : selected_photons,
+                "electrons" : selected_electrons,
+                "muons" : selected_muons,
+                "taus" : selected_taus
+            }
 
         elif self.selections == "ttH_LeptonicPresel":
-            events = analysis_selections.tth_leptonic_preselection(events, options, self.debug)
-            events.Electron = events.Electron[lepton_selections.select_electrons(events, events.Photon, options, self.debug)]
-            events.Muon = events.Muon[lepton_selections.select_muons(events, events.Photon, options, self.debug)]
-            events.Jet = events.Jet[jet_selections.select_jets(events, events.Photon, events.Electron, events.Muon, None, options, self.debug)]
+            selected_events, selected_photons, selected_electrons, selected_muons, selected_jets = analysis_selections.tth_leptonic_preselection(diphoton_events, selected_photons, diphoton_events.Electron, diphoton_events.Muon, diphoton_events.Jet, options, self.debug)
+            
+            events_and_objects = { 
+                "events" : selected_events,
+                "photons" : selected_photons,
+                "electrons" : selected_electrons,
+                "muons" : selected_muons,
+                "jets" : selected_jets
+            }
+ 
+        else:
+            print("[LoopHelper] Selection: %s is not currently implemented, please check." % self.selections)
+            return
 
-        return events
+        return events_and_objects 
 
-    def trim_events(self, events, data):
-        events = photon_selections.set_photons(events, self.debug)
+    def trim_events(self, events_and_objects, data):
+        selected_events = photon_selections.set_photons(events_and_objects["events"], events_and_objects["photons"], self.debug)
         if self.selections == "HHggTauTau_InclusivePresel" or self.selections == "ttH_LeptonicPresel":
-            events = lepton_selections.set_electrons(events, self.debug)
-            events = lepton_selections.set_muons(events, self.debug)
+            selected_events = lepton_selections.set_electrons(events_and_objects["events"], events_and_objects["electrons"], self.debug)
+            selected_events = lepton_selections.set_muons(events_and_objects["events"], events_and_objects["muons"], self.debug)
         if self.selections == "HHggTauTau_InclusivePresel":
-            events = tau_selections.set_taus(events, self.debug)
+            selected_events = tau_selections.set_taus(events_and_objects["events"], events_and_objects["taus"], self.debug)
         if self.selections == "ttH_LeptonicPresel":
-            events = jet_selections.set_jets(events, self.selection_options, self.debug)
+            selected_events = jet_selections.set_jets(events_and_objects["events"], events_and_objects["jets"], self.selection_options, self.debug)
         if data:
             branches = self.save_branches_data
         else:
             branches = self.save_branches
-        trimmed_events = events[branches]
+        trimmed_events = selected_events[branches]
         return trimmed_events
 
     def loop_sample(self, job):
@@ -292,7 +308,8 @@ class LoopHelper():
             if events is None:
                 self.outputs.pop(output)
                 return
-            events = self.select_events(events, selection_metadata)
+            events_and_objects = self.select_events(events, selection_metadata)
+            events = events_and_objects["events"]
 
             events["process_id"] = numpy.ones(len(events)) * process_id
             if data:
@@ -300,7 +317,7 @@ class LoopHelper():
             else:
                 events["weight"] = events.genWeight * info["scale1fb"] * info["lumi"]
 
-            events = self.trim_events(events, data)
+            events = self.trim_events(events_and_objects, data)
             sel_evts.append(events)
 
         events_full = awkward.concatenate(sel_evts)

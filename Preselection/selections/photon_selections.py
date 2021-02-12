@@ -18,11 +18,11 @@ For this reason, all selections should be done in the following way:
     2. Trim objects with object-level selections afterwards
 """
 
-def diphoton_preselection(events, options, debug):
+def diphoton_preselection(events, photons, options, debug):
     # Initialize cut diagnostics tool for debugging
     cut_diagnostics = utils.CutDiagnostics(events = events, debug = debug, cut_set = "[photon_selections.py : diphoton_preselection]")
 
-    photons = events.Photon[select_photons(events, options, debug)]
+    selected_photons = photons[select_photons(events, photons, options, debug)]
 
     ### mgg cut ###
     resonant = options["resonant"]
@@ -34,49 +34,47 @@ def diphoton_preselection(events, options, debug):
         mgg_mask = sideband_low | sideband_high
 
     ### pt/mgg cuts ###
-    lead_pt_mgg_requirement = (photons.pt / events.ggMass) > 0.33
-    sublead_pt_mgg_requirement = (photons.pt / events.ggMass) > 0.25
+    lead_pt_mgg_requirement = (selected_photons.pt / events.ggMass) > 0.33
+    sublead_pt_mgg_requirement = (selected_photons.pt / events.ggMass) > 0.25
 
-    lead_pt_mgg_cut = awkward.num(photons[lead_pt_mgg_requirement]) >= 1 # at least 1 photon passing lead requirement
-    sublead_pt_mgg_cut = awkward.num(photons[sublead_pt_mgg_requirement]) >= 2 # at least 2 photon passing sublead requirement
+    lead_pt_mgg_cut = awkward.num(selected_photons[lead_pt_mgg_requirement]) >= 1 # at least 1 photon passing lead requirement
+    sublead_pt_mgg_cut = awkward.num(selected_photons[sublead_pt_mgg_requirement]) >= 2 # at least 2 photon passing sublead requirement
     pt_mgg_cut = lead_pt_mgg_cut & sublead_pt_mgg_cut
 
     ### pho ID MVA cuts ###
-    pho_idmva_requirement = photons.mvaID > options["photons"]["idmva_cut"]
-    pho_idmva_cut = awkward.num(photons[pho_idmva_requirement]) >= 2 # both photons must pass id mva requirement
+    pho_idmva_requirement = selected_photons.mvaID > options["photons"]["idmva_cut"]
+    pho_idmva_cut = awkward.num(selected_photons[pho_idmva_requirement]) >= 2 # both selected_photons must pass id mva requirement
 
     ### electron veto cut ###
-    eveto_requirement = photons.electronVeto == 1
-    eveto_cut = awkward.num(photons[eveto_requirement]) >= 2 # both photons must pass eveto requirement
+    eveto_requirement = selected_photons.electronVeto == 1
+    eveto_cut = awkward.num(selected_photons[eveto_requirement]) >= 2 # both selected_photons must pass eveto requirement
 
-    ### 2 good photons ###
-    photon_cut = awkward.num(photons) == 2 # can regain a few % of signal if we set to >= 2 (probably e's that are reconstructed as photons)
+    ### 2 good selected_photons ###
+    photon_cut = awkward.num(selected_photons) == 2 # can regain a few % of signal if we set to >= 2 (probably e's that are reconstructed as selected_photons)
 
     all_cuts = mgg_mask & pt_mgg_cut & pho_idmva_cut & eveto_cut & photon_cut
     cut_diagnostics.add_cuts([mgg_mask, pt_mgg_cut, pho_idmva_cut, eveto_cut, photon_cut, all_cuts], ["mgg in [100, 180]" if resonant else "mgg in [100, 120] or [130, 180]", "lead (sublead) pt/mgg > 0.33 (0.25)", "pho IDMVA > -0.7", "electron veto", "2 good photons", "all"])
 
-    events = events[all_cuts]
+    return events[all_cuts], selected_photons[all_cuts]
 
-    return events
-
-def select_photons(events, options, debug):
-    cut_diagnostics = utils.ObjectCutDiagnostics(objects = events.Photon, cut_set = "[photon_selections.py : select_photons]", debug = debug)
+def select_photons(events, photons, options, debug):
+    cut_diagnostics = utils.ObjectCutDiagnostics(objects = photons, cut_set = "[photon_selections.py : select_photons]", debug = debug)
     
-    pt_cut = events.Photon.pt > 25
-    eta_cut = abs(events.Photon.eta) < 2.5
-    pt_mgg_cut = (events.Photon.pt / events.ggMass) >= 0.25
-    idmva_cut = events.Photon.mvaID > options["photons"]["idmva_cut"] 
-    eveto_cut = events.Photon.electronVeto == 1
+    pt_cut = photons.pt > 25
+    eta_cut = abs(photons.eta) < 2.5
+    pt_mgg_cut = (photons.pt / events.ggMass) >= 0.25
+    idmva_cut = photons.mvaID > options["photons"]["idmva_cut"] 
+    eveto_cut = photons.electronVeto == 1
     photon_cut = pt_cut & eta_cut & pt_mgg_cut & idmva_cut & eveto_cut
 
     cut_diagnostics.add_cuts([pt_cut, eta_cut, pt_mgg_cut, idmva_cut, eveto_cut, photon_cut], ["pt > 25", "|eta| < 2.5", "pt/mgg", "idmva", "eveto", "all"])
     return photon_cut
 
-def set_photons(events, debug):
-    events["lead_pho_ptmgg"] = events.Photon.pt[:,0] / events.ggMass
-    events["sublead_pho_ptmgg"] = events.Photon.pt[:,1] / events.ggMass
-    events["lead_pho_eta"] = events.Photon.eta[:,0]
-    events["sublead_pho_eta"] = events.Photon.eta[:,1]
-    events["lead_pho_idmva"] = events.Photon.mvaID[:,0]
-    events["sublead_pho_idmva"] = events.Photon.mvaID[:,1]
+def set_photons(events, photons, debug):
+    events["lead_pho_ptmgg"] = photons.pt[:,0] / events.ggMass
+    events["sublead_pho_ptmgg"] = photons.pt[:,1] / events.ggMass
+    events["lead_pho_eta"] = photons.eta[:,0]
+    events["sublead_pho_eta"] = photons.eta[:,1]
+    events["lead_pho_idmva"] = photons.mvaID[:,0]
+    events["sublead_pho_idmva"] = photons.mvaID[:,1]
     return events
