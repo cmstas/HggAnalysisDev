@@ -72,6 +72,7 @@ def split_files(files, file_size_map, target_size):
     return map    
 
 def merge_files(file_map, output_dir):
+    commands = []
     for idx, files in file_map.items():
         master = target_dir + "/merged_nanoAOD_skim_%d.root" % idx
         inputs = ""
@@ -79,7 +80,8 @@ def merge_files(file_map, output_dir):
             inputs += file + " "
 
         command = "hadd -fk -k %s %s" % (master, inputs)
-        return command
+        commands.append(command)
+    return commands
 
 ### Main script ###
 if args.debug > 0:
@@ -113,6 +115,6 @@ for dir in directories:
     if args.debug > 0:
         print("[merge_skims.py] Merging %d files of total size %.2f GB from directory %s into %d files in directory %s." % (len(files), size, dir, len(file_map.keys()), target_dir))
     
-    command_list.append(merge_files(file_map, args.output_dir))
+    command_list += merge_files(file_map, args.output_dir)
 
 parallel_utils.submit_jobs(command_list, args.nCores)
