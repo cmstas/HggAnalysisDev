@@ -7,7 +7,6 @@ import json
 import mplhep as hep
 import awkward as ak
 import numba as nb
-from looper_utils import deltaR_devfunc
 import sys
 plt.style.use([hep.style.CMS, hep.style.firamath])
 
@@ -29,6 +28,9 @@ class Plotter():
         self.plot_options = kwargs.get("plot_options")
         self.branches = kwargs.get("branches")
         self.debug = kwargs.get("debug")
+
+        if type(self.branches) == str:
+            self.branches = [self.branches]
 
         if kwargs.get("input_options"):
             self.input_options = kwargs.get("input_options")
@@ -65,10 +67,9 @@ class Plotter():
         # parse the plot options
         with open(self.plot_options, "r") as f_in:
             self.plot_options = json.load(f_in)
-        print(self.plot_options)
         # Samples specify which processes to plot. "all" implies everything will be plotted
         if self.debug > 0:
-            print("[make_plots_from_json] Loaded dataframe and options")
+            print("[plotter.py] Loaded dataframe and options")
 
     def run(self):
         self.preprocess()
@@ -82,7 +83,8 @@ class Plotter():
         self.master_dataframe = {}
         self.process_id_map = {}
         for sample, info in self.input_options["samples_dict"].items():
-            print("sample = ", sample)
+            if self.debug:
+                print("plotter.py] sample = ", sample)
             # FIXME: Hardcoded signal as HH_ggTauTau
             if sample == "HH_ggTauTau":
                 self.process_id_map["signal"] = info["process_id"]
@@ -106,6 +108,8 @@ class Plotter():
 
         #self.plot_options holds the plot options
         self.histograms = {}
+        if self.branches == ["all"]:
+            self.branches = list(self.plot_options.keys())
         for branch in self.branches:
             self.histograms[branch] = {} # one histogram per process
             for process in self.plot_options[branch]["processes"]:
@@ -115,7 +119,7 @@ class Plotter():
                 if self.plot_options[branch]["bin_type"] == "linspace": # "list" or "linspace"
                     bins = np.linspace(self.plot_options[branch]["bins"][0],self.plot_options[branch]["bins"][1], self.plot_options[branch]["bins"][2]) # start, stop, nbins
                 else:
-                    bins = np.array(self.plot_options[branch][bins]) #custom binning
+                    bins = np.array(self.plot_options[branch]["bins"]) #custom binning
                 self.histograms[branch][process] = Hist1D(toFill.values, bins = bins, weights = weights, label = process)
 
 
@@ -127,6 +131,7 @@ class Plotter():
     def make_plots(self):
         """Plots the YaHists properly (stacking the backgrounds, applying normalization, signals in solid line, data as points etc)"""
         for branch in self.branches:
+            print("Making plots for branch ",branch)
             hist_stack = []
             for process, hist in self.histograms[branch].items():
                 if process == "signal" or process == "Data":
@@ -145,7 +150,7 @@ class Plotter():
                     ax1.set_yscale("log")
                 else:
                     if self.debug:
-                        print("Setting linear scale for y axis")
+                        print("[plotter.py] Setting linear scale for y axis")
             else:
                 print("No yaxis scale option given! Setting linear by default")
 
@@ -158,7 +163,6 @@ class Plotter():
                     signal_label = "signal"
                 self.histograms[branch]["signal"].plot(histtype = "step", label = signal_label, ax = ax1, color = "black")
 
-            # Plotting Data
 
             if "xlabel" in self.plot_options[branch].keys():
                 ax1.set_xlabel(self.plot_options[branch]["xlabel"])
@@ -174,6 +178,7 @@ class Plotter():
                 plt.sca(ax1)
                 hep.cms.label(loc = 0, data = True, lumi = 137.2,fontsize = 18)
 
+            # Plotting Data
 
             if "Data" in self.histograms[branch]:
                 self.histograms[branch]["Data"].plot(show_errors = True, ax = ax1, color = "black")
@@ -192,18 +197,17 @@ class Plotter():
 
                 ratio_hist.plot(ax = ax2, show_errors = True, label = "ratio")
 
-            # Shamelessly stolen from mplhep
-            if self.debug:
-                print("Rescaling y axis to accommodate legend")
-
-            if ax1.get_yscale() == "log":
-                scale_factor = 11.2
-            else:
-                scale_factor = 1.05
-
-            while hep.plot.overlap(ax1,hep.plot._draw_leg_bbox(ax1)) > 0:
-                ax1.set_ylim(ax1.get_ylim()[0], ax1.get_ylim()[-1] * scale_factor)
-                ax1.figure.canvas.draw()
+                # Shamelessly stolen from mplhep
+                if self.debug:
+                    print("[plotter.py] Rescaling y axis to accommodate legend")
+                if ax1.get_yscale() == "log":
+                    scale_factor = 11.2
+                else:
+                    scale_factor = 1.05
+                print("lines = ",ax1.lines)
+                while hep.plot.overlap(ax1,hep.plot._draw_leg_bbox(ax1)) > 0:
+                    ax1.set_ylim(ax1.get_ylim()[0], ax1.get_ylim()[-1] * scale_factor)
+                    ax1.figure.canvas.draw()
 
             #Title
             if "title" in self.plot_options[branch].keys():
@@ -219,5 +223,5 @@ class Plotter():
 
 #unit test
 if __name__ == "__main__":
-    p = Plotter(df = "HggUnitTest.pkl",plot_options = "plot_options_test.json", branches = ["ggMass"], debug = True)
+    p = Plotter(df = "HggUnitTest.pkl",plot_options = "plot_temp_options.json", branches = "all", debug = True)
     p.run()

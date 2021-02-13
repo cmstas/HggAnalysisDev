@@ -32,8 +32,9 @@
     * `ratio_ylim` : Sets y limits for the ratio plots
     * `output_name` : string containing the output name
 
-# Sample test 
+#### Sample test 
 * Download `HggUnitTest.pkl`, `plot_options_test.json` and `HggUnitTest.json` from [here](http://uaf-10.t2.ucsd.edu/~bsathian/HHggTauTau_plotting/)
 * Run `plotter.py`
 
-
+#### Known issues
+* Axis rescaling to accommodate legend does not work if a data histogram is not present

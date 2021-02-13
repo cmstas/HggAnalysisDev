@@ -157,3 +157,6 @@ logs/
 
 # CMSSW
 *CMSSW*
+
+HggUnitTest.json
+plot_temp_options.json
