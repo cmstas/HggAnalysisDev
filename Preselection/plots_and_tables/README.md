@@ -1,4 +1,12 @@
-### Plotter help
+# Plotter code
+
+---
+
+### Requirements
+* yahist
+* mplhep
+
+### Instructions
 
 1. Initialize an instance of the `Plotter` class from `plots_and_tables/plotter.py`
     * Required arguments
@@ -10,7 +18,7 @@
 
 2. `run()` the instance to get plots
 
-#### Plotter `json` file contents
+### Plotter `json` file contents
 * Every main entry in the `json` file has the following format
     `{branch name : {bin type : <bin type>, bins : <bins>, processes : [List of physics processes involved for this plot], <other optional parameters>}}`
 * A json file can have multiple such entries 
@@ -32,9 +40,9 @@
     * `ratio_ylim` : Sets y limits for the ratio plots
     * `output_name` : string containing the output name
 
-#### Sample test 
+### Sample test 
 * Download `HggUnitTest.pkl`, `plot_options_test.json` and `HggUnitTest.json` from [here](http://uaf-10.t2.ucsd.edu/~bsathian/HHggTauTau_plotting/)
 * Run `plotter.py`
 
-#### Known issues
+### Known issues
 * Axis rescaling to accommodate legend does not work if a data histogram is not present
