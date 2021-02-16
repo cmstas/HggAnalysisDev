@@ -3,7 +3,7 @@
 ---
 
 One plotter to rule them all  
-One Plotter to find them  
+One plotter to find them  
 One plotter to collect them all  
 And in the output, plot them  
 
