@@ -19,11 +19,11 @@ Use this plotter both in script mode and in jupyter notebook mode
 
 1. Initialize an instance of the `Plotter` class from `plots_and_tables/plotter.py`
     * Required arguments
-        * `input` : Input DataFrame `pkl` or `hdf5` file
-        * `plot_options` : A `json` file that contains the options for the plotter (More details below)
+        * `input` : Input DataFrame `pkl` or `hdf5` file, or an actual pandas `DataFrame` (useful in Jupyter notebook mode)
+        * `plot_options` : A `json` file (or an equivalent `dict`) that contains the options for the plotter (More details below)
         * `branches` : A list of branches to plot
         * `debug` : Boolean that prints debug messages
-    * In addition, an input `json` file corresponding to the `pkl` or `hdf5` file containing DataFrame details is also required
+    * In addition, an input `json` file (or an equivalent `dict`) corresponding to the `pkl` or `hdf5` file containing DataFrame details is also required
 
 2. `run()` the instance to get plots
 
