@@ -19,7 +19,7 @@ class Plotter():
     """
     def __init__(self, **kwargs):
         """
-        input : dataframe or location of hdf5/pickle file
+        df : dataframe or location of hdf5/pickle file
 
         input_options : json file of the input dataframe if input is a
         pandas DF. Otherwise the json corresponding to pickle will be used
