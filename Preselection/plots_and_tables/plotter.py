@@ -21,31 +21,35 @@ class Plotter():
         """
         df : dataframe or location of hdf5/pickle file
 
-        input_options : json file of the input dataframe if input is a
-        pandas DF. Otherwise the json corresponding to pickle will be used
+        input_options : json file or a dictionary of the input dataframe
+        if input is a pandas DF. Otherwise the json corresponding to pickle
+        will be used
 
         branches : List of branches to be plotted (string if single branch). If
         "all" specified, then all the branches from the plot_options json file
         will be plotted
 
-        plot_options : json file containing the plot options. If not specified,
-        then only table will be produced
+        plot_options : json file or dictionary containing the plot options.
+        If not specified, then only table will be produced
 
         debug : bool specifies if debug messages need to be printed
 
         save_filenames : List of filenames to be used for saving the plots. If
         "all" branches specified or the lengths of this list and the branches
-        list don't match, then the names from the plot_options json will be used
+        list don't match, then the names from the plot_options json
+        will be used.
         """
 
         self.input = kwargs.get("df")
         self.input_options = None
         self.plot_options = kwargs.get("plot_options")
         self.branches = kwargs.get("branches")
+
         if kwargs.get("debug"):
             self.debug = kwargs.get("debug")
         else:
             self.debug = False
+
         if kwargs.get("save_filenames"):
             self.save_filenames = kwargs.get("save_filenames")
         else:
@@ -60,7 +64,6 @@ class Plotter():
         if self.save_filenames and self.branches[0] == "all":
             print("[plotter.py] Plot names will be read from the json file if requesting to plot all branches")
             self.save_filenames = None
-
 
         elif self.save_filenames and len(self.branches) != len(self.save_filenames):
             print("[plotter.py] Number of save file names do not match the number of branches! Using default names from json")
@@ -93,6 +96,8 @@ class Plotter():
             if type(self.input_options) is str:
                 with open(self.input_options, "r") as f_in:
                     self.input_options = json.load(f_in)
+            elif type(self.input_options) is dict:
+                pass  # do nothing
             else:
                 print("No dataframe options json file or dict given! Cannot Plot!")
                 sys.exit(1)
@@ -100,10 +105,15 @@ class Plotter():
             print("Not a valid input! Cannot Plot!")
             sys.exit(1)
         # parse the plot options
-        with open(self.plot_options, "r") as f_in:
-            self.plot_options = json.load(f_in)
+        if type(self.plot_options) is str:
+            with open(self.plot_options, "r") as f_in:
+                self.plot_options = json.load(f_in)
+        elif type(self.plot_options) is dict:
+            pass  # do nothing
+        else:
+            print("plot_options not properly provided! Provide json file or dict")
         # Samples specify which processes to plot. "all" implies everything will be plotted
-        if self.debug > 0:
+        if self.debug:
             print("[plotter.py] Loaded dataframe and options")
 
     def run(self):
@@ -151,7 +161,7 @@ class Plotter():
                 toFill = self.master_dataframe[process][branch]
                 weights = self.master_dataframe[process]["weight"]
                 # bin parsing
-                if self.plot_options[branch]["bin_type"] == "linspace": # "list" or "linspace"
+                if self.plot_options[branch]["bin_type"] == "linspace":  # "list" or "linspace"
                     bins = np.linspace(self.plot_options[branch]["bins"][0],self.plot_options[branch]["bins"][1], self.plot_options[branch]["bins"][2]) # start, stop, nbins
                 else:
                     bins = np.array(self.plot_options[branch]["bins"]) #custom binning
@@ -163,7 +173,9 @@ class Plotter():
         pass
 
     def make_plots(self):
-        """Plots the YaHists properly (stacking the backgrounds, applying normalization, signals in solid line, data as points etc)"""
+        """Plots the YaHists properly (stacking the backgrounds, applying normalization,
+        signals in solid line, data as points etc)"""
+
         for idx, branch in enumerate(self.branches):
             print("Making plots for branch ", branch)
             hist_stack = []
