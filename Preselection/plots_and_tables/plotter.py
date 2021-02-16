@@ -37,16 +37,23 @@ class Plotter():
         if kwargs.get("save_filenames"):
             self.save_filenames = kwargs.get("save_filenames")
         else:
-            self.save_files = None
+            self.save_filenames = None
 
         if type(self.branches) == str:
             self.branches = [self.branches]
 
         if type(self.save_filenames) == str:
-            self.save_filenames = [self.save_files]
-        if len(self.branches) != len(self.save_filenames):
-            print("Number of save file names do not match the number of branches! Uisng default names from json")
+            self.save_filenames = [self.save_filenames]
+
+        if self.save_filenames and self.branches[0] == "all":
+            print("[plotter.py] Plot names will be read from the json file if requesting to plot all branches")
             self.save_filenames = None
+
+
+        elif self.save_filenames and len(self.branches) != len(self.save_filenames):
+            print("[plotter.py] Number of save file names do not match the number of branches! Using default names from json")
+            self.save_filenames = None
+
 
         if kwargs.get("input_options"):
             self.input_options = kwargs.get("input_options")
@@ -100,7 +107,7 @@ class Plotter():
         self.process_id_map = {}
         for sample, info in self.input_options["samples_dict"].items():
             if self.debug:
-                print("plotter.py] sample = ", sample)
+                print("[plotter.py] sample = ", sample)
             # FIXME: Hardcoded signal as HH_ggTauTau
             if sample == "HH_ggTauTau":
                 self.process_id_map["signal"] = info["process_id"]
@@ -232,11 +239,15 @@ class Plotter():
                 plt.savefig(self.save_filenames[idx])
             elif "output_name" in self.plot_options[branch].keys():
                 plt.savefig(self.plot_options[branch]["output_name"])
+                if self.debug:
+                    print("[plotter.py] Saved plot at {}".format(self.plot_options[branch]["output_name"]))
             else:
                 plt.savefig("plot_{}.pdf".format(branch))
+                if self.debug:
+                    print("[plotter.py] Saved plot at {}".format("plot_{}.pdf".format(branch)))
 
 
 # unit test
 if __name__ == "__main__":
-    p = Plotter(df="HggUnitTest.pkl", plot_options="plot_temp_options.json", branches="all", debug=True)
+    p = Plotter(df="HggUnitTest.pkl", plot_options="plot_options_test.json", branches="all", debug=True, save_filenames = ["abc","bcd","cda"])
     p.run()
