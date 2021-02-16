@@ -42,7 +42,10 @@ class Plotter():
         self.input_options = None
         self.plot_options = kwargs.get("plot_options")
         self.branches = kwargs.get("branches")
-        self.debug = kwargs.get("debug")
+        if kwargs.get("debug"):
+            self.debug = kwargs.get("debug")
+        else:
+            self.debug = False
         if kwargs.get("save_filenames"):
             self.save_filenames = kwargs.get("save_filenames")
         else:
