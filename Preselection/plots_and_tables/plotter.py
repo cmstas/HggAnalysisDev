@@ -21,14 +21,23 @@ class Plotter():
         """
         input : dataframe or location of hdf5/pickle file
 
-        input_options : json file or dict of the input dataframe if input is a
+        input_options : json file of the input dataframe if input is a
         pandas DF. Otherwise the json corresponding to pickle will be used
 
-        samples : List of samples to be plotted
+        branches : List of branches to be plotted (string if single branch). If
+        "all" specified, then all the branches from the plot_options json file
+        will be plotted
 
-        options : json file containing the plot options. If not specified, then
-        only table will be produced
+        plot_options : json file containing the plot options. If not specified,
+        then only table will be produced
+
+        debug : bool specifies if debug messages need to be printed
+
+        save_filenames : List of filenames to be used for saving the plots. If
+        "all" branches specified or the lengths of this list and the branches
+        list don't match, then the names from the plot_options json will be used
         """
+
         self.input = kwargs.get("df")
         self.input_options = None
         self.plot_options = kwargs.get("plot_options")
