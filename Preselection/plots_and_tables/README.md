@@ -2,6 +2,15 @@
 
 ---
 
+One plotter to rule them all  
+One Plotter to find them  
+One plotter to collect them all  
+And in the output, plot them  
+
+---
+
+Use this plotter both in script mode and in jupyter notebook mode
+
 ### Requirements
 * yahist
 * mplhep
@@ -46,3 +55,8 @@
 
 ### Known issues
 * Axis rescaling to accommodate legend does not work if a data histogram is not present
+
+### More features 
+* Ability to provide custom colors
+* Draw the dotted line at 1 for the ratio
+* Custom normalization (data/MC or unit area)
