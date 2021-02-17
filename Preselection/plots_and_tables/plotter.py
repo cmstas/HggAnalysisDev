@@ -5,18 +5,18 @@ from yahist import Hist1D, Hist2D
 from yahist.utils import plot_stack
 import json
 import mplhep as hep
-import awkward as ak
-import numba as nb
 import sys
+
 plt.style.use([hep.style.CMS, hep.style.firamath])
 
 
-class Plotter():
+class Plotter:
     """
     Plotter class - initialize an instance of this class,
     supply an input dataframe/hdf5/pickle, plot parameters json
     and get yield tables and plots out
     """
+
     def __init__(self, **kwargs):
         """
         df : dataframe or location of hdf5/pickle file
@@ -62,13 +62,16 @@ class Plotter():
             self.save_filenames = [self.save_filenames]
 
         if self.save_filenames and self.branches[0] == "all":
-            print("[plotter.py] Plot names will be read from the json file if requesting to plot all branches")
+            print(
+                "[plotter.py] Plot names will be read from the json file if requesting to plot all branches"
+            )
             self.save_filenames = None
 
         elif self.save_filenames and len(self.branches) != len(self.save_filenames):
-            print("[plotter.py] Number of save file names do not match the number of branches! Using default names from json")
+            print(
+                "[plotter.py] Number of save file names do not match the number of branches! Using default names from json"
+            )
             self.save_filenames = None
-
 
         if kwargs.get("input_options"):
             self.input_options = kwargs.get("input_options")
@@ -119,7 +122,7 @@ class Plotter():
     def run(self):
         self.preprocess()
         self.fill_hists()
-#        self.make_tables()
+        #        self.make_tables()
         self.make_plots()
         return
 
@@ -133,17 +136,23 @@ class Plotter():
             # FIXME: Hardcoded signal as HH_ggTauTau
             if sample == "HH_ggTauTau":
                 self.process_id_map["signal"] = info["process_id"]
-                self.master_dataframe["signal"] = self.input[self.input["process_id"] == info["process_id"]]
+                self.master_dataframe["signal"] = self.input[
+                    self.input["process_id"] == info["process_id"]
+                ]
             elif "GJets" in sample:
                 if "GJets" in self.process_id_map:
                     continue
                 else:
                     self.process_id_map["GJets"] = info["process_id"]
-                    self.master_dataframe["GJets"] = self.input[self.input["process_id"] == info["process_id"]]
+                    self.master_dataframe["GJets"] = self.input[
+                        self.input["process_id"] == info["process_id"]
+                    ]
 
             else:
                 self.process_id_map[sample] = info["process_id"]
-                self.master_dataframe[sample] = self.input[self.input["process_id"] == info["process_id"]]
+                self.master_dataframe[sample] = self.input[
+                    self.input["process_id"] == info["process_id"]
+                ]
 
     def fill_hists(self):
         """Reads the json file for binning :-
@@ -161,11 +170,19 @@ class Plotter():
                 toFill = self.master_dataframe[process][branch]
                 weights = self.master_dataframe[process]["weight"]
                 # bin parsing
-                if self.plot_options[branch]["bin_type"] == "linspace":  # "list" or "linspace"
-                    bins = np.linspace(self.plot_options[branch]["bins"][0], self.plot_options[branch]["bins"][1], self.plot_options[branch]["bins"][2])  # start, stop, nbins
+                if (
+                    self.plot_options[branch]["bin_type"] == "linspace"
+                ):  # "list" or "linspace"
+                    bins = np.linspace(
+                        self.plot_options[branch]["bins"][0],
+                        self.plot_options[branch]["bins"][1],
+                        self.plot_options[branch]["bins"][2],
+                    )  # start, stop, nbins
                 else:
-                    bins = np.array(self.plot_options[branch]["bins"]) #custom binning
-                self.histograms[branch][process] = Hist1D(toFill.values, bins=bins, weights=weights, label=process)
+                    bins = np.array(self.plot_options[branch]["bins"])  # custom binning
+                self.histograms[branch][process] = Hist1D(
+                    toFill.values, bins=bins, weights=weights, label=process
+                )
 
     def make_tables(self):
         """Composes a common table using the YaHists created"""
@@ -173,13 +190,15 @@ class Plotter():
         pass
 
     def make_plots(self):
-        """Plots the YaHists properly (stacking the backgrounds, applying normalization,
-        signals in solid line, data as points etc)"""
+        """Plots the YaHists properly (stacking the backgrounds, applying
+        normalization, signals in solid line, data as points etc)"""
 
         for idx, branch in enumerate(self.branches):
             print("Making plots for branch ", branch)
             if "Data" in self.histograms[branch]:
-                fig, (ax1, ax2) = plt.subplots(2, sharex=True, gridspec_kw=dict(height_ratios=[3,1]))
+                fig, (ax1, ax2) = plt.subplots(
+                    2, sharex=True, gridspec_kw=dict(height_ratios=[3, 1])
+                )
             else:
                 fig, ax1 = plt.subplots()
 
@@ -192,10 +211,16 @@ class Plotter():
 
             # stack plotting
             unit_normalize = False
-            if "stack" in self.plot_options[branch].keys() and self.plot_options[branch]["stack"] == 0:
+            if (
+                "stack" in self.plot_options[branch].keys()
+                and self.plot_options[branch]["stack"] == 0
+            ):
                 stack = False
 
-            elif "normalize" in self.plot_options[branch].keys() and self.plot_options[branch]["normalize"] == "unit_area":
+            elif (
+                "normalize" in self.plot_options[branch].keys()
+                and self.plot_options[branch]["normalize"] == "unit_area"
+            ):
                 unit_normalize = True
                 stack = False
             else:
@@ -226,11 +251,17 @@ class Plotter():
             # Plotting signal
             if "signal" in self.histograms[branch]:
                 if "signal_scaling" in self.plot_options[branch]:
-                    self.histograms[branch]["signal"] *= float(self.plot_options[branch]["signal_scaling"])
-                    signal_label = "signal x {:0.3f}".format(self.plot_options[branch]["signal_scaling"])
+                    self.histograms[branch]["signal"] *= float(
+                        self.plot_options[branch]["signal_scaling"]
+                    )
+                    signal_label = "signal x {:0.3f}".format(
+                        self.plot_options[branch]["signal_scaling"]
+                    )
                 else:
                     signal_label = "signal"
-                self.histograms[branch]["signal"].plot(histtype="step", label=signal_label, ax=ax1, color="black")
+                self.histograms[branch]["signal"].plot(
+                    histtype="step", label=signal_label, ax=ax1, color="black"
+                )
 
             if "xlabel" in self.plot_options[branch].keys():
                 ax1.set_xlabel(self.plot_options[branch]["xlabel"])
@@ -242,14 +273,19 @@ class Plotter():
                 ax1.set_ylim(self.plot_options[branch]["ylim"])
             ax1.legend(fontsize=10)
 
-            if "cms_label" in self.plot_options[branch] and self.plot_options[branch]["cms_label"]:
+            if (
+                "cms_label" in self.plot_options[branch]
+                and self.plot_options[branch]["cms_label"]
+            ):
                 plt.sca(ax1)
                 hep.cms.label(loc=0, data=True, lumi=137.2, fontsize=18)
 
             # Plotting Data
 
             if "Data" in self.histograms[branch]:
-                self.histograms[branch]["Data"].plot(show_errors=True, ax=ax1, color="black")
+                self.histograms[branch]["Data"].plot(
+                    show_errors=True, ax=ax1, color="black"
+                )
                 total_background_counts = hist_stack[0].copy()
 
                 for i in hist_stack[1:]:
@@ -289,14 +325,28 @@ class Plotter():
             elif "output_name" in self.plot_options[branch].keys():
                 plt.savefig(self.plot_options[branch]["output_name"])
                 if self.debug:
-                    print("[plotter.py] Saved plot at {}".format(self.plot_options[branch]["output_name"]))
+                    print(
+                        "[plotter.py] Saved plot at {}".format(
+                            self.plot_options[branch]["output_name"]
+                        )
+                    )
             else:
                 plt.savefig("plot_{}.pdf".format(branch))
                 if self.debug:
-                    print("[plotter.py] Saved plot at {}".format("plot_{}.pdf".format(branch)))
+                    print(
+                        "[plotter.py] Saved plot at {}".format(
+                            "plot_{}.pdf".format(branch)
+                        )
+                    )
 
 
 # unit test
 if __name__ == "__main__":
-    p = Plotter(df="HggUnitTest.pkl", plot_options="plot_options_test.json", branches="all", debug=True, save_filenames = ["abc","bcd","cda"])
+    p = Plotter(
+        df="HggUnitTest.pkl",
+        plot_options="plot_options_test.json",
+        branches="all",
+        debug=True,
+        save_filenames=["abc", "bcd", "cda"],
+    )
     p.run()
