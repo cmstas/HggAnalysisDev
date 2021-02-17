@@ -185,6 +185,8 @@ class Plotter():
                 else:
                     hist_stack.append(hist)
             hist_stack = sorted(hist_stack, key=lambda x: x.integral)
+            for i in hist_stack:
+                print(i.metadata.get("label"),i.integral)
             if "Data" in self.histograms[branch]:
                 fig, (ax1, ax2) = plt.subplots(2, sharex=True, gridspec_kw=dict(height_ratios=[3,1]))
             else:
@@ -217,7 +219,7 @@ class Plotter():
                 ax1.set_xlabel(branch)
             if "ylim" in self.plot_options[branch].keys():
                 ax1.set_ylim(self.plot_options[branch]["ylim"])
-            ax1.legend(fontsize=12)
+            ax1.legend(fontsize=10)
 
             if "cms_label" in self.plot_options[branch] and self.plot_options[branch]["cms_label"]:
                 plt.sca(ax1)
@@ -235,12 +237,14 @@ class Plotter():
                 ratio_hist /= total_background_counts
                 plt.sca(ax2)
                 if "ratio_log" in self.plot_options[branch].keys():
-                    ax2.set_yscale("log")
+                    if self.plot_options[branch]["ratio_log"]:
+                        ax2.set_yscale("log")
 
                 if "ratio_ylim" in self.plot_options[branch].keys():
                     ax2.set_ylim(self.plot_options[branch]["ratio_ylim"])
 
                 ratio_hist.plot(ax=ax2, show_errors=True, label="ratio")
+                ax1.legend(fontsize=10)
 
                 # Shamelessly stolen from mplhep
                 if self.debug:
