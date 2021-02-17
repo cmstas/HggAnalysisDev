@@ -162,7 +162,7 @@ class Plotter():
                 weights = self.master_dataframe[process]["weight"]
                 # bin parsing
                 if self.plot_options[branch]["bin_type"] == "linspace":  # "list" or "linspace"
-                    bins = np.linspace(self.plot_options[branch]["bins"][0],self.plot_options[branch]["bins"][1], self.plot_options[branch]["bins"][2]) # start, stop, nbins
+                    bins = np.linspace(self.plot_options[branch]["bins"][0], self.plot_options[branch]["bins"][1], self.plot_options[branch]["bins"][2])  # start, stop, nbins
                 else:
                     bins = np.array(self.plot_options[branch]["bins"]) #custom binning
                 self.histograms[branch][process] = Hist1D(toFill.values, bins=bins, weights=weights, label=process)
@@ -178,21 +178,42 @@ class Plotter():
 
         for idx, branch in enumerate(self.branches):
             print("Making plots for branch ", branch)
+            if "Data" in self.histograms[branch]:
+                fig, (ax1, ax2) = plt.subplots(2, sharex=True, gridspec_kw=dict(height_ratios=[3,1]))
+            else:
+                fig, ax1 = plt.subplots()
+
             hist_stack = []
             for process, hist in self.histograms[branch].items():
                 if process == "signal" or process == "Data":
                     continue
                 else:
                     hist_stack.append(hist)
-            hist_stack = sorted(hist_stack, key=lambda x: x.integral)
-            for i in hist_stack:
-                print(i.metadata.get("label"),i.integral)
-            if "Data" in self.histograms[branch]:
-                fig, (ax1, ax2) = plt.subplots(2, sharex=True, gridspec_kw=dict(height_ratios=[3,1]))
-            else:
-                fig, ax1 = plt.subplots()
 
-            plot_stack(hist_stack, ax=ax1)
+            # stack plotting
+            unit_normalize = False
+            if "stack" in self.plot_options[branch].keys() and self.plot_options[branch]["stack"] == 0:
+                stack = False
+
+            elif "normalize" in self.plot_options[branch].keys() and self.plot_options[branch]["normalize"] == "unit_area":
+                unit_normalize = True
+                stack = False
+            else:
+                stack = True
+
+            if stack:
+                hist_stack = sorted(hist_stack, key=lambda x: x.integral)
+                for i in hist_stack:
+                    print(i.metadata.get("label"), i.integral)
+                plot_stack(hist_stack, ax=ax1)
+            else:
+                if self.debug:
+                    print("[plotter.py] No stacking for branch ", branch)
+                for hist in hist_stack:
+                    if unit_normalize:
+                        hist /= hist.integral
+                    hist.plot(ax=ax1)
+
             if "yaxis" in self.plot_options[branch].keys():
                 if self.plot_options[branch]["yaxis"] == "log":
                     ax1.set_yscale("log")
