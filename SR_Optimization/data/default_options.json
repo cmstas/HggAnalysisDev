@@ -1,5 +1,5 @@
 {
-    "metric" : "z_a",
+    "metric" : "upper_limit",
     "non_resonant" : {
         "data" : false,
         "fit" : "exponential"
@@ -8,7 +8,7 @@
         "fit" : "dcb"
     },
     "n_bins" : 2,
-    "n_points" : 20,
+    "n_points" : 5,
     "mvas" : ["mva_score"],
     "branches" : ["ggMass", "weight", "train_label", "process_id"],
     "signal" : ["HH_ggTauTau"],
