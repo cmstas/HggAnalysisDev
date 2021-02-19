@@ -79,5 +79,5 @@
 - If you want to use these notebooks and scripts with condor workers, be careful one needs to supply local scripts in "input_files" in make_htcondor_cluster function from condor_utils.py 
 
 # Other needed packages
-
+- https://github.com/scikit-hep/mplhep
 - https://github.com/aminnj/yahist

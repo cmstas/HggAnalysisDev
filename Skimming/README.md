@@ -14,7 +14,7 @@ cd CMSSW_10_2_22/src/
 cmsenv
 
 # add nanoAOD-tools package
-git clone https://github.com/cms-nanoAOD/nanoAOD-tools.git PhysicsTools/NanoAODTools
+git clone -b hhggtautau_skim https://github.com/leonardogiannini/nanoAOD-tools.git PhysicsTools/NanoAODTools
 
 # add SVFit packages (using latest version under CMSSW, reference here https://github.com/SVfit/ClassicSVfit/tree/fastMTT_19_02_2019)
 git clone https://github.com/SVfit/ClassicSVfit TauAnalysis/ClassicSVfit -b fastMTT_19_02_2019

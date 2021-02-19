@@ -14,4 +14,5 @@ Will contain machinery for the standard tasks in developing an H->gg analysis:
 * For major revisions/additions, make a pull request
 * For minor changes/bug fixes, commit directly to `main`
 * Try to somewhat loosely adhere to [PEP 8 style guidlines](https://www.python.org/dev/peps/pep-0008/) (or at least make your code readable and add comments)
+  * If you want adhere to PEP8, use `flake8` to check if your code adheres to it, and `black` to auto-format your code to adhere to PEP8 
 

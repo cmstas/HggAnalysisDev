@@ -1,2 +1,0 @@
-{"ggMass": {"bin_type": "linspace", "bins": [100, 200, 100], "processes": ["Data", "signal", "GJets","DiPhoton" ,"VH"],"signal_scaling":1000,"yaxis":"log","title":"Di-Photon Mass (GeV)","cms_label":1}}
-
