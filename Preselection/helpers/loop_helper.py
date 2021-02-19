@@ -115,6 +115,7 @@ class LoopHelper():
                     continue
                 for path in year_info["paths"]:
                     files += glob.glob(path + "/*.root")
+                    files += glob.glob(path + "/*/*/*/*.root") # to be compatible with CRAB
 
                 if len(files) == 0:
                     continue
@@ -221,13 +222,15 @@ class LoopHelper():
     ### Physics: selections, etc ###
     ################################
 
-    def select_events(self, events, metadata):
+    def select_events(self, events, photons, metadata):
         options = copy.deepcopy(self.selection_options)
         for key, value in metadata.items(): # add sample-specific options to selection options
             options[key] = value
 
         # Diphoton preselection
-        diphoton_events, selected_photons = diphoton_selections.diphoton_preselection(events, events.Photon, options, self.debug)
+        diphoton_events = events # most of dipho preselection already applied, still need to enforce pt/mgg and mgg cuts
+        selected_photons = photon_selections.create_selected_photons(photons, self.branches, self.debug) # create record manually since it doesn't seem to work for selectedPhoton 
+        diphoton_events, selected_photons = diphoton_selections.diphoton_preselection(diphoton_events, selected_photons, options, self.debug) 
 
         events_and_objects = {}
 
@@ -300,11 +303,11 @@ class LoopHelper():
             if self.debug > 0:
                 print("[LoopHelper] Loading file %s" % file)
 
-            events = self.load_file(file, data = data)
+            events, photons = self.load_file(file, data = data)
             if events is None:
                 self.outputs.pop(output)
                 return
-            events_and_objects = self.select_events(events, selection_metadata)
+            events_and_objects = self.select_events(events, photons, selection_metadata)
             events = events_and_objects["events"]
 
             events["process_id"] = numpy.ones(len(events)) * process_id
@@ -338,10 +341,15 @@ class LoopHelper():
                 branches = self.branches_data
             else:
                 branches = self.branches
-            events = tree.arrays(branches, library = "ak", how = "zip") 
+            branches_no_pho = [branch for branch in branches if "selectedPhoton" not in branch]
+            events = tree.arrays(branches_no_pho, library = "ak", how = "zip") 
+
+            branches_pho = [branch for branch in branches if "selectedPhoton" in branch]
+            photons = tree.arrays(branches_pho, library = "ak", how = "zip")
+
             # library = "ak" to load arrays as awkward arrays for best performance
             # how = "zip" allows us to access arrays as records, e.g. events.Photon
-        return events
+        return events, photons
 
     def chunks(self, files, fpo):
         for i in range(0, len(files), fpo):

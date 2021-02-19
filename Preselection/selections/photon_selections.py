@@ -18,6 +18,19 @@ For this reason, all selections should be done in the following way:
     2. Trim objects with object-level selections afterwards
 """
 
+
+def create_selected_photons(photons, branches, debug):
+    map = {}
+    for branch in branches:
+        if "selectedPhoton" not in branch:
+            continue
+        key = branch.replace("selectedPhoton_","")
+        map[key] = photons[branch]
+
+    selected_photons = awkward.zip(map)
+
+    return selected_photons
+
 def select_photons(events, photons, options, debug):
     cut_diagnostics = utils.ObjectCutDiagnostics(objects = photons, cut_set = "[photon_selections.py : select_photons]", debug = debug)
     
@@ -28,12 +41,11 @@ def select_photons(events, photons, options, debug):
     eta_cut3 = abs(photons.eta) > options["photons"]["transition_region_eta"][1]
     eta_cut = eta_cut1 & (eta_cut2 | eta_cut3)
 
-    pt_mgg_cut = (photons.pt / events.ggMass) >= options["photons"]["sublead_pt_mgg_cut"]
     idmva_cut = photons.mvaID > options["photons"]["idmva_cut"] 
     eveto_cut = photons.electronVeto >= options["photons"]["eveto_cut"]
-    photon_cut = pt_cut & eta_cut & pt_mgg_cut & idmva_cut & eveto_cut
+    photon_cut = pt_cut & eta_cut & idmva_cut & eveto_cut
 
-    cut_diagnostics.add_cuts([pt_cut, eta_cut, pt_mgg_cut, idmva_cut, eveto_cut, photon_cut], ["pt > 25", "|eta| < 2.5", "pt/mgg", "idmva", "eveto", "all"])
+    cut_diagnostics.add_cuts([pt_cut, eta_cut, idmva_cut, eveto_cut, photon_cut], ["pt > 25", "|eta| < 2.5", "idmva", "eveto", "all"])
     return photon_cut
 
 #TODO: finish full diphoton preselection for sync purposes
@@ -47,7 +59,7 @@ def select_photons_full(events, photons, options, debug):
     eta_cut3 = abs(photons.eta) > options["photons"]["transition_region_eta"][1]
     eta_cut = eta_cut1 & (eta_cut2 | eta_cut3)
 
-    pt_mgg_cut = (photons.pt / events.ggMass) >= options["photons"]["sublead_pt_mgg_cut"]
+    pt_mgg_cut = (photons.pt / events.gg_mass) >= options["photons"]["sublead_pt_mgg_cut"]
     idmva_cut = photons.mvaID > options["photons"]["idmva_cut"]
     eveto_cut = photons.electronVeto == 1
 
@@ -84,8 +96,8 @@ def photon_eff_area(eta):
         return 0.13212
 
 def set_photons(events, photons, debug):
-    events["lead_pho_ptmgg"] = photons.pt[:,0] / events.ggMass
-    events["sublead_pho_ptmgg"] = photons.pt[:,1] / events.ggMass
+    events["lead_pho_ptmgg"] = photons.pt[:,0] / events.gg_mass
+    events["sublead_pho_ptmgg"] = photons.pt[:,1] / events.gg_mass
     events["lead_pho_eta"] = photons.eta[:,0]
     events["sublead_pho_eta"] = photons.eta[:,1]
     events["lead_pho_idmva"] = photons.mvaID[:,0]

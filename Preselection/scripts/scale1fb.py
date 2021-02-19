@@ -106,6 +106,7 @@ for sample, info in samples.items():
         files = []
         for path in year_info["paths"]:
             files += glob.glob(path + "/*.root")
+            files += glob.glob(path + "/*/*/*/*.root") # to be compatible with CRAB
 
         if "xs" not in year_info["metadata"].keys():
             if args.debug > 0:
