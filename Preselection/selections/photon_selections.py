@@ -32,7 +32,7 @@ def create_selected_photons(photons, branches, debug):
     return selected_photons
 
 def select_photons(events, photons, options, debug):
-    cut_diagnostics = utils.ObjectCutDiagnostics(objects = photons, cut_set = "[photon_selections.py : select_photons]", debug = debug)
+    #cut_diagnostics = utils.ObjectCutDiagnostics(objects = photons, cut_set = "[photon_selections.py : select_photons]", debug = debug)
     
     pt_cut = photons.pt > options["photons"]["pt"]
 
@@ -45,7 +45,7 @@ def select_photons(events, photons, options, debug):
     eveto_cut = photons.electronVeto >= options["photons"]["eveto_cut"]
     photon_cut = pt_cut & eta_cut & idmva_cut & eveto_cut
 
-    cut_diagnostics.add_cuts([pt_cut, eta_cut, idmva_cut, eveto_cut, photon_cut], ["pt > 25", "|eta| < 2.5", "idmva", "eveto", "all"])
+    #cut_diagnostics.add_cuts([pt_cut, eta_cut, idmva_cut, eveto_cut, photon_cut], ["pt > 25", "|eta| < 2.5", "idmva", "eveto", "all"])
     return photon_cut
 
 #TODO: finish full diphoton preselection for sync purposes

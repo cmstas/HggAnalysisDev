@@ -22,12 +22,12 @@ def diphoton_preselection(events, selected_photons, options, debug):
     sublead_pt_mgg_cut = selected_photons.pt[:,1] / events.gg_mass > options["photons"]["sublead_pt_mgg_cut"]
     pt_mgg_cut = lead_pt_mgg_cut & sublead_pt_mgg_cut
 
-    lead_idmva_cut = selected_photons.pt[:,0] > options["photons"]["idmva_cut"]
-    sublead_idmva_cut = selected_photons.pt[:,1] > options["photons"]["idmva_cut"]
+    lead_idmva_cut = selected_photons.mvaID[:,0] > options["photons"]["idmva_cut"]
+    sublead_idmva_cut = selected_photons.mvaID[:,1] > options["photons"]["idmva_cut"]
     idmva_cut = lead_idmva_cut & sublead_idmva_cut
 
-    lead_eveto_cut = selected_photons.pt[:,0] > options["photons"]["eveto_cut"]
-    sublead_eveto_cut = selected_photons.pt[:,1] > options["photons"]["eveto_cut"]
+    lead_eveto_cut = selected_photons.electronVeto[:,0] > options["photons"]["eveto_cut"]
+    sublead_eveto_cut = selected_photons.electronVeto[:,1] > options["photons"]["eveto_cut"]
     eveto_cut = lead_eveto_cut & sublead_eveto_cut
 
     lead_eta_cut1 = abs(selected_photons.eta[:,0]) < options["photons"]["eta"]
@@ -44,7 +44,7 @@ def diphoton_preselection(events, selected_photons, options, debug):
 
     all_cuts = mgg_mask & pt_mgg_cut & idmva_cut & eveto_cut & eta_cut
     cut_diagnostics.add_cuts([mgg_mask, pt_mgg_cut, idmva_cut, eveto_cut, eta_cut, all_cuts], ["mgg in [100, 180]" if resonant else "mgg in [100, 120] or [130, 180]", "lead (sublead) pt/mgg > 0.33 (0.25)", "pho idmva > -0.7", "eveto cut", "eta cut", "all"])
-    return events[all_cuts], selected_photons 
+    return events[all_cuts], selected_photons[all_cuts] 
 
 def diphoton_preselection_old(events, photons, options, debug):
     # Initialize cut diagnostics tool for debugging
