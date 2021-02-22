@@ -1,0 +1,77 @@
+{
+    "Data": {
+        "2016": {
+            "metadata": {},
+            "paths": [
+                "/hadoop/cms/store/user/hmei/nanoaod_runII/HHggtautau/DoubleEG_Run2016B-17Jul2018_ver1-v1_MINIAOD_v0.6_20201021/",
+                "/hadoop/cms/store/user/hmei/nanoaod_runII/HHggtautau/DoubleEG_Run2016B-17Jul2018_ver2-v1_MINIAOD_v0.6_20201021/",
+                "/hadoop/cms/store/user/hmei/nanoaod_runII/HHggtautau/DoubleEG_Run2016C-17Jul2018-v1_MINIAOD_v0.6_20201021/",
+                "/hadoop/cms/store/user/hmei/nanoaod_runII/HHggtautau/DoubleEG_Run2016D-17Jul2018-v1_MINIAOD_v0.6_20201021/",
+                "/hadoop/cms/store/user/hmei/nanoaod_runII/HHggtautau/DoubleEG_Run2016E-17Jul2018-v1_MINIAOD_v0.6_20201021/",
+                "/hadoop/cms/store/user/hmei/nanoaod_runII/HHggtautau/DoubleEG_Run2016F-17Jul2018-v1_MINIAOD_v0.6_20201021/",
+                "/hadoop/cms/store/user/hmei/nanoaod_runII/HHggtautau/DoubleEG_Run2016G-17Jul2018-v1_MINIAOD_v0.6_20201021/",
+                "/hadoop/cms/store/user/hmei/nanoaod_runII/HHggtautau/DoubleEG_Run2016H-17Jul2018-v1_MINIAOD_v0.6_20201021/"
+            ]
+        },
+        "2017": {
+            "metadata": {},
+            "paths": [
+                "/hadoop/cms/store/user/hmei/nanoaod_runII/HHggtautau/DoubleEG_Run2017B-31Mar2018-v1_MINIAOD_v0.6_20201021/",
+                "/hadoop/cms/store/user/hmei/nanoaod_runII/HHggtautau/DoubleEG_Run2017C-31Mar2018-v1_MINIAOD_v0.6_20201021/",
+                "/hadoop/cms/store/user/hmei/nanoaod_runII/HHggtautau/DoubleEG_Run2017D-31Mar2018-v1_MINIAOD_v0.6_20201021/",
+                "/hadoop/cms/store/user/hmei/nanoaod_runII/HHggtautau/DoubleEG_Run2017E-31Mar2018-v1_MINIAOD_v0.6_20201021/",
+                "/hadoop/cms/store/user/hmei/nanoaod_runII/HHggtautau/DoubleEG_Run2017F-31Mar2018-v1_MINIAOD_v0.6_20201021/"
+            ]
+        },
+        "2018": {
+            "metadata": {},
+            "paths": [
+                "/hadoop/cms/store/user/hmei/nanoaod_runII/HHggtautau/EGamma_Run2018A-17Sep2018-v2_MINIAOD_v0.6_20201021/",
+                "/hadoop/cms/store/user/hmei/nanoaod_runII/HHggtautau/EGamma_Run2018B-17Sep2018-v1_MINIAOD_v0.6_20201021/",
+                "/hadoop/cms/store/user/hmei/nanoaod_runII/HHggtautau/EGamma_Run2018C-17Sep2018-v1_MINIAOD_v0.6_20201021/",
+                "/hadoop/cms/store/user/hmei/nanoaod_runII/HHggtautau/EGamma_Run2018D-22Jan2019-v2_MINIAOD_v0.6_20201021/"
+            ]
+        },
+        "fpo": 25,
+        "process_id": 0,
+        "resonant": false
+    },
+    "HH_ggTauTau": {
+        "2016": {
+            "metadata": {
+                "n_events": 998000,
+                "scale1fb": 9.82567448743567e-09,
+                "sumWeights": 997387,
+                "xs": 9.8e-06
+            },
+            "paths": [
+                "/hadoop/cms/store/user/hmei/nanoaod_runII/HHggtautau/HHggtautau_Era2016_private_v0.1_20201117/"
+            ]
+        },
+        "2017": {
+            "metadata": {
+                "n_events": 998000,
+                "scale1fb": 9.820642991568276e-09,
+                "sumWeights": 997898,
+                "xs": 9.8e-06
+            },
+            "paths": [
+                "/hadoop/cms/store/user/hmei/nanoaod_runII/HHggtautau/HHggtautau_Era2017_private_v0.1_20201117/"
+            ]
+        },
+        "2018": {
+            "metadata": {
+                "n_events": 996000,
+                "scale1fb": 9.845011392084611e-09,
+                "sumWeights": 995428,
+                "xs": 9.8e-06
+            },
+            "paths": [
+                "/hadoop/cms/store/user/hmei/nanoaod_runII/HHggtautau/HHggtautau_Era2018_private_v2_20201005/"
+            ]
+        },
+        "fpo": 10,
+        "process_id": -1,
+        "resonant": true
+    }
+}

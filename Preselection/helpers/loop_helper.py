@@ -227,7 +227,7 @@ class LoopHelper():
             options[key] = value
 
         # Diphoton preselection
-        diphoton_events, selected_photons = diphoton_selections.diphoton_preselection(events, events.Photon, options, self.debug)
+        diphoton_events, selected_photons = diphoton_selections.diphoton_preselection_full(events, events.Photon, options, self.debug)
 
         events_and_objects = {}
 
