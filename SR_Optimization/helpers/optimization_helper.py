@@ -2,7 +2,7 @@ import pandas
 import json
 import itertools
 
-from helpers import utils
+from helpers import utils, model_helper
 
 class OptimizationHelper():
     """
@@ -14,6 +14,7 @@ class OptimizationHelper():
     def __init__(self, **kwargs):
         self.input = kwargs.get("input")
         self.debug = kwargs.get("debug")
+        self.output_dir = kwargs.get("output_dir")
         self.output_tag = kwargs.get("output_tag")
         self.optimization_options = kwargs.get("optimization_options")
         with open(self.optimization_options, "r") as f_in:
@@ -169,6 +170,18 @@ class OptimizationHelper():
                 self.results[idx] = utils.calculate_za(signal_events, resonant_background_events, background_events, data_events, self.options)
                 # FIXME: just using z_a calculation as a quick and dirty estimate. Need to replace with real fits + combine
 
+            else:
+                helper = combine_helper.CombineHelper(
+                    options = self.options,
+                    output_dir = self.output_dir + "/fits_" + self.output_tag,
+                    signal_events = signal_events,
+                    resonant_background_events = resonant_background_events,
+                    background_events = background_events,
+                    data_events = data_events
+                )
+                helper.run()
+                self.results[idx] = helper.get_results()
+
         if self.options["metric"] == "z_a":
             best = {"Z_A_combined" : 0}
             for key, result in self.results.items():
@@ -179,7 +192,7 @@ class OptimizationHelper():
             if self.debug > 1:
                 print("[OptimizationHelper] Best binning combination", best)
 
-        with open("output/optimization_%s.json" % self.output_tag, "w") as f_out:
+        with open(self.output_dir + "/optimization_%s.json" % self.output_tag, "w") as f_out:
             json.dump(self.results, f_out, sort_keys = True, indent = 4)
 
     ########################

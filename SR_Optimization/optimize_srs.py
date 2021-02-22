@@ -21,6 +21,12 @@ parser.add_argument(
     default = 0
 )
 parser.add_argument(
+    "--output_dir",
+    help = "directory to save fits and combine results in",
+    type = str,
+    default = "output/"
+)
+parser.add_argument(
     "--output_tag",
     help = "tag to identify this optimization",
     type = str,

@@ -13,7 +13,7 @@ parser.add_argument(
     "--input",
     help = "path to input dataframe",
     type = str,
-    default = "../Preselection/output/HHggTauTau_InclusivePresel_v0.2_4Feb2021_SyncWithFranny.pkl"
+    default = "../Preselection/output/HHggTauTau_InclusivePresel_SyncWithFranny.pkl"
 )
 parser.add_argument(
     "--mvas",
