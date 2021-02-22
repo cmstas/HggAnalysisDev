@@ -48,6 +48,8 @@ Use this plotter both in script mode and in jupyter notebook mode
     * `ratio_log` : Log ratio plot
     * `ratio_ylim` : Sets y limits for the ratio plots
     * `output_name` : string containing the output name
+    * `stack`:`1` or `0` (default 1) Enables or disables stacking
+    * `normalize`:`unit_area` - Normalizes the plots to unit area for shape comparisons. **NOTE : This disables stacking!**
 
 ### Sample test 
 * Download `HggUnitTest.pkl`, `plot_options_test.json` and `HggUnitTest.json` from [here](http://uaf-10.t2.ucsd.edu/~bsathian/HHggTauTau_plotting/)
@@ -59,4 +61,4 @@ Use this plotter both in script mode and in jupyter notebook mode
 ### More features 
 * Ability to provide custom colors
 * Draw the dotted line at 1 for the ratio
-* Custom normalization (data/MC or unit area)
+
