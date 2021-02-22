@@ -164,9 +164,14 @@ class Plotter:
         self.histograms = {}
         if self.branches == ["all"]:
             self.branches = list(self.plot_options.keys())
-        for branch in self.branches:
+        for idx,branch in enumerate(self.branches):
             self.histograms[branch] = {}  # one histogram per process
             for process in self.plot_options[branch]["processes"]:
+                if branch not in self.master_dataframe[process].columns:
+                    print("[plotter.py] {} not found in the dataframe. Skipping...".format(branch))
+                    del self.histograms[branch]
+                    del self.branches[idx]
+                    break
                 toFill = self.master_dataframe[process][branch]
                 weights = self.master_dataframe[process]["weight"]
                 # bin parsing
@@ -250,7 +255,7 @@ class Plotter:
 
             # Plotting signal
             if "signal" in self.histograms[branch]:
-                if "signal_scaling" in self.plot_options[branch]:
+                if not unit_normalize and "signal_scaling" in self.plot_options[branch]:
                     self.histograms[branch]["signal"] *= float(
                         self.plot_options[branch]["signal_scaling"]
                     )
@@ -259,6 +264,9 @@ class Plotter:
                     )
                 else:
                     signal_label = "signal"
+                
+                if unit_normalize:
+                    self.histograms[branch]["signal"] /= self.histograms[branch]["signal"].integral
                 self.histograms[branch]["signal"].plot(
                     histtype="step", label=signal_label, ax=ax1, color="black"
                 )
