@@ -205,6 +205,11 @@ class Plotter:
 
     def make_tables(self):
         """Composes a common table using the YaHists created"""
+        # Create the histograms if required
+        if len(self.histograms) == 0:
+            self.preprocess()
+            self.fill_hists()
+
         mdf = open("tables.md", "w")
         for branch in self.branches:
             representative_key = list(self.histograms[branch].keys())[0]
