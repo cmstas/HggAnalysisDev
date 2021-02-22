@@ -1,7 +1,7 @@
 import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
-from yahist import Hist1D, Hist2D
+from yahist import Hist1D
 from yahist.utils import plot_stack
 import json
 import mplhep as hep
@@ -63,13 +63,17 @@ class Plotter:
 
         if self.save_filenames and self.branches[0] == "all":
             print(
-                "[plotter.py] Plot names will be read from the json file if requesting to plot all branches"
+                "[plotter.py] Plot names will be read from the json file if \
+                requesting to plot all branches"
             )
             self.save_filenames = None
 
-        elif self.save_filenames and len(self.branches) != len(self.save_filenames):
+        elif self.save_filenames and len(self.branches) != len(
+            self.save_filenames
+        ):
             print(
-                "[plotter.py] Number of save file names do not match the number of branches! Using default names from json"
+                "[plotter.py] Number of save file names do not match the \
+                        number of branches! Using default names from json"
             )
             self.save_filenames = None
 
@@ -102,7 +106,10 @@ class Plotter:
             elif type(self.input_options) is dict:
                 pass  # do nothing
             else:
-                print("No dataframe options json file or dict given! Cannot Plot!")
+                print(
+                    "No dataframe options json file or dict given! Cannot Plot\
+                            !"
+                )
                 sys.exit(1)
         else:
             print("Not a valid input! Cannot Plot!")
@@ -114,15 +121,15 @@ class Plotter:
         elif type(self.plot_options) is dict:
             pass  # do nothing
         else:
-            print("plot_options not properly provided! Provide json file or dict")
-        # Samples specify which processes to plot. "all" implies everything will be plotted
+            print(
+                "plot_options not properly provided! Provide json file or dict"
+            )
         if self.debug:
             print("[plotter.py] Loaded dataframe and options")
 
     def run(self):
         self.preprocess()
         self.fill_hists()
-        #        self.make_tables()
         self.make_plots()
         return
 
@@ -164,11 +171,16 @@ class Plotter:
         self.histograms = {}
         if self.branches == ["all"]:
             self.branches = list(self.plot_options.keys())
-        for idx,branch in enumerate(self.branches):
+        for idx, branch in enumerate(self.branches):
             self.histograms[branch] = {}  # one histogram per process
             for process in self.plot_options[branch]["processes"]:
                 if branch not in self.master_dataframe[process].columns:
-                    print("[plotter.py] {} not found in the dataframe. Skipping...".format(branch))
+                    print(
+                        "[plotter.py] {} not found in the dataframe. Skipping..\
+                                .".format(
+                            branch
+                        )
+                    )
                     del self.histograms[branch]
                     del self.branches[idx]
                     break
@@ -184,15 +196,49 @@ class Plotter:
                         self.plot_options[branch]["bins"][2],
                     )  # start, stop, nbins
                 else:
-                    bins = np.array(self.plot_options[branch]["bins"])  # custom binning
+                    bins = np.array(
+                        self.plot_options[branch]["bins"]
+                    )  # custom binning
                 self.histograms[branch][process] = Hist1D(
                     toFill.values, bins=bins, weights=weights, label=process
                 )
 
     def make_tables(self):
         """Composes a common table using the YaHists created"""
-        # TODO:Splitting by year
-        pass
+        mdf = open("tables.md", "w")
+        for branch in self.branches:
+            representative_key = list(self.histograms[branch].keys())[0]
+            bin_lefts = self.histograms[branch][representative_key].edges[:-1]
+            bin_rights = self.histograms[branch][representative_key].edges[1:]
+            mdf.write("| {} ".format(branch))
+            for bin_number in range(len(bin_lefts)):
+                mdf.write(
+                    "| {:0.2f} - {:0.2f} ".format(
+                        bin_lefts[bin_number], bin_rights[bin_number]
+                    )
+                )
+            mdf.write("|\n")
+
+            mdf.write("| --- ")
+            for bin_number in range(len(bin_lefts)):
+                mdf.write("| --- ")
+            mdf.write("| --- |\n")
+            for process in self.histograms[branch].keys():
+                mdf.write("| {} ".format(process))
+                for bin_number in range(len(bin_lefts)):
+                    mdf.write(
+                        "| {:0.2f} $\\pm$ {:0.2f} ".format(
+                            self.histograms[branch][process].counts[
+                                bin_number
+                            ],
+                            self.histograms[branch][process].errors[
+                                bin_number
+                            ],
+                        )
+                    )
+                mdf.write("|\n")
+            mdf.write("\n\n")
+        mdf.close()
 
     def make_plots(self):
         """Plots the YaHists properly (stacking the backgrounds, applying
@@ -255,7 +301,10 @@ class Plotter:
 
             # Plotting signal
             if "signal" in self.histograms[branch]:
-                if not unit_normalize and "signal_scaling" in self.plot_options[branch]:
+                if (
+                    not unit_normalize
+                    and "signal_scaling" in self.plot_options[branch]
+                ):
                     self.histograms[branch]["signal"] *= float(
                         self.plot_options[branch]["signal_scaling"]
                     )
@@ -264,9 +313,11 @@ class Plotter:
                     )
                 else:
                     signal_label = "signal"
-                
+
                 if unit_normalize:
-                    self.histograms[branch]["signal"] /= self.histograms[branch]["signal"].integral
+                    self.histograms[branch]["signal"] /= self.histograms[
+                        branch
+                    ]["signal"].integral
                 self.histograms[branch]["signal"].plot(
                     histtype="step", label=signal_label, ax=ax1, color="black"
                 )
@@ -313,13 +364,17 @@ class Plotter:
 
                 # Shamelessly stolen from mplhep
                 if self.debug:
-                    print("[plotter.py] Rescaling y axis to accommodate legend")
+                    print(
+                        "[plotter.py] Rescaling y axis to accommodate legend"
+                    )
                 if ax1.get_yscale() == "log":
                     scale_factor = 11.2
                 else:
                     scale_factor = 1.05
                 while hep.plot.overlap(ax1, hep.plot._draw_leg_bbox(ax1)) > 0:
-                    ax1.set_ylim(ax1.get_ylim()[0], ax1.get_ylim()[-1] * scale_factor)
+                    ax1.set_ylim(
+                        ax1.get_ylim()[0], ax1.get_ylim()[-1] * scale_factor
+                    )
                     ax1.figure.canvas.draw()
 
             # Title
@@ -358,3 +413,12 @@ if __name__ == "__main__":
         save_filenames=["abc", "bcd", "cda"],
     )
     p.run()
+
+    table_test = Plotter(
+        df="HggUnitTest.pkl",
+        plot_options="plot_options_test.json",
+        branches=["ele1_eta"],
+        debug=True,
+    )
+    table_test.run()
+    table_test.make_tables()
