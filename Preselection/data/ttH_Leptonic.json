@@ -1,13 +1,14 @@
 {
     "branches" : [ 
-        "Photon_pt", "Photon_eta", "Photon_phi", "Photon_mass", "Photon_pixelSeed", "Photon_mvaID", "Photon_electronVeto",
-        "Muon_pt", "Muon_eta", "Muon_phi", "Muon_mass", "Muon_charge", "Muon_pfRelIso03_all", "Muon_dxy", "Muon_dz",
+        "selectedPhoton_pt", "selectedPhoton_eta", "selectedPhoton_phi", "selectedPhoton_mass", "selectedPhoton_pixelSeed", "selectedPhoton_mvaID", "selectedPhoton_electronVeto",
+        "Muon_pt", "Muon_eta", "Muon_phi", "Muon_mass", "Muon_charge", "Muon_pfRelIso03_all", "Muon_dxy", "Muon_dz", "Muon_miniPFRelIso_all", "Muon_mediumId",
         "Electron_pt", "Electron_eta", "Electron_phi", "Electron_mass", "Electron_charge", "Electron_mvaFall17V2Iso_WP90", "Electron_mvaFall17V2noIso_WP90", "Electron_pfRelIso03_all", "Electron_dxy", "Electron_dz",
         "Jet_pt", "Jet_eta", "Jet_phi", "Jet_mass", "Jet_btagDeepFlavB", "Jet_jetId",
-        "ggMass", "nJet", "MET_pt", "genWeight", "tautauMassAll_SVFit"
+        "Jet_neEmEF", "Jet_neHEF", "Jet_chHEF", "Jet_chEmEF", "Jet_nConstituents",
+        "gg_mass", "nJet", "MET_pt", "genWeight"
     ],
     "save_branches" : [
-        "ggMass", "MET_pt",
+        "gg_mass", "MET_pt",
         "lead_pho_ptmgg", "sublead_pho_ptmgg", "lead_pho_eta", "sublead_pho_eta", "lead_pho_idmva", "sublead_pho_idmva",
         "ele1_pt", "ele1_eta", "ele2_pt", "ele2_eta", 
         "muon1_pt", "muon1_eta", "muon2_pt", "muon2_eta",
@@ -17,23 +18,38 @@
         "n_electrons", "n_muons", "n_jets"
     ],
     "selection_options" : {
+        "diphotons" : {
+            "mgg_lower" : 100,
+            "mgg_upper" : 180,
+            "mgg_sideband_lower" : 120,
+            "mgg_sideband_upper" : 130
+        },
         "photons" : {
-            "idmva_cut" : -0.7
+            "pt" : 25,
+            "eta" : 2.5,
+            "transition_region_eta": [1.442, 1.566],
+            "idmva_cut" : -0.7,
+            "lead_pt_mgg_cut" : 0.33,
+            "sublead_pt_mgg_cut" : 0.25,
+            "eveto_cut" : 0.5
         },
         "electrons" : {
             "pt" : 10.0,
             "eta" : 2.4,
-            "ip_xy" : 0.045,
-            "ip_z" : 0.2,
-            "dR_pho" : 0.2
+            "ip_xy" : 999,
+            "ip_z" : 999,
+            "dR_pho" : 0.2,
+            "mZ_cut" : [86.187, 96.187],
+            "id" : "hig_19_013"
         },
         "muons" : {
             "pt" : 5.0,
             "eta" : 2.4,
-            "ip_xy" : 0.045,
-            "ip_z" : 0.2,
+            "ip_xy" : 999,
+            "ip_z" : 999,
             "rel_iso" : 0.3,
-            "dR_pho" : 0.2
+            "dR_pho" : 0.2,
+            "id" : "hig_19_013"
         },
         "jets": {
             "pt" : 25.0,

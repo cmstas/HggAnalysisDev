@@ -13,13 +13,13 @@ def select_electrons(events, photons, electrons, options, debug):
     ip_xy_cut = abs(electrons.dxy) < options["electrons"]["ip_xy"]
     ip_z_cut = abs(electrons.dz) < options["electrons"]["ip_z"]
     id_cut = (electrons.mvaFall17V2Iso_WP90 == True | ((electrons.mvaFall17V2noIso_WP90 == True) & (electrons.pfRelIso03_all < 0.3)))
-    # TODO: make ID cut configurable
-    # also: ID cut has pretty low efficiency on signal, loosen?
     dR_cut = object_selections.select_deltaR(events, electrons, photons, options["electrons"]["dR_pho"], debug)
+    mZ_cut = object_selections.select_mass(events, electrons, photons, options["electrons"]["mZ_cut"], debug)
+    
 
-    electron_cut = pt_cut & eta_cut & ip_xy_cut & ip_z_cut & id_cut & dR_cut
+    electron_cut = pt_cut & eta_cut & ip_xy_cut & ip_z_cut & id_cut & dR_cut & mZ_cut
 
-    cut_diagnostics.add_cuts([pt_cut, eta_cut, ip_xy_cut, ip_z_cut, id_cut, dR_cut, electron_cut], ["pt", "eta", "ip_xy", "ip_z", "id", "dR", "all"])
+    cut_diagnostics.add_cuts([pt_cut, eta_cut, ip_xy_cut, ip_z_cut, id_cut, dR_cut, mZ_cut, electron_cut], ["pt", "eta", "ip_xy", "ip_z", "id", "dR", "m_egamma not in m_Z +/- 5 Gev", "all"])
 
     return electron_cut
 
@@ -30,12 +30,12 @@ def select_muons(events, photons, muons, options, debug):
     eta_cut = abs(muons.eta) < options["muons"]["eta"]
     ip_xy_cut = abs(muons.dxy) < options["muons"]["ip_xy"]
     ip_z_cut = abs(muons.dz) < options["muons"]["ip_z"]
-    iso_cut = muons.pfRelIso03_all < options["muons"]["rel_iso"]
+    id_cut = muon_id(muons, options)
     dR_cut = object_selections.select_deltaR(events, muons, photons, options["muons"]["dR_pho"], debug)
 
-    muon_cut = pt_cut & eta_cut & ip_xy_cut & ip_z_cut & iso_cut & dR_cut
+    muon_cut = pt_cut & eta_cut & ip_xy_cut & ip_z_cut & id_cut & dR_cut
 
-    cut_diagnostics.add_cuts([pt_cut, eta_cut, ip_xy_cut, ip_z_cut, iso_cut, dR_cut, muon_cut], ["pt", "eta", "ip_xy", "ip_z", "iso", "dR", "all"])
+    cut_diagnostics.add_cuts([pt_cut, eta_cut, ip_xy_cut, ip_z_cut, id_cut, dR_cut, muon_cut], ["pt", "eta", "ip_xy", "ip_z", "id", "dR", "all"])
 
     return muon_cut
 
@@ -76,5 +76,22 @@ def set_muons(events, muons, debug):
     events["muon2_mass"] = muon_mass_padded[:,1] 
 
     return events
+
+def electron_id(electrons, options):
+    if options["electrons"]["id"] == "hh":
+        cut = (electrons.mvaFall17V2Iso_WP90 == True | ((electrons.mvaFall17V2noIso_WP90 == True) & (electrons.pfRelIso03_all < 0.3)))
+    elif options["electrons"]["id"] == "hig_19_013":
+        cut = electrons.mvaFall17V2Iso_WP90 == True
+    return cut
+
+def muon_id(muons, options):
+    if options["electrons"]["id"] == "hh":
+        iso_cut = muons.pfRelIso03_all < options["muons"]["rel_iso"] 
+        id_cut = muons.pt > 0 # dummy selection, TODO: update muon id for hh->ggtautau
+    elif options["electrons"]["id"] == "hig_19_013":
+        iso_cut = muons.miniPFRelIso_all < 0.25
+        id_cut = muons.mediumId == True
+    cut = id_cut & iso_cut
+    return cut
 
 #TODO: implement varying definitions for leptons (e.g. "Loose", "Medium", "Tight") 

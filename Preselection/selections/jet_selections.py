@@ -20,11 +20,26 @@ def select_jets(events, photons, electrons, muons, taus, jets, options, debug):
     else:
         dR_tau_cut = object_selections.select_deltaR(events, jets, photons, 0.0, debug) # dummy cut of all True
 
-    jet_cut = pt_cut & eta_cut & dR_pho_cut & dR_ele_cut & dR_muon_cut & dR_tau_cut
+    id_cut = jet_id(jets, options)
 
-    cut_diagnostics.add_cuts([pt_cut, eta_cut, dR_pho_cut, dR_ele_cut, dR_muon_cut, dR_tau_cut, jet_cut], ["pt > 25", "|eta| < 2.4", "dR_photons", "dR_electrons", "dR_muons", "dR_taus", "all"])
+    jet_cut = pt_cut & eta_cut & dR_pho_cut & dR_ele_cut & dR_muon_cut & dR_tau_cut & id_cut
+
+    cut_diagnostics.add_cuts([pt_cut, eta_cut, dR_pho_cut, dR_ele_cut, dR_muon_cut, dR_tau_cut, id_cut, jet_cut], ["pt > 25", "|eta| < 2.4", "dR_photons", "dR_electrons", "dR_muons", "dR_taus", "loose jet ID", "all"])
     
     return jet_cut
+
+def jet_id(jets, options):
+    """
+    Loose jet ID taken from flashgg: https://github.com/cms-analysis/flashgg/blob/dd6661a55448c403b46d1155510c67a313cd44a8/DataFormats/src/Jet.cc#L140-L155
+    """
+    nemf_cut = jets.neEmEF < 0.99
+    nh_cut = jets.neHEF < 0.99
+    chf_cut = jets.chHEF > 0
+    chemf_cut = jets.chEmEF < 0.99
+    n_constituent_cut = jets.nConstituents > 1
+
+    id_cut = nemf_cut & nh_cut & chf_cut & chemf_cut & n_constituent_cut
+    return id_cut
 
 def set_jets(events, jets, options, debug):
     events["n_jets"] = awkward.num(jets)

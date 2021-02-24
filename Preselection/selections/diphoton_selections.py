@@ -42,8 +42,16 @@ def diphoton_preselection(events, selected_photons, options, debug):
 
     eta_cut = lead_eta_cut & sublead_eta_cut
 
-    all_cuts = mgg_mask & pt_mgg_cut & idmva_cut & eveto_cut & eta_cut
-    cut_diagnostics.add_cuts([mgg_mask, pt_mgg_cut, idmva_cut, eveto_cut, eta_cut, all_cuts], ["mgg in [100, 180]" if resonant else "mgg in [100, 120] or [130, 180]", "lead (sublead) pt/mgg > 0.33 (0.25)", "pho idmva > -0.7", "eveto cut", "eta cut", "all"])
+    if options["data"]:
+        if options["year"] == 2016:
+            trigger_cut = events.HLT_Diphoton30_18_R9Id_OR_IsoCaloId_AND_HE_R9Id_Mass90 == True
+        elif options["year"] == 2017 or options["year"] == 2018:
+            trigger_cut = events.HLT_Diphoton30_22_R9Id_OR_IsoCaloId_AND_HE_R9Id_Mass90 == True
+    else:
+        trigger_cut = events.gg_mass > 0
+
+    all_cuts = mgg_mask & pt_mgg_cut & idmva_cut & eveto_cut & eta_cut & trigger_cut
+    cut_diagnostics.add_cuts([mgg_mask, pt_mgg_cut, idmva_cut, eveto_cut, eta_cut, trigger_cut, all_cuts], ["mgg in [100, 180]" if resonant else "mgg in [100, 120] or [130, 180]", "lead (sublead) pt/mgg > 0.33 (0.25)", "pho idmva > -0.7", "eveto cut", "eta cut", "trigger", "all"])
     return events[all_cuts], selected_photons[all_cuts] 
 
 def diphoton_preselection_old(events, photons, options, debug):
