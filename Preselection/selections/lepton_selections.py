@@ -12,7 +12,7 @@ def select_electrons(events, photons, electrons, options, debug):
     eta_cut = abs(electrons.eta) < options["electrons"]["eta"]
     ip_xy_cut = abs(electrons.dxy) < options["electrons"]["ip_xy"]
     ip_z_cut = abs(electrons.dz) < options["electrons"]["ip_z"]
-    id_cut = (electrons.mvaFall17V2Iso_WP90 == True | ((electrons.mvaFall17V2noIso_WP90 == True) & (electrons.pfRelIso03_all < 0.3)))
+    id_cut = electron_id(electrons, options)
     dR_cut = object_selections.select_deltaR(events, electrons, photons, options["electrons"]["dR_pho"], debug)
     mZ_cut = object_selections.select_mass(events, electrons, photons, options["electrons"]["mZ_cut"], debug)
     

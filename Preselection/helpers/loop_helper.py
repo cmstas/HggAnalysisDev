@@ -52,8 +52,7 @@ class LoopHelper():
             for key, info in options.items():
                 setattr(self, key, info)
 
-        self.save_branches.append("process_id")
-        self.save_branches.append("weight")
+        self.save_branches += ["process_id", "weight", "year"]
 
         self.branches_data = [branch for branch in self.branches if "gen" not in branch]
         self.save_branches_data = [branch for branch in self.save_branches if "gen" not in branch]
@@ -284,17 +283,19 @@ class LoopHelper():
         files = job["files"]
         output = job["output"]
 
-        selection_metadata = {
-            "resonant" : info["resonant"]
-        }
-
-        if self.debug > 0:
-            print("[LoopHelper] Running job with parameters", job)
-
         if sample == "Data":
             data = True
         else:
             data = False
+
+        selection_metadata = {
+            "resonant" : info["resonant"],
+            "data" : data,
+            "year" : int(job["info"]["year"])
+        }
+
+        if self.debug > 0:
+            print("[LoopHelper] Running job with parameters", job)
 
         sel_evts = []
         process_id = info["process_id"]
@@ -303,7 +304,7 @@ class LoopHelper():
             if self.debug > 0:
                 print("[LoopHelper] Loading file %s" % file)
 
-            events, photons = self.load_file(file, data = data)
+            events, photons = self.load_file(file, selection_metadata)
             if events is None:
                 self.outputs.pop(output)
                 return
@@ -316,6 +317,8 @@ class LoopHelper():
             else:
                 events["weight"] = events.genWeight * info["scale1fb"] * info["lumi"]
 
+            events["year"] = numpy.ones(len(events)) * int(info["year"])
+
             events = self.trim_events(events_and_objects, data)
             sel_evts.append(events)
 
@@ -327,7 +330,7 @@ class LoopHelper():
     ### Helper functions ###
     ########################
 
-    def load_file(self, file, tree_name = "Events", data = False):
+    def load_file(self, file, metadata, tree_name = "Events"):
         with uproot.open(file) as f:
             if not f:
                 print("[LoopHelper] Problem opening file %s" % file)
@@ -337,11 +340,22 @@ class LoopHelper():
                 print("[LoopHelper] Problem opening file %s" % file)
                 return None
 
-            if data:
+            if metadata["data"]:
                 branches = self.branches_data
             else:
                 branches = self.branches
             branches_no_pho = [branch for branch in branches if "selectedPhoton" not in branch]
+            
+            if metadata["data"]:
+                if metadata["year"] == 2016:
+                    triggers = ["HLT_Diphoton30_18_R9Id_OR_IsoCaloId_AND_HE_R9Id_Mass90"]
+                if metadata["year"] == 2017:
+                    triggers = ["HLT_Diphoton30_22_R9Id_OR_IsoCaloId_AND_HE_R9Id_Mass90"]
+                if metadata["year"] == 2018:
+                    triggers = ["HLT_Diphoton30_22_R9Id_OR_IsoCaloId_AND_HE_R9Id_Mass90"]
+                branches_no_pho += triggers
+
+
             events = tree.arrays(branches_no_pho, library = "ak", how = "zip") 
 
             branches_pho = [branch for branch in branches if "selectedPhoton" in branch]

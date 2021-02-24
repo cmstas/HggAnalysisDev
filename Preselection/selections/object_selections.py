@@ -83,7 +83,7 @@ def select_mass_raw(events, nEvents, obj1, n_obj1, obj2, n_obj2, mass_low, mass_
             mask_contents[mask_offsets[i] + j] = True
             for k in range(n_obj2[i]):
                 mass = inv_mass(obj1[i][j].pt, obj1[i][j].eta, obj1[i][j].phi, obj2[i][k].pt, obj2[i][k].eta, obj2[i][k].phi)
-                if mass > mass_high and mass < mass_high:
+                if mass > mass_low and mass < mass_high:
                     mask_contents[mask_offsets[i] + j] = False
     return mask_offsets, mask_contents
 
