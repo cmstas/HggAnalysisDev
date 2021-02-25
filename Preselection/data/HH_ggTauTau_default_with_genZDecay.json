@@ -1,0 +1,61 @@
+{
+    "branches" : [ 
+        "Photon_pt", "Photon_eta", "Photon_phi", "Photon_mass", "Photon_pixelSeed", "Photon_mvaID", "Photon_electronVeto",
+        "Tau_pt", "Tau_eta", "Tau_phi", "Tau_mass", "Tau_idDeepTau2017v2p1VSe", "Tau_idDeepTau2017v2p1VSjet", "Tau_idDeepTau2017v2p1VSmu", "Tau_charge", "Tau_dz", "Tau_idDecayModeNewDMs",
+        "Muon_pt", "Muon_eta", "Muon_phi", "Muon_mass", "Muon_charge", "Muon_pfRelIso03_all", "Muon_dxy", "Muon_dz",
+        "Electron_pt", "Electron_eta", "Electron_phi", "Electron_mass", "Electron_charge", "Electron_mvaFall17V2Iso_WP90", "Electron_mvaFall17V2noIso_WP90", "Electron_pfRelIso03_all", "Electron_dxy", "Electron_dz",
+        "Jet_pt", "Jet_eta", "Jet_phi", "Jet_mass", "Jet_btagDeepFlavB",
+        "ggMass", "nJet", "MET_pt", "genWeight", "tautauMassAll_SVFit","GenPart_pdgId","GenPart_genPartIdxMother"
+    ],
+    "save_branches" : [
+        "ggMass", "nJet", "MET_pt", "tautauMassAll_SVFit",
+        "lead_pho_ptmgg", "sublead_pho_ptmgg", "lead_pho_eta", "sublead_pho_eta", "lead_pho_idmva", "sublead_pho_idmva",
+        "ele1_pt", "ele1_eta", "ele2_pt", "ele2_eta", 
+        "muon1_pt", "muon1_eta", "muon2_pt", "muon2_eta",
+        "tau1_pt", "tau1_eta", "tau2_pt", "tau2_eta", "tau1_id_vs_e", "tau1_id_vs_m", "tau1_id_vs_j", "tau2_id_vs_e", "tau2_id_vs_m", "tau2_id_vs_j",
+        "n_tau", "n_electrons", "n_muons","genZ_decayMode"
+    ],
+    "selection_options" : {
+        "diphotons" : {
+            "mgg_lower" : 100,
+            "mgg_upper" : 180,
+            "mgg_sideband_lower" : 120,
+            "mgg_sideband_upper" : 130
+        },
+        "photons" : {
+            "pt" : 25,
+            "eta" : 2.5,
+            "transition_region_eta": [1.442, 1.566],
+            "idmva_cut" : -0.7,
+            "lead_pt_mgg_cut" : 0.33,
+            "sublead_pt_mgg_cut" : 0.25,
+            "eveto_cut" : 0.5
+        },
+        "electrons" : {
+            "pt" : 10.0,
+            "eta" : 2.5,
+            "ip_xy" : 0.045,
+            "ip_z" : 0.2,
+            "dR_pho" : 0.2
+        },
+        "muons" : {
+            "pt" : 10.0,
+            "eta" : 2.4,
+            "ip_xy" : 0.045,
+            "ip_z" : 0.2,
+            "rel_iso" : 0.3,
+            "dR_pho" : 0.2
+        },
+        "taus" : {
+            "pt" : 20.0,
+            "eta" : 2.3,
+            "dz" : 0.2,
+            "DeepTau_vs_e" : 2,
+            "DeepTau_vs_mu" : 1,
+            "DeepTau_vs_jet" : 8,
+            "dR_pho" : 0.2,
+            "dR_lep" : 0.2
+        },
+        "n_leptons_and_taus" : 1
+    }
+}
