@@ -38,6 +38,23 @@ the modules used are
 
 2.submission via crab
 
+the submission via crab can be handled using the scripts in the crab folder of the skim repo.
+
+https://github.com/leonardogiannini/nanoAOD-tools/blob/hhggtautau_skim/crab/crab_cfg_ggOnly.py
+https://github.com/leonardogiannini/nanoAOD-tools/blob/hhggtautau_skim/crab/crab_cfg_ggtautauFull.py
+
+the two configuration submit the skim either with the ggOnly preselection and relative modules activated, or with the full tautau variables computation
+
+the configurations make use of the lists of samples generated via the https://github.com/cmstas/HggAnalysisDev/blob/main/Skimming/make_samples.py script.
+the script works only locally at UCSD, therefore the outputs https://github.com/cmstas/HggAnalysisDev/blob/main/Skimming/sa.py and https://github.com/cmstas/HggAnalysisDev/blob/main/Skimming/allsamples.py are also stored in the repo.
+
+the files are expected to be found in the folder HggAnalysisDev/Skimming, where HggAnalysisDev should be in the same location of the $CMSSW_BASE environment. (this can be cahnged at the time of submission in case it's needed.)
+
+Before submitting remember to create a proxy certificate and setup crab (cmsenv && source /cvmfs/cms.cern.ch/common/crab-setup.sh)
+IN case of submission errors you can find info here https://twiki.cern.ch/twiki/bin/view/CMSPublic/CRAB3ConfigurationFile or in similar pages.
+
+the crab configurations are set to submit all the jobs for all the datasets. if you want to experiment, please reduce https://github.com/cmstas/HggAnalysisDev/blob/main/Skimming/allsamples.py to a single sample, try the --dry-run option, etc.
+
 3.submission via [ProjectMetis](https://github.com/aminnj/ProjectMetis)
 
 first checkout the repository https://github.com/aminnj/ProjectMetis and set up environment via ```source setup.sh```
