@@ -34,7 +34,7 @@ the modules used are
 - HHggtautaulep2018() => categories by leptons decay for HHggtautau
 - HHggtautauModule2018LVVV(), HHggtautauModule2018LL(), HHggtautauModule2018MM() => possible selections of HHggtautau, with SVFit mass computation included
 
-<h3>2.submission via crab</h3>
+<h3>2. submission via crab</h3>
 
 the submission via crab can be handled using the scripts in the crab folder of the skim repo.
 
@@ -53,7 +53,7 @@ IN case of submission errors you can find info here https://twiki.cern.ch/twiki/
 
 the crab configurations are set to submit all the jobs for all the datasets. if you want to experiment, please reduce [allsamples.py](https://github.com/cmstas/HggAnalysisDev/blob/main/Skimming/allsamples.py) to a single sample, try the --dry-run option, etc.
 
-<h3>3.submission via ProjectMetis</h3>
+<h3>3. submission via ProjectMetis</h3>
 
 first checkout the repository https://github.com/aminnj/ProjectMetis and set up environment via ```source setup.sh```
 
