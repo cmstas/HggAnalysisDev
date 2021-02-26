@@ -53,7 +53,7 @@ IN case of submission errors you can find info here https://twiki.cern.ch/twiki/
 
 the crab configurations are set to submit all the jobs for all the datasets. if you want to experiment, please reduce [allsamples.py](https://github.com/cmstas/HggAnalysisDev/blob/main/Skimming/allsamples.py) to a single sample, try the --dry-run option, etc.
 
-<h3>3.submission via [ProjectMetis](https://github.com/aminnj/ProjectMetis)</h3>
+<h3>3.submission via ProjectMetis</h3>
 
 first checkout the repository https://github.com/aminnj/ProjectMetis and set up environment via ```source setup.sh```
 
