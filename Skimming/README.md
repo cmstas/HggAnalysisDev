@@ -46,7 +46,7 @@ the two configuration submit the skim either with the ggOnly preselection and re
 the configurations make use of the lists of samples generated via the [make_samples.py](https://github.com/cmstas/HggAnalysisDev/blob/main/Skimming/make_samples.py) script.
 the script works only locally at UCSD, therefore the outputs [sa.py](https://github.com/cmstas/HggAnalysisDev/blob/main/Skimming/sa.py) and [allsamples.py](https://github.com/cmstas/HggAnalysisDev/blob/main/Skimming/allsamples.py) are also stored in the repo.
 
-the files are expected to be found in the folder HggAnalysisDev/Skimming, where HggAnalysisDev should be in the same location of the $CMSSW_BASE environment. (this can be cahnged at the time of submission in case it's needed.)
+the files are expected to be found in the folder HggAnalysisDev/Skimming, where HggAnalysisDev should be in the same path of the $CMSSW_BASE environment. (this can be cahnged at the time of submission in case it's needed.)
 
 Before submitting remember to create a proxy certificate and setup crab (cmsenv && source /cvmfs/cms.cern.ch/common/crab-setup.sh)
 IN case of submission errors you can find info here https://twiki.cern.ch/twiki/bin/view/CMSPublic/CRAB3ConfigurationFile or in similar pages.
