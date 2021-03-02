@@ -295,9 +295,9 @@
         "2018": {
             "comment": "using 2017 sample in place of 2018 for now",
             "metadata": {
-                "n_events": 1992000,
-                "scale1fb": 4.92079775169755e-09,
-                "sumWeights": 1991547,
+                "n_events": 996000,
+                "scale1fb": 9.841995796061795e-09,
+                "sumWeights": 995733,
                 "xs": 9.8e-06
             },
             "paths": [
