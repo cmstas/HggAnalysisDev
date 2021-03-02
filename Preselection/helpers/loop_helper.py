@@ -234,7 +234,7 @@ class LoopHelper():
         events_and_objects = {}
 
         if self.selections == "HHggTauTau_InclusivePresel":
-            selected_events = analysis_selections.ggTauTau_inclusive_preselection(diphoton_events, selected_photons, diphoton_events.Electron, diphoton_events.Muon, diphoton_events.Tau, options, self.debug)
+            selected_events = analysis_selections.ggTauTau_inclusive_preselection(diphoton_events, selected_photons, diphoton_events.Electron, diphoton_events.Muon, diphoton_events.Tau, diphoton_events.Jet, options, self.debug)
 
         elif self.selections == "ttH_LeptonicPresel":
             selected_events = analysis_selections.tth_leptonic_preselection(diphoton_events, selected_photons, diphoton_events.Electron, diphoton_events.Muon, diphoton_events.Jet, options, self.debug)

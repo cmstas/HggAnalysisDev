@@ -90,7 +90,7 @@ def muon_id(muons, options):
         id_cut = muons.pt > 0 # dummy selection, TODO: update muon id for hh->ggtautau
     elif options["electrons"]["id"] == "hig_19_013":
         iso_cut = muons.miniPFRelIso_all < 0.25
-        id_cut = muons.mediumId == True
+        id_cut = muons.mediumId == True 
     cut = id_cut & iso_cut
     return cut
 
