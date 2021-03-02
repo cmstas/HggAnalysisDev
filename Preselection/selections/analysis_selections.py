@@ -35,7 +35,19 @@ def ggTauTau_inclusive_preselection(events, photons, electrons, muons, taus, opt
     all_cuts = lep_tau_cut & os_cut
     cut_diagnostics.add_cuts([lep_tau_cut, os_cut, all_cuts], ["N_leptons + N_taus >= 1", "OS dileptons", "all"])
 
-    return events[all_cuts], photons[all_cuts], selected_electrons[all_cuts], selected_muons[all_cuts], selected_taus[all_cuts]
+    selected_events = events[all_cuts]
+    selected_photons = photons[all_cuts]
+    selected_electrons = selected_electrons[all_cuts]
+    selected_muons = selected_muons[all_cuts]
+    selected_taus = selected_taus[all_cuts]
+
+    # Calculate event-level variables
+    selected_events = lepton_selections.set_electrons(selected_events, selected_electrons, debug)
+    selected_events = lepton_selections.set_muons(selected_events, selected_muons, debug)
+    selected_events = tau_selections.set_taus(selected_events, selected_taus, debug)
+    # TODO: add calculation HH->ggTauTau specific variables (e.g. H->TauTau kinematics) here
+
+    return selected_events
 
 def tth_leptonic_preselection(events, photons, electrons, muons, jets, options, debug):
     cut_diagnostics = utils.CutDiagnostics(events = events, debug = debug, cut_set = "[analysis_selections.py : tth_leptonic_preselection]")
@@ -59,4 +71,15 @@ def tth_leptonic_preselection(events, photons, electrons, muons, jets, options, 
     all_cuts = lep_cut & jet_cut
     cut_diagnostics.add_cuts([lep_cut, jet_cut, all_cuts], ["N_leptons >= 1", "N_jets >= 1", "all"])
 
-    return events[all_cuts], photons[all_cuts], selected_electrons[all_cuts], selected_muons[all_cuts], selected_jets[all_cuts]
+    selected_events = events[all_cuts]
+    selected_photons = photons[all_cuts]
+    selected_electrons = selected_electrons[all_cuts]
+    selected_muons = selected_muons[all_cuts]
+    selected_jets = selected_jets[all_cuts]
+
+    # Calculate event-level variables
+    selected_events = lepton_selections.set_electrons(selected_events, selected_electrons, debug)
+    selected_events = lepton_selections.set_muons(selected_events, selected_muons, debug)
+    selected_events = jet_selections.set_jets(selected_events, selected_jets, debug)
+
+    return selected_events

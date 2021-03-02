@@ -52,7 +52,15 @@ def diphoton_preselection(events, selected_photons, options, debug):
 
     all_cuts = mgg_mask & pt_mgg_cut & idmva_cut & eveto_cut & eta_cut & trigger_cut
     cut_diagnostics.add_cuts([mgg_mask, pt_mgg_cut, idmva_cut, eveto_cut, eta_cut, trigger_cut, all_cuts], ["mgg in [100, 180]" if resonant else "mgg in [100, 120] or [130, 180]", "lead (sublead) pt/mgg > 0.33 (0.25)", "pho idmva > -0.7", "eveto cut", "eta cut", "trigger", "all"])
-    return events[all_cuts], selected_photons[all_cuts] 
+
+    selected_events = events[all_cuts]
+    selected_photons = selected_photons[all_cuts]
+
+    # Calculate event-level photon/diphoton variables
+    selected_events = photon_selections.set_photons(selected_events, selected_photons, debug)
+    selected_events = set_diphotons(selected_events, selected_photons, debug) 
+
+    return selected_events, selected_photons 
 
 def set_diphotons(events, selected_photons, debug):
     events["diphoton_pt_mgg"] = events["gg_pt"] / events["gg_mass"]
@@ -63,6 +71,7 @@ def set_diphotons(events, selected_photons, debug):
         selected_photons.eta[:,0],
         selected_photons.eta[:,1]
     )
+    return events
 
 def diphoton_preselection_old(events, photons, options, debug):
     # Initialize cut diagnostics tool for debugging
