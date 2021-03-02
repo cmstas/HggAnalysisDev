@@ -48,53 +48,6 @@ def select_photons(events, photons, options, debug):
     #cut_diagnostics.add_cuts([pt_cut, eta_cut, idmva_cut, eveto_cut, photon_cut], ["pt > 25", "|eta| < 2.5", "idmva", "eveto", "all"])
     return photon_cut
 
-#TODO: finish full diphoton preselection for sync purposes
-def select_photons_full(events, photons, options, debug):
-    cut_diagnostics = utils.ObjectCutDiagnostics(objects = photons, cut_set = "[photon_selections.py : select_photons]", debug = debug)
-
-    pt_cut = photons.pt > options["photons"]["pt"]
-
-    eta_cut1 = abs(photons.eta) < options["photons"]["eta"]
-    eta_cut2 = abs(photons.eta) < options["photons"]["transition_region_eta"][0]
-    eta_cut3 = abs(photons.eta) > options["photons"]["transition_region_eta"][1]
-    eta_cut = eta_cut1 & (eta_cut2 | eta_cut3)
-
-    pt_mgg_cut = (photons.pt / events.gg_mass) >= options["photons"]["sublead_pt_mgg_cut"]
-    idmva_cut = photons.mvaID > options["photons"]["idmva_cut"]
-    eveto_cut = photons.electronVeto == 1
-
-    #r9_iso_cut = photon_r9_iso_cuts(photons)
-
-    #hlt_cut = photon_hlt_cuts(photons)
-
-
-    return photon_cut
-
-
-
-def photon_r9_iso_cuts(photons):
-    return
-
-def photon_hlt_cuts(photons):
-    nEvents = len(photons)
-
-    for i in range(nEvents):
-        nPhotons = len(photons[i])
-        for j in range(nPhotons):
-            continue
-
-    return  
-
-
-def photon_eff_area(eta):
-    """
-    Values copied from https://github.com/cms-analysis/flashgg/blob/af2080a888a5013a14104fb46b5e97fadbbad811/Taggers/python/flashggPreselectedDiPhotons_cfi.py#L3
-    """
-    if eta < 1.5:
-        return 0.16544
-    else:
-        return 0.13212
-
 def set_photons(events, photons, debug):
     events["lead_pho_ptmgg"] = photons.pt[:,0] / events.gg_mass
     events["sublead_pho_ptmgg"] = photons.pt[:,1] / events.gg_mass
