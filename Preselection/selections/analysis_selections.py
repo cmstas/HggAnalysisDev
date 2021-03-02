@@ -98,6 +98,6 @@ def tth_leptonic_preselection(events, photons, electrons, muons, jets, options, 
     # Calculate event-level variables
     selected_events = lepton_selections.set_electrons(selected_events, selected_electrons, debug)
     selected_events = lepton_selections.set_muons(selected_events, selected_muons, debug)
-    selected_events = jet_selections.set_jets(selected_events, selected_jets, debug)
+    selected_events = jet_selections.set_jets(selected_events, selected_jets, options, debug)
 
     return selected_events
