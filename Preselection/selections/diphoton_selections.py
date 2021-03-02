@@ -3,7 +3,7 @@ import numpy
 import numba
 
 import selections.selection_utils as utils
-from selections import photon_selections
+from selections import photon_selections, object_selections
 
 def diphoton_preselection(events, selected_photons, options, debug):
     # Initialize cut diagnostics tool for debugging
@@ -53,6 +53,16 @@ def diphoton_preselection(events, selected_photons, options, debug):
     all_cuts = mgg_mask & pt_mgg_cut & idmva_cut & eveto_cut & eta_cut & trigger_cut
     cut_diagnostics.add_cuts([mgg_mask, pt_mgg_cut, idmva_cut, eveto_cut, eta_cut, trigger_cut, all_cuts], ["mgg in [100, 180]" if resonant else "mgg in [100, 120] or [130, 180]", "lead (sublead) pt/mgg > 0.33 (0.25)", "pho idmva > -0.7", "eveto cut", "eta cut", "trigger", "all"])
     return events[all_cuts], selected_photons[all_cuts] 
+
+def set_diphotons(events, selected_photons, debug):
+    events["diphoton_pt_mgg"] = events["gg_pt"] / events["gg_mass"]
+    events["diphoton_rapidity"] = events["gg_eta"] # just using pseudorapidity, shouldn't be a big difference
+    events["diphoton_delta_R"] = object_selections.compute_deltaR(
+        selected_photons.phi[:,0],
+        selected_photons.phi[:,1],
+        selected_photons.eta[:,0],
+        selected_photons.eta[:,1]
+    )
 
 def diphoton_preselection_old(events, photons, options, debug):
     # Initialize cut diagnostics tool for debugging

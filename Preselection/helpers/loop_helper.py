@@ -263,6 +263,7 @@ class LoopHelper():
 
     def trim_events(self, events_and_objects, data):
         selected_events = photon_selections.set_photons(events_and_objects["events"], events_and_objects["photons"], self.debug)
+        selected_events = diphoton_selections.set_diphotons(events_and_objects["events"], events_and_objects["photons"], self.debug)
         if self.selections == "HHggTauTau_InclusivePresel" or self.selections == "ttH_LeptonicPresel":
             selected_events = lepton_selections.set_electrons(events_and_objects["events"], events_and_objects["electrons"], self.debug)
             selected_events = lepton_selections.set_muons(events_and_objects["events"], events_and_objects["muons"], self.debug)

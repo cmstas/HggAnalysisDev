@@ -8,6 +8,19 @@ import selections.selection_utils as utils
 
 PI = math.pi
 
+def compute_deltaR(phi1, phi2, eta1, eta2):
+    d_phi = numpy.array(phi1 - phi2)
+    for i in range(len(d_phi)):
+        if d_phi[i] > PI:
+            d_phi[i] = d_phi[i] - (2*PI)
+        elif d_phi[i] < -PI:
+            d_phi[i] = d_phi[i] + (2*PI)
+
+    d_eta = numpy.abs(eta1 - eta2)
+    dR = ((d_eta)**2 + (d_phi)**2)**(0.5)
+    return dR
+
+#TODO: make compatible with vectors (quick, unoptimized implementation above)
 @numba.njit
 def deltaR(phi1, phi2, eta1, eta2):
     dR = float(0)

@@ -102,4 +102,6 @@ def set_photons(events, photons, debug):
     events["sublead_pho_eta"] = photons.eta[:,1]
     events["lead_pho_idmva"] = photons.mvaID[:,0]
     events["sublead_pho_idmva"] = photons.mvaID[:,1]
+    events["lead_pixelSeed"] = photons.pixelSeed[:,0]
+    events["sublead_pixelSeed"] = photons.pixelSeed[:,1]
     return events

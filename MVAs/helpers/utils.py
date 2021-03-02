@@ -95,7 +95,7 @@ def calc_roc_and_unc(y, pred, sample_weight, n_bootstrap = 10, interp = 10000):
     return results
 
 def make_train_test_validation_split(df):
-    mgg = df["ggMass"].tolist()
+    mgg = df["gg_mass"].tolist()
     digits = numpy.array([int(str(m).split(".")[1]) for m in mgg])
 
     idx_train = numpy.argwhere(digits % 3 == 0).ravel() # ravel() to make it the right shape for slicing df
