@@ -2,8 +2,8 @@
     "branches" : [ 
         "selectedPhoton_pt", "selectedPhoton_eta", "selectedPhoton_phi", "selectedPhoton_mass", "selectedPhoton_pixelSeed", "selectedPhoton_mvaID", "selectedPhoton_electronVeto",
         "Tau_pt", "Tau_eta", "Tau_phi", "Tau_mass", "Tau_idDeepTau2017v2p1VSe", "Tau_idDeepTau2017v2p1VSjet", "Tau_idDeepTau2017v2p1VSmu", "Tau_charge", "Tau_dz", "Tau_idDecayModeNewDMs",
-        "Muon_pt", "Muon_eta", "Muon_phi", "Muon_mass", "Muon_charge", "Muon_pfRelIso03_all", "Muon_dxy", "Muon_dz",
-        "Electron_pt", "Electron_eta", "Electron_phi", "Electron_mass", "Electron_charge", "Electron_mvaFall17V2Iso_WP90", "Electron_mvaFall17V2noIso_WP90", "Electron_pfRelIso03_all", "Electron_dxy", "Electron_dz",
+        "Muon_pt", "Muon_eta", "Muon_phi", "Muon_mass", "Muon_charge", "Muon_pfRelIso03_all", "Muon_dxy", "Muon_dz", "Muon_tightId",
+        "Electron_pt", "Electron_eta", "Electron_phi", "Electron_mass", "Electron_charge", "Electron_mvaFall17V2Iso_WP90", "Electron_mvaFall17V2noIso_WP90", "Electron_pfRelIso03_all", "Electron_dxy", "Electron_dz", "Electron_mvaFall17V2Iso_WP80",
         "Jet_pt", "Jet_eta", "Jet_phi", "Jet_mass", "Jet_btagDeepFlavB", "Jet_jetId",
         "Jet_neEmEF", "Jet_neHEF", "Jet_chHEF", "Jet_chEmEF", "Jet_nConstituents",
         "gg_mass", "gg_pt", "gg_eta", "nJet", "MET_pt", "genWeight"

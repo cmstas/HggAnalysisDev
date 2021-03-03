@@ -46,6 +46,7 @@ def set_electrons(events, electrons, debug):
     electron_eta_padded = utils.pad_awkward_array(electrons.eta, 2, -9)
     electron_phi_padded = utils.pad_awkward_array(electrons.phi, 2, -9)
     electron_mass_padded = utils.pad_awkward_array(electrons.mass, 2, -9)
+    electron_tightID_padded = utils.pad_awkward_array(electrons.mvaFall17V2Iso_WP80, 2, -9)
 
     events["ele1_pt"] = electron_pt_padded[:,0]
     events["ele2_pt"] = electron_pt_padded[:,1]
@@ -55,6 +56,8 @@ def set_electrons(events, electrons, debug):
     events["ele2_phi"] = electron_phi_padded[:,1]
     events["ele1_mass"] = electron_mass_padded[:,0]
     events["ele2_mass"] = electron_mass_padded[:,1]
+    events["ele1_tightId"] = electron_tightID_padded[:,0]
+    events["ele2_tightId"] = electron_tightID_padded[:,0]
 
     return events
 
@@ -65,7 +68,8 @@ def set_muons(events, muons, debug):
     muon_eta_padded = utils.pad_awkward_array(muons.eta, 2, -9)
     muon_phi_padded = utils.pad_awkward_array(muons.phi, 2, -9)
     muon_mass_padded = utils.pad_awkward_array(muons.mass, 2, -9)
-    
+    muon_tightID_padded = utils.pad_awkward_array(muons.tightId, 2, -9)
+
     events["muon1_pt"] = muon_pt_padded[:,0]
     events["muon2_pt"] = muon_pt_padded[:,1]
     events["muon1_eta"] = muon_eta_padded[:,0]
@@ -74,6 +78,8 @@ def set_muons(events, muons, debug):
     events["muon2_phi"] = muon_phi_padded[:,1]
     events["muon1_mass"] = muon_mass_padded[:,0]
     events["muon2_mass"] = muon_mass_padded[:,1] 
+    events["muon1_tightId"] = muon_tightID_padded[:,0]
+    events["muon2_tightId"] = muon_tightID_padded[:,1]
 
     return events
 
