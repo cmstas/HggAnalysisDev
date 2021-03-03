@@ -9,7 +9,12 @@ def select_electrons(events, photons, electrons, options, debug):
     cut_diagnostics = utils.ObjectCutDiagnostics(objects = electrons, cut_set = "[lepton_selections.py : select_electrons]", debug = debug)
 
     pt_cut = electrons.pt > options["electrons"]["pt"]
-    eta_cut = abs(electrons.eta) < options["electrons"]["eta"]
+
+    eta_cut1 = abs(electrons.eta) < options["electrons"]["eta"]
+    eta_cut2 = abs(electrons.eta) < options["electrons"]["transition_region_eta"][0]
+    eta_cut3 = abs(electrons.eta) > options["electrons"]["transition_region_eta"][1]
+    eta_cut = eta_cut1 & (eta_cut2 | eta_cut3)
+
     ip_xy_cut = abs(electrons.dxy) < options["electrons"]["ip_xy"]
     ip_z_cut = abs(electrons.dz) < options["electrons"]["ip_z"]
     id_cut = electron_id(electrons, options)
