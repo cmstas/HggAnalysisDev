@@ -273,9 +273,9 @@
         "2016": {
             "metadata": {
                 "n_events": 998000,
-                "scale1fb": 9.822710105764527e-09,
+                "scale1fb": 8.859483124984964e-09,
                 "sumWeights": 997688,
-                "xs": 9.8e-06
+                "xs": 8.839e-06
             },
             "paths": [
                 "/hadoop/cms/store/user/legianni/skimNano-Hggselection/HHggtautau_Era2016_private_mc16"
@@ -284,9 +284,9 @@
         "2017": {
             "metadata": {
                 "n_events": 998000,
-                "scale1fb": 9.820642991568276e-09,
+                "scale1fb": 8.857618714537959e-09,
                 "sumWeights": 997898,
-                "xs": 9.8e-06
+                "xs": 8.839e-06
             },
             "paths": [
                 "/hadoop/cms/store/user/legianni/skimNano-Hggselection/HHggtautau_Era2017_private_mc17"
@@ -296,9 +296,9 @@
             "comment": "using 2017 sample in place of 2018 for now",
             "metadata": {
                 "n_events": 996000,
-                "scale1fb": 9.841995796061795e-09,
+                "scale1fb": 8.876877636876552e-09,
                 "sumWeights": 995733,
-                "xs": 9.8e-06
+                "xs": 8.839e-06
             },
             "paths": [
                 "/hadoop/cms/store/user/legianni/skimNano-Hggselection/HHggtautau_Era2018_private_mc18"
@@ -308,14 +308,71 @@
         "process_id": -1,
         "resonant": true
     },
+    "HH_ggWW_dileptonic": {
+        "2016": {
+            "metadata": {
+                "xs": 3.031e-06
+            },
+            "paths": [
+                "GluGluToHHTo2G2l2nu_node_SM_TuneCUETP8M1_PSWeights_13TeV-madgraph-pythia8_private_mc16/"
+            ]
+        },
+        "2017": {
+            "metadata": {
+                "xs": 3.031e-06
+            },
+            "paths": [
+                "GluGluToHHTo2G2l2nu_node_SM_TuneCP5_PSWeights_13TeV-madgraph-pythia8_private_mc17/"
+            ]
+        },
+        "2018": {
+            "metadata": {
+                "xs": 3.031e-06
+            },
+            "paths": [
+                "GluGluToHHTo2G2l2nu_node_SM_TuneCP5_PSWeights_13TeV-madgraph-pythia8_private_mc18/"
+            ]
+        },
+        "fpo": 10,
+        "process_id": -3,
+        "resonant": true
+    },
+    "HH_ggWW_semileptonic": {
+        "2016": {
+            "metadata": {
+                "xs": 1.3063e-05
+            },
+            "paths": [
+                "GluGluToHHTo2G2Qlnu_node_SM_TuneCUETP8M1_PSWeights_13TeV-madgraph-pythia8_private_mc16/"
+            ]
+        },
+        "2017": {
+            "metadata": {
+                "xs": 1.3063e-05
+            },
+            "paths": [
+                "GluGluToHHTo2G2Qlnu_node_SM_TuneCP5_PSWeights_13TeV-madgraph-pythia8_private_mc17/"
+            ]
+        },
+        "2018": {
+            "metadata": {
+                "xs": 1.3063e-05
+            },
+            "paths": [
+                "GluGluToHHTo2G2Qlnu_node_SM_TuneCP5_PSWeights_13TeV-madgraph-pythia8_private_mc18/"
+            ]
+        },
+        "fpo": 10,
+        "process_id": -4,
+        "resonant": true
+    },
     "HH_ggZZ": {
         "2016": {
             "metadata": {
-                "comment": "calculated as 33 * 0.00227 * 0.026 * 2",
                 "n_events": 993871,
-                "scale1fb": 3.920809180482316e-09,
+                "scale1fb": 3.7171652915604347e-09,
                 "sumWeights": 993499,
-                "xs": 3.89532e-06
+                "xs": 3.693e-06
             },
             "paths": [
                 "/hadoop/cms/store/user/legianni/skimNano-Hggselection/HHggZZ_Era2016_private_mc16/"
@@ -323,11 +380,10 @@
         },
         "2017": {
             "metadata": {
-                "comment": "calculated as 33 * 0.00227 * 0.026 * 2",
                 "n_events": 901884,
-                "scale1fb": 4.320371066650252e-09,
+                "scale1fb": 4.095974232961446e-09,
                 "sumWeights": 901617,
-                "xs": 3.89532e-06
+                "xs": 3.693e-06
             },
             "paths": [
                 "/hadoop/cms/store/user/legianni/skimNano-Hggselection/HHggZZ_Era2017_private_mc17/"
@@ -335,11 +391,10 @@
         },
         "2018": {
             "metadata": {
-                "comment": "calculated as 33 * 0.00227 * 0.026 * 2",
                 "n_events": 989862,
-                "scale1fb": 3.936420162921059e-09,
+                "scale1fb": 3.731965451276781e-09,
                 "sumWeights": 989559,
-                "xs": 3.89532e-06
+                "xs": 3.693e-06
             },
             "paths": [
                 "/hadoop/cms/store/user/legianni/skimNano-Hggselection/HHggZZ_Era2018_private_mc18/"

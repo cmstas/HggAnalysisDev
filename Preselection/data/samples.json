@@ -5,16 +5,16 @@
         "process_id" : -1,
         "2016" : {
             "paths" : ["/hadoop/cms/store/user/legianni/skimNano-Hggselection/HHggtautau_Era2016_private_mc16"],
-            "metadata" : { "xs" : 0.0000098 }
+            "metadata" : { "xs" : 0.000008839 }
         },
         "2017" : {
             "paths" : ["/hadoop/cms/store/user/legianni/skimNano-Hggselection/HHggtautau_Era2017_private_mc17"],
-            "metadata" : { "xs" : 0.0000098 }
+            "metadata" : { "xs" : 0.000008839 }
         },
         "2018" : {
             "comment" : "using 2017 sample in place of 2018 for now",
             "paths" : ["/hadoop/cms/store/user/legianni/skimNano-Hggselection/HHggtautau_Era2018_private_mc18"],
-            "metadata" : { "xs" : 0.0000098 } 
+            "metadata" : { "xs" : 0.000008839 }
         } 
     },
     "HH_ggZZ" : {
@@ -23,17 +23,53 @@
         "process_id" : -2,
         "2016" : {
             "paths" : ["/hadoop/cms/store/user/legianni/skimNano-Hggselection/HHggZZ_Era2016_private_mc16/"],
-            "metadata" : { "xs" : 0.00000389532, "comment" : "calculated as 33 * 0.00227 * 0.026 * 2"}
+            "metadata" : { "xs" : 0.000003693 }
+        
         },
         "2017" : {
             "paths" : ["/hadoop/cms/store/user/legianni/skimNano-Hggselection/HHggZZ_Era2017_private_mc17/"],
-            "metadata" : { "xs" : 0.00000389532, "comment" : "calculated as 33 * 0.00227 * 0.026 * 2"}
+            "metadata" : { "xs" : 0.000003693 }
         },
         "2018" : {
             "paths" : ["/hadoop/cms/store/user/legianni/skimNano-Hggselection/HHggZZ_Era2018_private_mc18/"],
-            "metadata" : { "xs" : 0.00000389532, "comment" : "calculated as 33 * 0.00227 * 0.026 * 2"}
+            "metadata" : { "xs" : 0.000003693 }
         } 
     },
+    "HH_ggWW_dileptonic" : {
+        "resonant" : true,
+        "fpo": 10,
+        "process_id" : -3,
+        "2016" : {
+            "paths" : ["GluGluToHHTo2G2l2nu_node_SM_TuneCUETP8M1_PSWeights_13TeV-madgraph-pythia8_private_mc16/"],
+            "metadata" : { "xs" : 0.000003031 }
+        },
+        "2017" : {
+            "paths" : ["GluGluToHHTo2G2l2nu_node_SM_TuneCP5_PSWeights_13TeV-madgraph-pythia8_private_mc17/"],
+            "metadata" : { "xs" : 0.000003031 }
+        },
+        "2018" : {
+            "paths" : ["GluGluToHHTo2G2l2nu_node_SM_TuneCP5_PSWeights_13TeV-madgraph-pythia8_private_mc18/"],
+            "metadata" : { "xs" : 0.000003031 }
+        }
+    },
+    "HH_ggWW_semileptonic" : {
+        "resonant" : true,
+        "fpo": 10,
+        "process_id" : -4,
+        "2016" : {
+            "paths" : ["GluGluToHHTo2G2Qlnu_node_SM_TuneCUETP8M1_PSWeights_13TeV-madgraph-pythia8_private_mc16/"],
+            "metadata" : { "xs" : 0.000013063 }
+        },  
+        "2017" : {
+            "paths" : ["GluGluToHHTo2G2Qlnu_node_SM_TuneCP5_PSWeights_13TeV-madgraph-pythia8_private_mc17/"],
+            "metadata" : { "xs" : 0.000013063 }
+        },  
+        "2018" : {
+            "paths" : ["GluGluToHHTo2G2Qlnu_node_SM_TuneCP5_PSWeights_13TeV-madgraph-pythia8_private_mc18/"],
+            "metadata" : { "xs" : 0.000013063 }
+        }
+    },
+
     "Data" : {
         "resonant" : false,
         "fpo" : 25,
