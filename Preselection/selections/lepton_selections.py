@@ -92,17 +92,21 @@ def electron_id(electrons, options):
     if options["electrons"]["id"] == "hh":
         cut = (electrons.mvaFall17V2Iso_WP90 == True | ((electrons.mvaFall17V2noIso_WP90 == True) & (electrons.pfRelIso03_all < 0.3)))
     elif options["electrons"]["id"] == "hig_19_013":
-        cut = electrons.mvaFall17V2Iso_WP90 == True
+        id_cut = electrons.mvaFall17V2Iso_WP90 == True
+        conversion_cut = electrons.convVeto == True
+        cut = id_cut & conversion_cut
     return cut
 
 def muon_id(muons, options):
     if options["electrons"]["id"] == "hh":
         iso_cut = muons.pfRelIso03_all < options["muons"]["rel_iso"] 
         id_cut = muons.pt > 0 # dummy selection, TODO: update muon id for hh->ggtautau
+        cut = iso_cut & id_cut
     elif options["electrons"]["id"] == "hig_19_013":
-        iso_cut = muons.miniPFRelIso_all < 0.25
-        id_cut = muons.mediumId == True 
-    cut = id_cut & iso_cut
+        iso_cut = muons.miniPFRelIso_all < options["muons"]["rel_iso"]
+        id_cut = muons.mediumId == True
+        track_purity = muons.highPurity == True
+        cut = iso_cut & id_cut & track_purity
     return cut
 
 #TODO: implement varying definitions for leptons (e.g. "Loose", "Medium", "Tight") 
