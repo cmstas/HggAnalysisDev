@@ -40,15 +40,15 @@
         "fpo": 10,
         "process_id" : -3,
         "2016" : {
-            "paths" : ["GluGluToHHTo2G2l2nu_node_SM_TuneCUETP8M1_PSWeights_13TeV-madgraph-pythia8_private_mc16/"],
+            "paths" : ["/hadoop/cms/store/user/legianni/skimNano-Hggselection/GluGluToHHTo2G2l2nu_node_SM_TuneCUETP8M1_PSWeights_13TeV-madgraph-pythia8_private_mc16/"],
             "metadata" : { "xs" : 0.000003031 }
         },
         "2017" : {
-            "paths" : ["GluGluToHHTo2G2l2nu_node_SM_TuneCP5_PSWeights_13TeV-madgraph-pythia8_private_mc17/"],
+            "paths" : ["/hadoop/cms/store/user/legianni/skimNano-Hggselection/GluGluToHHTo2G2l2nu_node_SM_TuneCP5_PSWeights_13TeV-madgraph-pythia8_private_mc17/"],
             "metadata" : { "xs" : 0.000003031 }
         },
         "2018" : {
-            "paths" : ["GluGluToHHTo2G2l2nu_node_SM_TuneCP5_PSWeights_13TeV-madgraph-pythia8_private_mc18/"],
+            "paths" : ["/hadoop/cms/store/user/legianni/skimNano-Hggselection/GluGluToHHTo2G2l2nu_node_SM_TuneCP5_PSWeights_13TeV-madgraph-pythia8_private_mc18/"],
             "metadata" : { "xs" : 0.000003031 }
         }
     },
@@ -57,15 +57,15 @@
         "fpo": 10,
         "process_id" : -4,
         "2016" : {
-            "paths" : ["GluGluToHHTo2G2Qlnu_node_SM_TuneCUETP8M1_PSWeights_13TeV-madgraph-pythia8_private_mc16/"],
+            "paths" : ["/hadoop/cms/store/user/legianni/skimNano-Hggselection/GluGluToHHTo2G2Qlnu_node_SM_TuneCUETP8M1_PSWeights_13TeV-madgraph-pythia8_private_mc16/"],
             "metadata" : { "xs" : 0.000013063 }
         },  
         "2017" : {
-            "paths" : ["GluGluToHHTo2G2Qlnu_node_SM_TuneCP5_PSWeights_13TeV-madgraph-pythia8_private_mc17/"],
+            "paths" : ["/hadoop/cms/store/user/legianni/skimNano-Hggselection/GluGluToHHTo2G2Qlnu_node_SM_TuneCP5_PSWeights_13TeV-madgraph-pythia8_private_mc17/"],
             "metadata" : { "xs" : 0.000013063 }
         },  
         "2018" : {
-            "paths" : ["GluGluToHHTo2G2Qlnu_node_SM_TuneCP5_PSWeights_13TeV-madgraph-pythia8_private_mc18/"],
+            "paths" : ["/hadoop/cms/store/user/legianni/skimNano-Hggselection/GluGluToHHTo2G2Qlnu_node_SM_TuneCP5_PSWeights_13TeV-madgraph-pythia8_private_mc18/"],
             "metadata" : { "xs" : 0.000013063 }
         }
     },

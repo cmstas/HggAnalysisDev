@@ -311,26 +311,35 @@
     "HH_ggWW_dileptonic": {
         "2016": {
             "metadata": {
+                "n_events": 386791,
+                "scale1fb": 7.839171546212576e-09,
+                "sumWeights": 386648,
                 "xs": 3.031e-06
             },
             "paths": [
-                "GluGluToHHTo2G2l2nu_node_SM_TuneCUETP8M1_PSWeights_13TeV-madgraph-pythia8_private_mc16/"
+                "/hadoop/cms/store/user/legianni/skimNano-Hggselection/GluGluToHHTo2G2l2nu_node_SM_TuneCUETP8M1_PSWeights_13TeV-madgraph-pythia8_private_mc16/"
             ]
         },
         "2017": {
             "metadata": {
+                "n_events": 399988,
+                "scale1fb": 7.58091141013456e-09,
+                "sumWeights": 399820,
                 "xs": 3.031e-06
             },
             "paths": [
-                "GluGluToHHTo2G2l2nu_node_SM_TuneCP5_PSWeights_13TeV-madgraph-pythia8_private_mc17/"
+                "/hadoop/cms/store/user/legianni/skimNano-Hggselection/GluGluToHHTo2G2l2nu_node_SM_TuneCP5_PSWeights_13TeV-madgraph-pythia8_private_mc17/"
             ]
         },
         "2018": {
             "metadata": {
+                "n_events": 399986,
+                "scale1fb": 7.580740766677754e-09,
+                "sumWeights": 399829,
                 "xs": 3.031e-06
             },
             "paths": [
-                "GluGluToHHTo2G2l2nu_node_SM_TuneCP5_PSWeights_13TeV-madgraph-pythia8_private_mc18/"
+                "/hadoop/cms/store/user/legianni/skimNano-Hggselection/GluGluToHHTo2G2l2nu_node_SM_TuneCP5_PSWeights_13TeV-madgraph-pythia8_private_mc18/"
             ]
         },
         "fpo": 10,
@@ -340,26 +349,35 @@
     "HH_ggWW_semileptonic": {
         "2016": {
             "metadata": {
+                "n_events": 106717,
+                "scale1fb": 1.224640941988225e-07,
+                "sumWeights": 106668,
                 "xs": 1.3063e-05
             },
             "paths": [
-                "GluGluToHHTo2G2Qlnu_node_SM_TuneCUETP8M1_PSWeights_13TeV-madgraph-pythia8_private_mc16/"
+                "/hadoop/cms/store/user/legianni/skimNano-Hggselection/GluGluToHHTo2G2Qlnu_node_SM_TuneCUETP8M1_PSWeights_13TeV-madgraph-pythia8_private_mc16/"
             ]
         },
         "2017": {
             "metadata": {
+                "n_events": 251851,
+                "scale1fb": 5.18902213765626e-08,
+                "sumWeights": 251743,
                 "xs": 1.3063e-05
             },
             "paths": [
-                "GluGluToHHTo2G2Qlnu_node_SM_TuneCP5_PSWeights_13TeV-madgraph-pythia8_private_mc17/"
+                "/hadoop/cms/store/user/legianni/skimNano-Hggselection/GluGluToHHTo2G2Qlnu_node_SM_TuneCP5_PSWeights_13TeV-madgraph-pythia8_private_mc17/"
             ]
         },
         "2018": {
             "metadata": {
+                "n_events": 272820,
+                "scale1fb": 4.789929524270492e-08,
+                "sumWeights": 272718,
                 "xs": 1.3063e-05
             },
             "paths": [
-                "GluGluToHHTo2G2Qlnu_node_SM_TuneCP5_PSWeights_13TeV-madgraph-pythia8_private_mc18/"
+                "/hadoop/cms/store/user/legianni/skimNano-Hggselection/GluGluToHHTo2G2Qlnu_node_SM_TuneCP5_PSWeights_13TeV-madgraph-pythia8_private_mc18/"
             ]
         },
         "fpo": 10,
