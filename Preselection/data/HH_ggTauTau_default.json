@@ -1,19 +1,23 @@
 {
     "branches" : [ 
-        "Photon_pt", "Photon_eta", "Photon_phi", "Photon_mass", "Photon_pixelSeed", "Photon_mvaID", "Photon_electronVeto",
+        "selectedPhoton_pt", "selectedPhoton_eta", "selectedPhoton_phi", "selectedPhoton_mass", "selectedPhoton_pixelSeed", "selectedPhoton_mvaID", "selectedPhoton_electronVeto",
         "Tau_pt", "Tau_eta", "Tau_phi", "Tau_mass", "Tau_idDeepTau2017v2p1VSe", "Tau_idDeepTau2017v2p1VSjet", "Tau_idDeepTau2017v2p1VSmu", "Tau_charge", "Tau_dz", "Tau_idDecayModeNewDMs",
-        "Muon_pt", "Muon_eta", "Muon_phi", "Muon_mass", "Muon_charge", "Muon_pfRelIso03_all", "Muon_dxy", "Muon_dz",
-        "Electron_pt", "Electron_eta", "Electron_phi", "Electron_mass", "Electron_charge", "Electron_mvaFall17V2Iso_WP90", "Electron_mvaFall17V2noIso_WP90", "Electron_pfRelIso03_all", "Electron_dxy", "Electron_dz",
-        "Jet_pt", "Jet_eta", "Jet_phi", "Jet_mass", "Jet_btagDeepFlavB",
-        "ggMass", "nJet", "MET_pt", "genWeight", "tautauMassAll_SVFit"
+        "Muon_pt", "Muon_eta", "Muon_phi", "Muon_mass", "Muon_charge", "Muon_pfRelIso03_all", "Muon_dxy", "Muon_dz", "Muon_tightId",
+        "Electron_pt", "Electron_eta", "Electron_phi", "Electron_mass", "Electron_charge", "Electron_mvaFall17V2Iso_WP90", "Electron_mvaFall17V2noIso_WP90", "Electron_pfRelIso03_all", "Electron_dxy", "Electron_dz", "Electron_mvaFall17V2Iso_WP80",
+        "Jet_pt", "Jet_eta", "Jet_phi", "Jet_mass", "Jet_btagDeepFlavB", "Jet_jetId",
+        "Jet_neEmEF", "Jet_neHEF", "Jet_chHEF", "Jet_chEmEF", "Jet_nConstituents",
+        "gg_mass", "gg_pt", "gg_eta", "nJet", "MET_pt", "genWeight"
     ],
     "save_branches" : [
-        "ggMass", "nJet", "MET_pt", "tautauMassAll_SVFit",
+        "gg_mass", "nJet", "MET_pt",
+        "diphoton_pt_mgg", "diphoton_rapidity", "diphoton_delta_R",
         "lead_pho_ptmgg", "sublead_pho_ptmgg", "lead_pho_eta", "sublead_pho_eta", "lead_pho_idmva", "sublead_pho_idmva",
-        "ele1_pt", "ele1_eta", "ele2_pt", "ele2_eta", 
-        "muon1_pt", "muon1_eta", "muon2_pt", "muon2_eta",
+        "ele1_pt", "ele1_eta", "ele2_pt", "ele2_eta", "ele1_tightId", "ele2_tightId", 
+        "muon1_pt", "muon1_eta", "muon2_pt", "muon2_eta", "muon1_tightId", "muon2_tightId",
         "tau1_pt", "tau1_eta", "tau2_pt", "tau2_eta", "tau1_id_vs_e", "tau1_id_vs_m", "tau1_id_vs_j", "tau2_id_vs_e", "tau2_id_vs_m", "tau2_id_vs_j",
-        "n_tau", "n_electrons", "n_muons"
+        "n_tau", "n_electrons", "n_muons",
+        "jet1_pt", "jet1_eta", "jet1_id", "jet1_bTagDeepFlavB",
+        "jet2_pt", "jet2_eta", "jet2_id", "jet2_bTagDeepFlavB"
     ],
     "selection_options" : {
         "diphotons" : {
@@ -25,7 +29,7 @@
         "photons" : {
             "pt" : 25,
             "eta" : 2.5,
-            "transition_region_eta": [1.442, 1.566],
+            "transition_region_eta": [1.4442, 1.566],
             "idmva_cut" : -0.7,
             "lead_pt_mgg_cut" : 0.33,
             "sublead_pt_mgg_cut" : 0.25,
@@ -34,9 +38,12 @@
         "electrons" : {
             "pt" : 10.0,
             "eta" : 2.5,
+            "transition_region_eta": [0.0, 0.0],
             "ip_xy" : 0.045,
             "ip_z" : 0.2,
-            "dR_pho" : 0.2
+            "dR_pho" : 0.2,
+            "mZ_cut" : [91.187, 91.187],
+            "id" : "hh"
         },
         "muons" : {
             "pt" : 10.0,
@@ -44,7 +51,8 @@
             "ip_xy" : 0.045,
             "ip_z" : 0.2,
             "rel_iso" : 0.3,
-            "dR_pho" : 0.2
+            "dR_pho" : 0.2,
+            "id" : "hh"
         },
         "taus" : {
             "pt" : 20.0,
@@ -56,6 +64,14 @@
             "dR_pho" : 0.2,
             "dR_lep" : 0.2
         },
-        "n_leptons_and_taus" : 1
+        "n_leptons_and_taus" : 1,
+        "jets" : {
+            "pt" : 25.0,
+            "eta" : 2.4,
+            "dR_pho" : 0.4,
+            "dR_lep" : 0.4,
+            "dR_tau" : 0.4,
+            "n_jets_save" : 2
+        } 
     }
 }
