@@ -55,7 +55,6 @@ def set_electrons(events, electrons, debug):
     events["ele2_phi"] = electron_phi_padded[:,1]
     events["ele1_mass"] = electron_mass_padded[:,0]
     events["ele2_mass"] = electron_mass_padded[:,1]
-
     return events
 
 def set_muons(events, muons, debug):
@@ -65,7 +64,7 @@ def set_muons(events, muons, debug):
     muon_eta_padded = utils.pad_awkward_array(muons.eta, 2, -9)
     muon_phi_padded = utils.pad_awkward_array(muons.phi, 2, -9)
     muon_mass_padded = utils.pad_awkward_array(muons.mass, 2, -9)
-    
+
     events["muon1_pt"] = muon_pt_padded[:,0]
     events["muon2_pt"] = muon_pt_padded[:,1]
     events["muon1_eta"] = muon_eta_padded[:,0]
@@ -73,8 +72,19 @@ def set_muons(events, muons, debug):
     events["muon1_phi"] = muon_phi_padded[:,0]
     events["muon2_phi"] = muon_phi_padded[:,1]
     events["muon1_mass"] = muon_mass_padded[:,0]
-    events["muon2_mass"] = muon_mass_padded[:,1] 
+    events["muon2_mass"] = muon_mass_padded[:,1]
 
     return events
 
-#TODO: implement varying definitions for leptons (e.g. "Loose", "Medium", "Tight") 
+
+@numba.njit
+def set_ditau_vis(events, electrons, muons, taus, debug):
+    for i in range(len(events)):
+        lep1_eta = float(0)
+        lep2_eta = float(0)
+        lep1_phi = float(0)
+        lep2_phi = float(0)
+
+
+
+#TODO: implement varying definitions for leptons (e.g. "Loose", "Medium", "Tight")

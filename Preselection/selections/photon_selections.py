@@ -1,5 +1,6 @@
 import awkward
-import numpy
+import numpy as np
+
 import numba
 
 import selections.selection_utils as utils
@@ -20,16 +21,16 @@ For this reason, all selections should be done in the following way:
 
 def select_photons(events, photons, options, debug):
     cut_diagnostics = utils.ObjectCutDiagnostics(objects = photons, cut_set = "[photon_selections.py : select_photons]", debug = debug)
-    
+
     pt_cut = photons.pt > options["photons"]["pt"]
 
-    eta_cut1 = abs(photons.eta) < options["photons"]["eta"] 
+    eta_cut1 = abs(photons.eta) < options["photons"]["eta"]
     eta_cut2 = abs(photons.eta) < options["photons"]["transition_region_eta"][0]
     eta_cut3 = abs(photons.eta) > options["photons"]["transition_region_eta"][1]
     eta_cut = eta_cut1 & (eta_cut2 | eta_cut3)
 
     pt_mgg_cut = (photons.pt / events.ggMass) >= options["photons"]["sublead_pt_mgg_cut"]
-    idmva_cut = photons.mvaID > options["photons"]["idmva_cut"] 
+    idmva_cut = photons.mvaID > options["photons"]["idmva_cut"]
     eveto_cut = photons.electronVeto >= options["photons"]["eveto_cut"]
     photon_cut = pt_cut & eta_cut & pt_mgg_cut & idmva_cut & eveto_cut
 
@@ -71,7 +72,7 @@ def photon_hlt_cuts(photons):
         for j in range(nPhotons):
             continue
 
-    return  
+    return
 
 
 def photon_eff_area(eta):
@@ -88,6 +89,14 @@ def set_photons(events, photons, debug):
     events["sublead_pho_ptmgg"] = photons.pt[:,1] / events.ggMass
     events["lead_pho_eta"] = photons.eta[:,0]
     events["sublead_pho_eta"] = photons.eta[:,1]
+    events["lead_pho_phi"] = photons.phi[:,0]
+    events["sublead_pho_phi"] = photons.phi[:,1]
     events["lead_pho_idmva"] = photons.mvaID[:,0]
     events["sublead_pho_idmva"] = photons.mvaID[:,1]
+
+    events["diphoton_pt"] = np.sqrt((photons.pt[:,0] * np.cos(photons.phi[:,0]) + photons.pt[:,1] * np.cos(photons.phi[:,1])) ** 2 + (photons.pt[:,0] * np.sin(photons.phi[:,0]) + photons.pt[:,1] * np.sin(photons.phi[:,1]) ** 2))
+    events["diphoton_ptmgg"] = events.diphoton_pt/events.ggMass
+    events["diphoton_eta"] = np.arcsinh((photons.pt[:, 0] * np.sinh(photons.eta[:, 0]) + photons.pt[:, 1] * np.sinh(photons.eta[:, 1]))/events.diphoton_pt)
+    events["diphoton_phi"] = np.arctan2(photons.pt[:,0] * np.sin(photons.phi[:,0]) + photons.pt[:,1] * np.sin(photons.phi[:,1]), photons.pt[:,0] * np.cos(photons.phi[:,0]) + photons.pt[:,1] * np.cos(photons.phi[:,1]))
+    events["dR_pho1_pho2"] = np.sqrt((events.lead_pho_eta - events.sublead_pho_eta) ** 2 + (events.lead_pho_phi - events.sublead_pho_phi) ** 2)
     return events
