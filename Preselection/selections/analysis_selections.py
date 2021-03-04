@@ -9,7 +9,7 @@ import selections.tau_selections as tau_selections
 import selections.photon_selections as photon_selections
 import selections.jet_selections as jet_selections
 
-def ggTauTau_inclusive_preselection(events, photons, electrons, muons, taus, options, debug):
+def ggTauTau_inclusive_preselection(events, photons, electrons, muons, taus, options, debug, genPart = None):
     cut_diagnostics = utils.CutDiagnostics(events = events, debug = debug, cut_set = "[analysis_selections.py : ggTauTau_inclusive_preselection]")
 
     # Get number of electrons, muons, taus
@@ -34,6 +34,11 @@ def ggTauTau_inclusive_preselection(events, photons, electrons, muons, taus, opt
 
     all_cuts = lep_tau_cut & os_cut
     cut_diagnostics.add_cuts([lep_tau_cut, os_cut, all_cuts], ["N_leptons + N_taus >= 1", "OS dileptons", "all"])
+    if genPart is not None:
+        return events[all_cuts], photons[all_cuts], selected_electrons[all_cuts], selected_muons[all_cuts], selected_taus[all_cuts], genPart[all_cuts]
+    else:
+         return events[all_cuts], photons[all_cuts], selected_electrons[all_cuts], selected_muons[all_cuts], selected_taus[all_cuts]
+       
 
     return events[all_cuts], photons[all_cuts], selected_electrons[all_cuts], selected_muons[all_cuts], selected_taus[all_cuts]
 

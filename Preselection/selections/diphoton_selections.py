@@ -33,7 +33,6 @@ def diphoton_preselection(events, photons, options, debug):
 
     all_cuts = mgg_mask & pt_mgg_cut & n_photon_cut
     cut_diagnostics.add_cuts([mgg_mask, pt_mgg_cut, n_photon_cut, all_cuts], ["mgg in [100, 180]" if resonant else "mgg in [100, 120] or [130, 180]", "lead (sublead) pt/mgg > 0.33 (0.25)", "2 good photons", "all"])
-
     return events[all_cuts], selected_photons[all_cuts]
 
 #TODO: finish full diphoton preselection for sync purposes
