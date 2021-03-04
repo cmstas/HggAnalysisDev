@@ -270,6 +270,8 @@ class LoopHelper():
             selected_events = jet_selections.set_jets(events_and_objects["events"], events_and_objects["jets"], self.selection_options, self.debug)
         if self.selections == "HHggTauTau_InclusivePresel_genZStudy":
             selected_events = gen_selections.set_genZ(events_and_objects["events"], self.selection_options, self.debug)
+        if self.selections == "HHggTauTau_InclusivePresel"or sele.selections == "HHggTauTau_InclusivePresel_genZStudy":
+            selected_events = lepton_selections.set_ditau_vis(events_and_objects["events"], events_and_objects["electrons"], events_and_objects["muons"], events_and_objects["taus"], self.debug)
         if data:
             branches = self.save_branches_data
         else:

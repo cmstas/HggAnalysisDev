@@ -8,12 +8,12 @@
         "ggMass", "nJet", "MET_pt", "genWeight", "tautauMassAll_SVFit"
     ],
     "save_branches" : [
-        "ggMass", "nJet", "MET_pt", "tautauMassAll_SVFit",
-        "lead_pho_ptmgg", "sublead_pho_ptmgg", "lead_pho_eta", "sublead_pho_eta", "lead_pho_idmva", "sublead_pho_idmva",
-        "ele1_pt", "ele1_eta", "ele2_pt", "ele2_eta", 
-        "muon1_pt", "muon1_eta", "muon2_pt", "muon2_eta",
-        "tau1_pt", "tau1_eta", "tau2_pt", "tau2_eta", "tau1_id_vs_e", "tau1_id_vs_m", "tau1_id_vs_j", "tau2_id_vs_e", "tau2_id_vs_m", "tau2_id_vs_j",
-        "n_tau", "n_electrons", "n_muons"
+        "ggMass", "nJet", "MET_pt", "MET_phi","tautauMassAll_SVFit",
+        "lead_pho_ptmgg", "sublead_pho_ptmgg", "lead_pho_eta", "sublead_pho_eta", "lead_pho_phi","sublead_pho_phi","lead_pho_idmva", "sublead_pho_idmva",
+        "ele1_pt", "ele1_eta", "ele1_phi","ele2_pt", "ele2_eta", "ele2_phi",
+        "muon1_pt", "muon1_eta", "muon2_pt", "muon2_eta","muon2_phi",
+        "tau1_pt", "tau1_eta", "tau1_phi","tau2_pt", "tau2_eta", "tau2_phi","tau1_id_vs_e", "tau1_id_vs_m", "tau1_id_vs_j", "tau2_id_vs_e", "tau2_id_vs_m", "tau2_id_vs_j",
+        "n_tau", "n_electrons", "n_muons","dR_ele","dR_mu","dR_tau","dR_gamma","ditau_vis_pt","ditau_vis_eta","ditau_vis_phi","dR_ditau_vis_MET","min_dR_gamma_ele","max_dR_gamma_ele","min_dR_gamma_mu","max_dR_gamma_mu","min_dR_gamma_tau","max_dR_gamma_tau"
     ],
     "selection_options" : {
         "diphotons" : {
