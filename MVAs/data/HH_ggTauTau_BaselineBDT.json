@@ -1,10 +1,10 @@
 {
     "signal" : ["HH_ggTauTau"],
     "background" : ["DiPhoton", "TTGG", "TTGamma", "TTbar", "VH", "WGamma", "ZGamma"],
-    "training_features" : ["n_tau", "n_electrons", "n_muons", "MET_pt", "tautauMassAll_SVFit",
+    "training_features" : ["n_tau", "n_electrons", "n_muons", "MET_pt",
                            "lead_pho_idmva", "sublead_pho_idmva", "lead_pho_ptmgg", "sublead_pho_ptmgg",
                            "ele1_pt", "muon1_pt", "tau1_pt", "tau1_id_vs_e", "tau1_id_vs_m", "tau1_id_vs_j"],
-    "branches" : ["weight", "process_id", "ggMass"],
+    "branches" : ["weight", "process_id", "gg_mass"],
     "preprocess" : {
         "scale_signal" : true
     },

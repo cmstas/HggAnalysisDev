@@ -238,7 +238,21 @@ class LoopHelper():
 
         elif self.selections == "ttH_LeptonicPresel":
             selected_events = analysis_selections.tth_leptonic_preselection(diphoton_events, selected_photons, diphoton_events.Electron, diphoton_events.Muon, diphoton_events.Jet, options, self.debug)
-            
+
+        elif self.selections == "ttH_HadronicPresel":
+            selected_events = analysis_selections.tth_hadronic_preselection(diphoton_events, selected_photons, diphoton_events.Electron, diphoton_events.Muon, diphoton_events.Jet, options, self.debug)
+
+        elif self.selections== "ttH_InclusivePresel":
+            selected_events = analysis_selections.tth_inclusive_preselection(diphoton_events, selected_photons, diphoton_events.Electron, diphoton_events.Muon, diphoton_events.Jet, options, self.debug)
+
+        elif self.selections == "HHggbb_Presel":
+            options["boosted"] = False
+            selected_events = analysis_selections.ggbb_preselection(diphoton_events, selected_photons, diphoton_events.Electron, diphoton_events.Muon, diphoton_events.Jet, diphoton_events.FatJet, options, self.debug)
+
+        elif self.selections == "HHggbb_boosted_Presel":
+            options["boosted"] = True
+            selected_events = analysis_selections.ggbb_preselection(diphoton_events, selected_photons, diphoton_events.Electron, diphoton_events.Muon, diphoton_events.Jet, diphoton_events.FatJet, options, self.debug)
+
         else:
             print("[LoopHelper] Selection: %s is not currently implemented, please check." % self.selections)
             return
