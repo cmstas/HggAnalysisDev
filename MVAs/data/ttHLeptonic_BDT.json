@@ -1,9 +1,9 @@
 {
     "signal" : ["ttH"],
-    "background" : ["DiPhoton", "TTGG", "TTGamma", "TTbar", "VH", "WGamma", "ZGamma"],
+    "background" : ["DiPhoton", "TTGG", "TTGamma", "TTbar", "VH", "WGamma", "ZGamma", "GJets_HT-100To200"],
     "training_features" : [
         "diphoton_pt_mgg", "diphoton_rapidity", "diphoton_delta_R",
-        "lead_pho_idmva", "sublead_pho_idmva", "lead_pho_ptmgg", "sublead_pho_ptmgg", "lead_pho_eta", "sublead_pho_eta",
+        "lead_pho_idmva", "sublead_pho_idmva", "lead_pho_ptmgg", "sublead_pho_ptmgg", "lead_pho_eta", "sublead_pho_eta", "lead_pixelSeed", "sublead_pixelSeed",
         "n_electrons", "n_muons", "MET_pt",
         "ele1_pt", "ele1_eta", "ele2_pt", "ele2_eta", "ele1_tightId", "ele2_tightId",
         "muon1_pt", "muon1_eta", "muon2_pt", "muon2_eta", "muon1_tightId", "muon2_tightId",

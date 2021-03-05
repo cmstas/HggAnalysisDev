@@ -17,6 +17,7 @@ class BDTHelper():
         self.config = kwargs.get("config")
         self.output_tag = kwargs.get("output_tag", "")
         self.debug = kwargs.get("debug")
+        self.made_dmatrix = False
 
     def train(self):
         self.make_dmatrix()
@@ -53,6 +54,7 @@ class BDTHelper():
                 self.events[split]["y"],
                 weight = self.events[split]["weight"]
             )
+        self.made_dmatrix = True
         return
 
     def predict_from_df(self, df):
@@ -60,6 +62,8 @@ class BDTHelper():
         return self.bdt.predict(X)
 
     def predict(self):
+        if not self.made_dmatrix:
+            self.make_dmatrix()
         self.prediction = {}
         for split in self.events.keys():
             self.prediction[split] = self.bdt.predict(self.events[split]["dmatrix"])

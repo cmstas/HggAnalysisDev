@@ -112,3 +112,8 @@ def make_train_test_validation_split(df):
     df.iloc[idx_validation, df.columns.get_loc("train_label")] = 2
 
     return df, idx_train, idx_test, idx_validation
+
+def find_nearest(array,value):
+    val = numpy.ones_like(array)*value
+    idx = (numpy.abs(array-val)).argmin()
+    return array[idx], idx
