@@ -8,6 +8,10 @@ pip install --upgrade pip
 pip install uproot awkward
 pip install pandas
 pip install numba==0.50.1
+pip install mplhep
+
+# For plotting
+pip install yahist
 
 # For MVAs
 pip install tensorflow
