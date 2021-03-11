@@ -286,14 +286,14 @@ class Plotter:
                 hist_stack = sorted(hist_stack, key=lambda x: x.integral)
                 for i in hist_stack:
                     print(i.metadata.get("label"), i.integral)
-                plot_stack(hist_stack, ax=ax1)
+                plot_stack(hist_stack, ax=ax1, histtype="stepfilled")
             else:
                 if self.debug:
                     print("[plotter.py] No stacking for branch ", branch)
                 for hist in hist_stack:
                     if unit_normalize:
                         hist /= hist.integral
-                    hist.plot(ax=ax1)
+                    hist.plot(ax=ax1, histtype="stepfilled")
 
             if "yaxis" in self.plot_options[branch].keys():
                 if self.plot_options[branch]["yaxis"] == "log":
