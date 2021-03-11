@@ -39,7 +39,9 @@ def to_tensor(dataframe, columns = [], dtypes = {}):
     return numpy_buffer
 
 events = pandas.read_pickle(args.input)
-events = events.rename(columns = { "ggMass" : "mass" } )
+events = events.rename(columns = { "gg_mass" : "mass" } )
 events["weight"] = events["weight"] * 3
 events = to_tensor(events)
-numpy.savez(args.input.replace(".pkl", ".npz"), events = events)
+
+output = "output/" + args.input.split("/")[-1].replace(".pkl", ".npz")
+numpy.savez(output, events = events)

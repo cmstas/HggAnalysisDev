@@ -16,6 +16,10 @@ pip install scikit-learn
 pip install tables
 pip install matplotlib
 
+# For SR Optimization
+pip install zfit
+pip install tensorflow
+
 mkdir -p Preselection/output/
 mkdir -p MVAs/output/
 mkdir -p SR_Optimization/output/
