@@ -77,13 +77,6 @@ def set_muons(events, muons, debug):
     return events
 
 
-@numba.njit
-def set_ditau_vis(events, electrons, muons, taus, debug):
-    for i in range(len(events)):
-        lep1_eta = float(0)
-        lep2_eta = float(0)
-        lep1_phi = float(0)
-        lep2_phi = float(0)
 
 
 

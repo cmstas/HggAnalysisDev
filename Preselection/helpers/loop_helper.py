@@ -232,18 +232,19 @@ class LoopHelper():
 
         if self.selections == "HHggTauTau_InclusivePresel" or self.selections == "HHggTauTau_InclusivePresel_genZStudy":
             if "genZStudy" in self.selections:
-                selected_events, selected_photons, selected_electrons, selected_muons, selected_taus, selected_gen = analysis_selections.ggTauTau_inclusive_preselection(diphoton_events, selected_photons, diphoton_events.Electron, diphoton_events.Muon, diphoton_events.Tau, options, self.debug, diphoton_events.GenPart)
+                selected_events, selected_photons, selected_electrons, selected_muons, selected_taus, selected_dR, selected_gen = analysis_selections.ggTauTau_inclusive_preselection(diphoton_events, selected_photons, diphoton_events.Electron, diphoton_events.Muon, diphoton_events.Tau, diphoton_events.dR, options, self.debug, diphoton_events.GenPart)
                 events_and_objects = {
                 "events" : selected_events,
                 "photons" : selected_photons,
                 "electrons" : selected_electrons,
                 "muons" : selected_muons,
                 "taus" : selected_taus,
-                "gen" :   selected_gen
+                "gen" :   selected_gen,
+                "dR" : selected_dR
             }
 
             else:
-                selected_events, selected_photons, selected_electrons, selected_muons, selected_taus = analysis_selections.ggTauTau_inclusive_preselection(diphoton_events, selected_photons, diphoton_events.Electron, diphoton_events.Muon, diphoton_events.Tau, options, self.debug)
+                selected_events, selected_photons, selected_electrons, selected_muons, selected_taus, selected_dR = analysis_selections.ggTauTau_inclusive_preselection(diphoton_events, selected_photons, diphoton_events.Electron, diphoton_events.Muon, diphoton_events.Tau, diphoton_events.dR, options, self.debug)
 
 
                 events_and_objects = {
@@ -251,7 +252,8 @@ class LoopHelper():
                 "photons" : selected_photons,
                 "electrons" : selected_electrons,
                 "muons" : selected_muons,
-                "taus" : selected_taus
+                "taus" : selected_taus,
+                "dR" : selected_dR
             }
 
         elif self.selections == "ttH_LeptonicPresel":
@@ -278,12 +280,13 @@ class LoopHelper():
             selected_events = lepton_selections.set_muons(events_and_objects["events"], events_and_objects["muons"], self.debug)
         if self.selections == "HHggTauTau_InclusivePresel" or self.selections == "HHggTauTau_InclusivePresel_genZStudy":
             selected_events = tau_selections.set_taus(events_and_objects["events"], events_and_objects["taus"], self.debug)
+#            selected_events = other_selections.set_dR(events_and_objects["events"], events_and_objects["dR"], self.debug)
+
         if self.selections == "ttH_LeptonicPresel":
             selected_events = jet_selections.set_jets(events_and_objects["events"], events_and_objects["jets"], self.selection_options, self.debug)
+
         if self.selections == "HHggTauTau_InclusivePresel_genZStudy":
-        if self.selections == "HHggTauTau_InclusivePresel"or sele.selections == "HHggTauTau_InclusivePresel_genZStudy":
             selected_events = gen_selections.set_genZ(events_and_objects["events"], events_and_objects["gen"],self.selection_options, self.debug)
-            selected_events = lepton_selections.set_ditau_vis(events_and_objects["events"], events_and_objects["electrons"], events_and_objects["muons"], events_and_objects["taus"], self.debug)
         if data:
             branches = self.save_branches_data
         else:
