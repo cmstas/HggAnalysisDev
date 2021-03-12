@@ -233,7 +233,7 @@ class LoopHelper():
 
         events_and_objects = {}
 
-        if self.selections == "HHggTauTau_InclusivePresel":
+        if "HHggTauTau_InclusivePresel" in self.selections:
             if "genZStudy" in self.selections:
                 gen_events = diphoton_events.GenPart
             else:
