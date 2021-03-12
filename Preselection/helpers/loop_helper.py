@@ -52,8 +52,8 @@ class LoopHelper():
             for key, info in options.items():
                 setattr(self, key, info)
 
-        self.save_branches.append("process_id")
-        self.save_branches.append("weight")
+        self.save_branches += ["process_id", "weight", "year"]
+
         self.branches_data = [branch for branch in self.branches if "gen" not in branch]
         self.save_branches_data = [branch for branch in self.save_branches if "gen" not in branch]
 
@@ -114,6 +114,7 @@ class LoopHelper():
                     continue
                 for path in year_info["paths"]:
                     files += glob.glob(path + "/*.root")
+                    files += glob.glob(path + "/*/*/*/*.root") # to be compatible with CRAB
 
                 if len(files) == 0:
                     continue
@@ -220,78 +221,54 @@ class LoopHelper():
     ### Physics: selections, etc ###
     ################################
 
-    def select_events(self, events, metadata):
+    def select_events(self, events, photons, metadata):
         options = copy.deepcopy(self.selection_options)
         for key, value in metadata.items(): # add sample-specific options to selection options
             options[key] = value
 
-        # Diphoton preselection
-        diphoton_events, selected_photons = diphoton_selections.diphoton_preselection(events, events.Photon, options, self.debug)
+        # Diphoton preselection: NOTE we assume diphoton preselection is common to every analysis
+        diphoton_events = events # most of dipho preselection already applied, still need to enforce pt/mgg and mgg cuts
+        selected_photons = photon_selections.create_selected_photons(photons, self.branches, self.debug) # create record manually since it doesn't seem to work for selectedPhoton
+        diphoton_events, selected_photons = diphoton_selections.diphoton_preselection(diphoton_events, selected_photons, options, self.debug)
 
         events_and_objects = {}
 
-        if self.selections == "HHggTauTau_InclusivePresel" or self.selections == "HHggTauTau_InclusivePresel_genZStudy":
+        if self.selections == "HHggTauTau_InclusivePresel":
             if "genZStudy" in self.selections:
-                selected_events, selected_photons, selected_electrons, selected_muons, selected_taus, selected_dR, selected_gen = analysis_selections.ggTauTau_inclusive_preselection(diphoton_events, selected_photons, diphoton_events.Electron, diphoton_events.Muon, diphoton_events.Tau, diphoton_events.dR, options, self.debug, diphoton_events.GenPart)
-                events_and_objects = {
-                "events" : selected_events,
-                "photons" : selected_photons,
-                "electrons" : selected_electrons,
-                "muons" : selected_muons,
-                "taus" : selected_taus,
-                "gen" :   selected_gen,
-                "dR" : selected_dR
-            }
-
+                gen_events = diphoton_events.GenPart
             else:
-                selected_events, selected_photons, selected_electrons, selected_muons, selected_taus, selected_dR = analysis_selections.ggTauTau_inclusive_preselection(diphoton_events, selected_photons, diphoton_events.Electron, diphoton_events.Muon, diphoton_events.Tau, diphoton_events.dR, options, self.debug)
-
-
-                events_and_objects = {
-                "events" : selected_events,
-                "photons" : selected_photons,
-                "electrons" : selected_electrons,
-                "muons" : selected_muons,
-                "taus" : selected_taus,
-                "dR" : selected_dR
-            }
+                gen_events = None
+            selected_events = analysis_selections.ggTauTau_inclusive_preselection(diphoton_events, selected_photons, diphoton_events.Electron, diphoton_events.Muon, diphoton_events.Tau, diphoton_events.Jet, diphoton_events.dR, gen_events, options, self.debug)
 
         elif self.selections == "ttH_LeptonicPresel":
-            selected_events, selected_photons, selected_electrons, selected_muons, selected_jets = analysis_selections.tth_leptonic_preselection(diphoton_events, selected_photons, diphoton_events.Electron, diphoton_events.Muon, diphoton_events.Jet, options, self.debug)
+            selected_events = analysis_selections.tth_leptonic_preselection(diphoton_events, selected_photons, diphoton_events.Electron, diphoton_events.Muon, diphoton_events.Jet, options, self.debug)
 
-            events_and_objects = {
-                "events" : selected_events,
-                "photons" : selected_photons,
-                "electrons" : selected_electrons,
-                "muons" : selected_muons,
-                "jets" : selected_jets
-            }
+        elif self.selections == "ttH_HadronicPresel":
+            selected_events = analysis_selections.tth_hadronic_preselection(diphoton_events, selected_photons, diphoton_events.Electron, diphoton_events.Muon, diphoton_events.Jet, options, self.debug)
+
+        elif self.selections== "ttH_InclusivePresel":
+            selected_events = analysis_selections.tth_inclusive_preselection(diphoton_events, selected_photons, diphoton_events.Electron, diphoton_events.Muon, diphoton_events.Jet, options, self.debug)
+
+        elif self.selections == "HHggbb_Presel":
+            options["boosted"] = False
+            selected_events = analysis_selections.ggbb_preselection(diphoton_events, selected_photons, diphoton_events.Electron, diphoton_events.Muon, diphoton_events.Jet, diphoton_events.FatJet, options, self.debug)
+
+        elif self.selections == "HHggbb_boosted_Presel":
+            options["boosted"] = True
+            selected_events = analysis_selections.ggbb_preselection(diphoton_events, selected_photons, diphoton_events.Electron, diphoton_events.Muon, diphoton_events.Jet, diphoton_events.FatJet, options, self.debug)
 
         else:
             print("[LoopHelper] Selection: %s is not currently implemented, please check." % self.selections)
             return
 
-        return events_and_objects
+        return selected_events
 
-    def trim_events(self, events_and_objects, data):
-        selected_events = photon_selections.set_photons(events_and_objects["events"], events_and_objects["photons"], self.debug)
-        if self.selections == "HHggTauTau_InclusivePresel" or self.selections == "ttH_LeptonicPresel" or self.selections == "HHggTauTau_InclusivePresel_genZStudy":
-            selected_events = lepton_selections.set_electrons(events_and_objects["events"], events_and_objects["electrons"], self.debug)
-            selected_events = lepton_selections.set_muons(events_and_objects["events"], events_and_objects["muons"], self.debug)
-        if self.selections == "HHggTauTau_InclusivePresel" or self.selections == "HHggTauTau_InclusivePresel_genZStudy":
-            selected_events = tau_selections.set_taus(events_and_objects["events"], events_and_objects["taus"], self.debug)
-#            selected_events = other_selections.set_dR(events_and_objects["events"], events_and_objects["dR"], self.debug)
-
-        if self.selections == "ttH_LeptonicPresel":
-            selected_events = jet_selections.set_jets(events_and_objects["events"], events_and_objects["jets"], self.selection_options, self.debug)
-
-        if self.selections == "HHggTauTau_InclusivePresel_genZStudy":
-            selected_events = gen_selections.set_genZ(events_and_objects["events"], events_and_objects["gen"],self.selection_options, self.debug)
+    def trim_events(self, events, data):
         if data:
             branches = self.save_branches_data
         else:
             branches = self.save_branches
-        trimmed_events = selected_events[branches]
+        trimmed_events = events[branches]
         return trimmed_events
 
     def loop_sample(self, job):
@@ -300,17 +277,19 @@ class LoopHelper():
         files = job["files"]
         output = job["output"]
 
-        selection_metadata = {
-            "resonant" : info["resonant"]
-        }
-
-        if self.debug > 0:
-            print("[LoopHelper] Running job with parameters", job)
-
         if sample == "Data":
             data = True
         else:
             data = False
+
+        selection_metadata = {
+            "resonant": info["resonant"],
+            "data": data,
+            "year": int(job["info"]["year"])
+        }
+
+        if self.debug > 0:
+            print("[LoopHelper] Running job with parameters", job)
 
         sel_evts = []
         process_id = info["process_id"]
@@ -319,12 +298,11 @@ class LoopHelper():
             if self.debug > 0:
                 print("[LoopHelper] Loading file %s" % file)
 
-            events = self.load_file(file, data = data)
+            events, photons = self.load_file(file, selection_metadata)
             if events is None:
                 self.outputs.pop(output)
                 return
-            events_and_objects = self.select_events(events, selection_metadata)
-            events = events_and_objects["events"]
+            events = self.select_events(events, photons, selection_metadata)
 
             events["process_id"] = numpy.ones(len(events)) * process_id
             if data:
@@ -332,8 +310,10 @@ class LoopHelper():
             else:
                 events["weight"] = events.genWeight * info["scale1fb"] * info["lumi"]
 
-            events = self.trim_events(events_and_objects, data)
-            sel_evts.append(events)
+            events["year"] = numpy.ones(len(events)) * int(info["year"])
+
+            trimmed_events = self.trim_events(events, data) # drop unneeded branches
+            sel_evts.append(trimmed_events)
 
         events_full = awkward.concatenate(sel_evts)
         self.write_to_df(events_full, output)
@@ -343,7 +323,7 @@ class LoopHelper():
     ### Helper functions ###
     ########################
 
-    def load_file(self, file, tree_name = "Events", data = False):
+    def load_file(self, file, metadata, tree_name = "Events"):
         with uproot.open(file) as f:
             if not f:
                 print("[LoopHelper] Problem opening file %s" % file)
@@ -353,14 +333,30 @@ class LoopHelper():
                 print("[LoopHelper] Problem opening file %s" % file)
                 return None
 
-            if data:
+            if metadata["data"]:
                 branches = self.branches_data
             else:
                 branches = self.branches
-            events = tree.arrays(branches, library = "ak", how = "zip")
+            branches_no_pho = [branch for branch in branches if "selectedPhoton" not in branch]
+
+            if metadata["data"]:
+                if metadata["year"] == 2016:
+                    triggers = ["HLT_Diphoton30_18_R9Id_OR_IsoCaloId_AND_HE_R9Id_Mass90"]
+                if metadata["year"] == 2017:
+                    triggers = ["HLT_Diphoton30_22_R9Id_OR_IsoCaloId_AND_HE_R9Id_Mass90"]
+                if metadata["year"] == 2018:
+                    triggers = ["HLT_Diphoton30_22_R9Id_OR_IsoCaloId_AND_HE_R9Id_Mass90"]
+                branches_no_pho += triggers
+
+
+            events = tree.arrays(branches_no_pho, library = "ak", how = "zip")
+
+            branches_pho = [branch for branch in branches if "selectedPhoton" in branch]
+            photons = tree.arrays(branches_pho, library = "ak", how = "zip")
+
             # library = "ak" to load arrays as awkward arrays for best performance
             # how = "zip" allows us to access arrays as records, e.g. events.Photon
-        return events
+        return events, photons
 
     def chunks(self, files, fpo):
         for i in range(0, len(files), fpo):

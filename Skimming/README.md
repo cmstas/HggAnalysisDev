@@ -23,9 +23,7 @@ git clone https://github.com/SVfit/SVfitTF TauAnalysis/SVfitTF
 scram b
 ```
 
-<h2>Submission</h2>
-
-1.local tests
+<h3>1. local tests</h3>
 
 a local test of the postprocessor modules can be run using https://github.com/leonardogiannini/nanoAOD-tools/blob/hhggtautau_skim/crab/local_test.py
 
@@ -36,9 +34,26 @@ the modules used are
 - HHggtautaulep2018() => categories by leptons decay for HHggtautau
 - HHggtautauModule2018LVVV(), HHggtautauModule2018LL(), HHggtautauModule2018MM() => possible selections of HHggtautau, with SVFit mass computation included
 
-2.submission via crab
+<h3>2. submission via crab</h3>
 
-3.submission via [ProjectMetis](https://github.com/aminnj/ProjectMetis)
+the submission via crab can be handled using the scripts in the crab folder of the skim repo.
+
+- [crab_cfg_ggOnly.py](https://github.com/leonardogiannini/nanoAOD-tools/blob/hhggtautau_skim/crab/crab_cfg_ggOnly.py)
+- [crab_cfg_ggtautauFull.py](https://github.com/leonardogiannini/nanoAOD-tools/blob/hhggtautau_skim/crab/crab_cfg_ggtautauFull.py)
+
+the two configuration submit the skim either with the ggOnly preselection and relative modules activated, or with the full tautau variables computation
+
+the configurations make use of the lists of samples generated via the [make_samples.py](https://github.com/cmstas/HggAnalysisDev/blob/main/Skimming/make_samples.py) script.
+the script works only locally at UCSD, therefore the outputs [sa.py](https://github.com/cmstas/HggAnalysisDev/blob/main/Skimming/sa.py) and [allsamples.py](https://github.com/cmstas/HggAnalysisDev/blob/main/Skimming/allsamples.py) are also stored in the repo.
+
+the files are expected to be found in the folder HggAnalysisDev/Skimming, where HggAnalysisDev should be in the same path of the $CMSSW_BASE environment. (this can be cahnged at the time of submission in case it's needed.)
+
+Before submitting remember to create a proxy certificate and setup crab (cmsenv && source /cvmfs/cms.cern.ch/common/crab-setup.sh)
+IN case of submission errors you can find info here https://twiki.cern.ch/twiki/bin/view/CMSPublic/CRAB3ConfigurationFile or in similar pages.
+
+the crab configurations are set to submit all the jobs for all the datasets. if you want to experiment, please reduce [allsamples.py](https://github.com/cmstas/HggAnalysisDev/blob/main/Skimming/allsamples.py) to a single sample, try the --dry-run option, etc.
+
+<h3>3. submission via ProjectMetis</h3>
 
 first checkout the repository https://github.com/aminnj/ProjectMetis and set up environment via ```source setup.sh```
 

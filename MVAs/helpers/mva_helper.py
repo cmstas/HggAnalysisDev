@@ -34,6 +34,12 @@ class MVAHelper():
         self.evaluate_performance()
         self.save_weights()
 
+    def evaluate(self, weight_file):
+        self.load_events()
+        self.load_weights(weight_file)
+        self.predict()
+        self.evaluate_performance()
+
     def load_events(self):
         self.events = {}
         for split in ["train", "test"]:
@@ -49,7 +55,7 @@ class MVAHelper():
 
         return
 
-    def train(self):
+    def initialize_train_helper(self):
         if self.config["mva"]["type"] == "binary_classification_bdt":
             self.train_helper = bdt_helper.BDTHelper(
                 events = self.events,
@@ -57,9 +63,16 @@ class MVAHelper():
                 output_tag = self.output_tag,
                 debug = self.debug
             )
+        return
 
+    def load_weights(self, weight_file):
+        self.initialize_train_helper()
+        self.mva = self.train_helper.load_weights(weight_file)
+        return
+
+    def train(self):
+        self.initialize_train_helper()
         self.mva = self.train_helper.train()
-
         return
 
     def predict(self):
@@ -94,7 +107,7 @@ class MVAHelper():
             ax1.plot(self.performance[split]["fpr"],
                      self.performance[split]["tpr"],
                      color = "red",
-                     label = "BDT AUC: %.2f +/- %.2f" % (self.performance[split]["auc"], self.performance[split]["auc_unc"]))
+                     label = "BDT AUC: %.3f +/- %.3f" % (self.performance[split]["auc"], self.performance[split]["auc_unc"]))
             ax1.fill_between(self.performance[split]["fpr"],
                              self.performance[split]["tpr"] - (self.performance[split]["tpr_unc"]/2.),
                              self.performance[split]["tpr"] + (self.performance[split]["tpr_unc"]/2.),

@@ -1,0 +1,257 @@
+{
+    "HH_ggbb" : {
+        "resonant" : true,
+        "fpo" : 10,
+        "process_id" : -1,
+        "2016" : {
+            "paths" : ["/hadoop/cms/store/user/legianni/skimNano-Hggselection-wFjets/GluGluToHHTo2B2G_node_SM_13TeV-madgraph_private_mc17/"],
+            "metadata" : { "xs" : 0.000082325 }
+        },
+        "2017" : {
+            "paths" : ["/hadoop/cms/store/user/legianni/skimNano-Hggselection-wFjets/GluGluToHHTo2B2G_node_SM_13TeV-madgraph_private_mc17/"],
+            "metadata" : { "xs" : 0.000082325 }
+        },
+        "2018" : {
+            "paths" : ["/hadoop/cms/store/user/legianni/skimNano-Hggselection-wFjets/GluGluToHHTo2B2G_node_SM_TuneCP5_PSWeights_13TeV-madgraph-pythia8_private_mc18/"],
+            "metadata" : { "xs" : 0.000082325 }
+        }
+    },
+    "Data" : {
+        "resonant" : false,
+        "fpo" : 25,
+        "process_id" : 0,
+        "2016" : {
+            "paths" : ["/hadoop/cms/store/user/legianni/skimNano-Hggselection-wFjets/DoubleEG_Run2016B-2_private_data16/", "/hadoop/cms/store/user/legianni/skimNano-Hggselection-wFjets/DoubleEG_Run2016B_private_data16/", "/hadoop/cms/store/user/legianni/skimNano-Hggselection-wFjets/DoubleEG_Run2016C_private_data16/", "/hadoop/cms/store/user/legianni/skimNano-Hggselection-wFjets/DoubleEG_Run2016D_private_data16/", "/hadoop/cms/store/user/legianni/skimNano-Hggselection-wFjets/DoubleEG_Run2016E_private_data16/", "/hadoop/cms/store/user/legianni/skimNano-Hggselection-wFjets/DoubleEG_Run2016F_private_data16/", "/hadoop/cms/store/user/legianni/skimNano-Hggselection-wFjets/DoubleEG_Run2016G_private_data16/", "/hadoop/cms/store/user/legianni/skimNano-Hggselection-wFjets/DoubleEG_Run2016H_private_data16/"],
+            "metadata" : {}
+        },
+        "2017" : {
+            "paths" : ["/hadoop/cms/store/user/legianni/skimNano-Hggselection-wFjets/DoubleEG_Run2017B_private_data17/", "/hadoop/cms/store/user/legianni/skimNano-Hggselection-wFjets/DoubleEG_Run2017C_private_data17/", "/hadoop/cms/store/user/legianni/skimNano-Hggselection-wFjets/DoubleEG_Run2017D_private_data17/", "/hadoop/cms/store/user/legianni/skimNano-Hggselection-wFjets/DoubleEG_Run2017E_private_data17/", "/hadoop/cms/store/user/legianni/skimNano-Hggselection-wFjets/DoubleEG_Run2017F_private_data17/"],
+            "metadata" : {}
+        },
+        "2018" : {
+            "paths" : ["/hadoop/cms/store/user/legianni/skimNano-Hggselection-wFjets/EGamma_Run2018A_private_data18/", "/hadoop/cms/store/user/legianni/skimNano-Hggselection-wFjets/EGamma_Run2018B_private_data18/", "/hadoop/cms/store/user/legianni/skimNano-Hggselection-wFjets/EGamma_Run2018C_private_data18/", "/hadoop/cms/store/user/legianni/skimNano-Hggselection-wFjets/EGamma_Run2018D_private_data18/"],
+            "metadata" : {}
+        }
+    },
+    "ZGamma" : {
+        "resonant" : false,
+        "fpo" : 10,
+        "process_id" : 2,
+        "2016" : {
+            "paths" : ["/hadoop/cms/store/user/legianni/skimNano-Hggselection-wFjets/ZGTo2LG_TuneCUETP8M1_13TeV-amcatnloFXFX-pythia8_private_mc16/"],
+            "metadata" : { "xs" : 123.8 }
+        },
+        "2017" : {
+            "paths" : ["/hadoop/cms/store/user/legianni/skimNano-Hggselection-wFjets/ZGToLLG_01J_5f_TuneCP5_13TeV-amcatnloFXFX-pythia8_private_mc17/"],
+            "metadata" : { "xs" : 55.6 }
+        },
+        "2018" : {
+            "paths" : ["/hadoop/cms/store/user/legianni/skimNano-Hggselection-wFjets/ZGToLLG_01J_5f_TuneCP5_13TeV-amcatnloFXFX-pythia8_private_mc18_2/", "/hadoop/cms/store/user/legianni/skimNano-Hggselection-wFjets/ZGToLLG_01J_5f_TuneCP5_13TeV-amcatnloFXFX-pythia8_private_mc18_3/", "/hadoop/cms/store/user/legianni/skimNano-Hggselection-wFjets/ZGToLLG_01J_5f_TuneCP5_13TeV-amcatnloFXFX-pythia8_private_mc18/"],
+            "metadata" : { "xs" : 55.6 }
+        }
+    },
+    "DiPhoton" : {
+        "resonant" : false,
+        "fpo" : 10,
+        "process_id" : 3,
+        "2016" : {
+            "paths" : ["/hadoop/cms/store/user/legianni/skimNano-Hggselection-wFjets/DiPhotonJetsBox_MGG-80toInf_13TeV-Sherpa_private_mc16"], 
+            "metadata" : { "xs" : 84.4 }
+        },
+        "2017" : {
+            "paths" : ["/hadoop/cms/store/user/legianni/skimNano-Hggselection-wFjets/DiPhotonJetsBox_MGG-80toInf_13TeV-Sherpa_private_mc17/"], 
+            "metadata" : { "xs" : 84.4 }
+        },
+        "2018" : {
+            "paths" : ["/hadoop/cms/store/user/legianni/skimNano-Hggselection-wFjets/DiPhotonJetsBox_MGG-80toInf_13TeV-Sherpa_private_mc18/"], 
+            "metadata" : { "xs" : 84.4 }
+        }
+    },
+    "WGamma" : {
+        "resonant" : false,
+        "fpo" : 10,
+        "process_id" : 4,
+        "2016" : {
+            "paths" : ["/hadoop/cms/store/user/legianni/skimNano-Hggselection-wFjets/WGToLNuG_TuneCUETP8M1_13TeV-amcatnloFXFX-pythia8_private_mc16_2", "/hadoop/cms/store/user/legianni/skimNano-Hggselection-wFjets/WGToLNuG_TuneCUETP8M1_13TeV-amcatnloFXFX-pythia8_private_mc16_3", "/hadoop/cms/store/user/legianni/skimNano-Hggselection-wFjets/WGToLNuG_TuneCUETP8M1_13TeV-amcatnloFXFX-pythia8_private_mc16"], 
+            "metadata" : { "xs" : 510.6 }
+        },
+        "2017" : {
+            "paths" : ["/hadoop/cms/store/user/legianni/skimNano-Hggselection-wFjets/WGToLNuG_01J_5f_TuneCP5_13TeV-amcatnloFXFX-pythia8_private_mc17"], 
+            "metadata" : { "xs" : 191.4 }
+        },
+        "2018" : {
+            "paths" : ["/hadoop/cms/store/user/legianni/skimNano-Hggselection-wFjets/WGToLNuG_01J_5f_TuneCP5_13TeV-amcatnloFXFX-pythia8_private_mc18"],
+            "metadata" : { "xs" : 191.4 }
+        }
+    },
+    "TTbar" : {
+        "resonant" : false,
+        "fpo" : 10,
+        "process_id" : 5,
+        "2016" : {
+            "paths" : ["/hadoop/cms/store/user/legianni/skimNano-Hggselection-wFjets/TTJets_TuneCUETP8M2T4_13TeV-amcatnloFXFX-pythia8_private_mc16"], 
+            "metadata" : { "xs" : 831.76 }
+        },
+        "2017" : {
+            "paths" : ["/hadoop/cms/store/user/legianni/skimNano-Hggselection-wFjets/TTJets_TuneCP5_13TeV-amcatnloFXFX-pythia8_private_mc17"], 
+            "metadata" : { "xs" : 831.76 }
+        },
+        "2018" : {
+            "paths" : ["/hadoop/cms/store/user/legianni/skimNano-Hggselection-wFjets/TTJets_TuneCP5_13TeV-amcatnloFXFX-pythia8_private_mc18"], 
+            "metadata" : { "xs" : 831.76 }
+        }
+    },
+    "TTGamma" : {
+        "resonant" : false,
+        "fpo" : 10,
+        "process_id" : 6,
+        "2016" : {
+            "paths" : ["/hadoop/cms/store/user/legianni/skimNano-Hggselection-wFjets/TTGJets_TuneCUETP8M1_13TeV-amcatnloFXFX-madspin-pythia8_private_mc16", "/hadoop/cms/store/user/legianni/skimNano-Hggselection-wFjets/TTGJets_TuneCUETP8M1_13TeV-amcatnloFXFX-madspin-pythia8_private_mc16_2"],
+            "metadata" : { "xs" : 3.819 }
+         },
+        "2017" : {
+            "paths" : ["/hadoop/cms/store/user/legianni/skimNano-Hggselection-wFjets/TTGJets_TuneCP5_13TeV-amcatnloFXFX-madspin-pythia8_private_mc17", "/hadoop/cms/store/user/legianni/skimNano-Hggselection-wFjets/TTGJets_TuneCP5_13TeV-amcatnloFXFX-madspin-pythia8_private_mc17_2"],
+            "metadata" : { "xs" : 4.078 }
+        },
+        "2018" : {
+            "paths" : ["/hadoop/cms/store/user/legianni/skimNano-Hggselection-wFjets/TTGJets_TuneCP5_13TeV-amcatnloFXFX-madspin-pythia8_private_mc18"],
+            "metadata" : { "xs" : 4.078 }
+        }
+    },
+    "TTGG" : {
+        "resonant" : false,
+        "fpo" : 10,
+        "process_id" : 7,
+        "2016" : {
+            "paths" : ["/hadoop/cms/store/user/legianni/skimNano-Hggselection-wFjets/TTGG_0Jets_TuneCUETP8M1_13TeV_amcatnlo_madspin_pythia8_private_mc16"],
+            "metadata" : { "xs" : 0.01731 }
+         },
+        "2017" : {
+            "paths" : ["/hadoop/cms/store/user/legianni/skimNano-Hggselection-wFjets/TTGG_0Jets_TuneCP5_13TeV_amcatnlo_madspin_pythia8_private_mc17"],
+            "metadata" : { "xs" : 0.01687 }
+        },
+        "2018" : {
+            "paths" : ["/hadoop/cms/store/user/legianni/skimNano-Hggselection-wFjets/TTGG_0Jets_TuneCP5_13TeV_amcatnlo_madspin_pythia8_private_mc18"],
+            "metadata" : { "xs" : 0.01687 }
+        }
+    },
+    "GJets_HT40To100" : {
+        "resonant" : false,
+        "fpo" : 10,
+        "process_id" : 8,
+        "2016" : {
+            "paths" : ["/hadoop/cms/store/user/legianni/skimNano-Hggselection-wFjets/GJets_HT-40To100_TuneCUETP8M1_13TeV-madgraphMLM-pythia8_private_mc16", "/hadoop/cms/store/user/legianni/skimNano-Hggselection-wFjets/GJets_HT-40To100_TuneCUETP8M1_13TeV-madgraphMLM-pythia8_private_mc16_2"],
+            "metadata" : { "xs" : 23100.0 }
+         },
+        "2017" : {
+            "paths" : ["/hadoop/cms/store/user/legianni/skimNano-Hggselection-wFjets/GJets_HT-40To100_TuneCP5_13TeV-madgraphMLM-pythia8_private_mc17"],
+            "metadata" : { "xs" : 23100.0 }
+        },
+        "2018" : {
+            "paths" : ["/hadoop/cms/store/user/legianni/skimNano-Hggselection-wFjets/GJets_HT-40To100_TuneCP5_13TeV-madgraphMLM-pythia8_private_mc18"],
+            "metadata" : { "xs" : 23100.0 }
+        }
+    },
+    "GJets_HT-100To200" : {
+        "resonant" : false,
+        "fpo" : 10,
+        "process_id" : 8,
+        "2016" : {
+            "paths" : ["/hadoop/cms/store/user/legianni/skimNano-Hggselection-wFjets/GJets_HT-100To200_TuneCUETP8M1_13TeV-madgraphMLM-pythia8_private_mc16", "/hadoop/cms/store/user/legianni/skimNano-Hggselection-wFjets/GJets_HT-100To200_TuneCUETP8M1_13TeV-madgraphMLM-pythia8_private_mc16_2"],
+            "metadata" : { "xs" : 8631.0 }
+         },
+        "2017" : {
+            "paths" : ["/hadoop/cms/store/user/legianni/skimNano-Hggselection-wFjets/GJets_HT-100To200_TuneCP5_13TeV-madgraphMLM-pythia8_private_mc17"],
+            "metadata" : { "xs" : 8631.0 }
+        },
+        "2018" : {
+            "paths" : ["/hadoop/cms/store/user/legianni/skimNano-Hggselection-wFjets/GJets_HT-100To200_TuneCP5_13TeV-madgraphMLM-pythia8_private_mc18"],
+            "metadata" : { "xs" : 8631.0 }
+        }
+    },
+    "GJets_HT-200To400" : {
+        "resonant" : false,
+        "fpo" : 10,
+        "process_id" : 8,
+        "2016" : {
+            "paths" : ["/hadoop/cms/store/user/legianni/skimNano-Hggselection-wFjets/GJets_HT-200To400_TuneCUETP8M1_13TeV-madgraphMLM-pythia8_private_mc16", "/hadoop/cms/store/user/legianni/skimNano-Hggselection-wFjets/GJets_HT-200To400_TuneCUETP8M1_13TeV-madgraphMLM-pythia8_private_mc16_2"],
+            "metadata" : { "xs" : 2280.0 }
+         },
+        "2017" : {
+            "paths" : ["/hadoop/cms/store/user/legianni/skimNano-Hggselection-wFjets/GJets_HT-200To400_TuneCP5_13TeV-madgraphMLM-pythia8_private_mc17"],
+            "metadata" : { "xs" : 2280.0 }
+        },
+        "2018" : {
+            "paths" : ["/hadoop/cms/store/user/legianni/skimNano-Hggselection-wFjets/GJets_HT-200To400_TuneCP5_13TeV-madgraphMLM-pythia8_private_mc18"],
+            "metadata" : { "xs" : 2280.0 }
+        }
+    },
+    "GJets_HT-400To600" : {
+        "resonant" : false,
+        "fpo" : 10,
+        "process_id" : 8,
+        "2016" : {
+            "paths" : ["/hadoop/cms/store/user/legianni/skimNano-Hggselection-wFjets/GJets_HT-400To600_TuneCUETP8M1_13TeV-madgraphMLM-pythia8_private_mc16", "/hadoop/cms/store/user/legianni/skimNano-Hggselection-wFjets/GJets_HT-400To600_TuneCUETP8M1_13TeV-madgraphMLM-pythia8_private_mc16_2"],
+            "metadata" : { "xs" : 273.0 }
+         },
+        "2017" : {
+            "paths" : ["/hadoop/cms/store/user/legianni/skimNano-Hggselection-wFjets/GJets_HT-400To600_TuneCP5_13TeV-madgraphMLM-pythia8_private_mc17"],
+            "metadata" : { "xs" : 273.0 }
+        },
+        "2018" : {
+            "paths" : ["/hadoop/cms/store/user/legianni/skimNano-Hggselection-wFjets/GJets_HT-400To600_TuneCP5_13TeV-madgraphMLM-pythia8_private_mc18"],
+            "metadata" : { "xs" : 273.0 }
+        }
+    },
+    "GJets_HT-600ToInf" : {
+        "resonant" : false,
+        "fpo" : 10,
+        "process_id" : 8,
+        "2016" : {
+            "paths" : ["/hadoop/cms/store/user/legianni/skimNano-Hggselection-wFjets/GJets_HT-600ToInf_TuneCUETP8M1_13TeV-madgraphMLM-pythia8_private_mc16", "/hadoop/cms/store/user/legianni/skimNano-Hggselection-wFjets/GJets_HT-600ToInf_TuneCUETP8M1_13TeV-madgraphMLM-pythia8_private_mc16_2"],
+            "metadata" : { "xs" : 94.5 }
+         },
+        "2017" : {
+            "paths" : ["/hadoop/cms/store/user/legianni/skimNano-Hggselection-wFjets/GJets_HT-600ToInf_TuneCP5_13TeV-madgraphMLM-pythia8_private_mc17"],
+            "metadata" : { "xs" : 94.5 }
+        },
+        "2018" : {
+            "paths" : ["/hadoop/cms/store/user/legianni/skimNano-Hggselection-wFjets/GJets_HT-600ToInf_TuneCP5_13TeV-madgraphMLM-pythia8_private_mc18"],
+            "metadata" : { "xs" : 94.5 }
+        }
+    },
+    "VH" : {
+        "resonant" : true,
+        "fpo" : 10,
+        "process_id" : 9,
+        "2016" : {
+            "paths" : ["/hadoop/cms/store/user/legianni/skimNano-Hggselection-wFjets/VHToGG_M125_13TeV_amcatnloFXFX_madspin_pythia8_private_mc16"],
+            "metadata" : { "xs" : 0.00512 }
+         },
+        "2017" : {
+            "paths" : ["/hadoop/cms/store/user/legianni/skimNano-Hggselection-wFjets/VHToGG_M125_13TeV_amcatnloFXFX_madspin_pythia8_private_mc17"],
+            "metadata" : { "xs" : 0.00512 }
+        },
+        "2018" : {
+            "paths" : ["/hadoop/cms/store/user/legianni/skimNano-Hggselection-wFjets/VHToGG_M125_13TeV_amcatnloFXFX_madspin_pythia8_private_mc18"],
+            "metadata" : { "xs" : 0.00512 }
+        }
+    },
+    "ttH" : {
+        "resonant" : true,
+        "fpo" : 10,
+        "process_id" : 10,
+        "2016" : {
+            "paths" : ["/hadoop/cms/store/user/legianni/skimNano-Hggselection-wFjets/ttHJetToGG_M125_13TeV_amcatnloFXFX_madspin_pythia8_private_mc17/"],
+            "metadata" : { "xs" : 0.001151117 }
+        },
+        "2017" : {
+            "paths" : ["/hadoop/cms/store/user/legianni/skimNano-Hggselection-wFjets/ttHJetToGG_M125_13TeV_amcatnloFXFX_madspin_pythia8_private_mc17/"],
+            "metadata" : { "xs" : 0.001151117 }
+        },
+        "2018" : {
+            "paths" : ["/hadoop/cms/store/user/legianni/skimNano-Hggselection-wFjets/ttHJetToGG_M125_13TeV_amcatnloFXFX_madspin_pythia8_private_mc18/"],
+            "metadata" : { "xs" : 0.001151117 }
+        }
+    }
+}

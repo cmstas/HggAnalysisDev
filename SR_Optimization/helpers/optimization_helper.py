@@ -168,7 +168,7 @@ class OptimizationHelper():
 
             if self.options["metric"] == "z_a":
                 self.results[idx] = utils.calculate_za(signal_events, resonant_background_events, background_events, data_events, self.options)
-                # FIXME: just using z_a calculation as a quick and dirty estimate. Need to replace with real fits + combine
+                # FIXME: just using z_a calculation as a quick and dirty estimate. Need to replace with real fits (zfit + hepstats)
 
             else:
                 helper = combine_helper.CombineHelper(
