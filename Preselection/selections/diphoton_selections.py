@@ -58,13 +58,14 @@ def diphoton_preselection(events, selected_photons, options, debug):
 
     # Calculate event-level photon/diphoton variables
     selected_events = photon_selections.set_photons(selected_events, selected_photons, debug)
-    selected_events = set_diphotons(selected_events, selected_photons, debug) 
+    selected_events = set_diphotons(selected_events, selected_photons, debug)
 
-    return selected_events, selected_photons 
+    return selected_events, selected_photons
+
 
 def set_diphotons(events, selected_photons, debug):
     events["diphoton_pt_mgg"] = events["gg_pt"] / events["gg_mass"]
-    events["diphoton_rapidity"] = events["gg_eta"] # just using pseudorapidity, shouldn't be a big difference
+    events["diphoton_rapidity"] = events["gg_eta"]  # just using pseudorapidity, shouldn't be a big difference
     events["diphoton_delta_R"] = object_selections.compute_deltaR(
         selected_photons.phi[:,0],
         selected_photons.phi[:,1],
