@@ -163,3 +163,4 @@ plot_temp_options.json
 *.pkl
 *.json
 *.hdf5
+*.pdf

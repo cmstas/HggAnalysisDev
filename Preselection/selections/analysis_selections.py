@@ -42,10 +42,6 @@ def ggTauTau_inclusive_preselection(events, photons, electrons, muons, taus, jet
 
     all_cuts = lep_tau_cut & os_cut
     cut_diagnostics.add_cuts([lep_tau_cut, os_cut, all_cuts], ["N_leptons + N_taus >= 1", "OS dileptons", "all"])
-    if genPart is not None:
-        return events[all_cuts], photons[all_cuts], selected_electrons[all_cuts], selected_muons[all_cuts], selected_taus[all_cuts], dR[all_cuts], genPart[all_cuts]
-    else:
-         return events[all_cuts], photons[all_cuts], selected_electrons[all_cuts], selected_muons[all_cuts], selected_taus[all_cuts], dR[all_cuts]
 
     # Keep only selected events
     selected_events = events[all_cuts]
