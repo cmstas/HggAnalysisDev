@@ -52,7 +52,7 @@ class BDTHelper():
             self.events[split]["dmatrix"] = xgboost.DMatrix(
                 self.events[split]["X"],
                 self.events[split]["y"],
-                weight = self.events[split]["weight"]
+                weight = abs(self.events[split]["weight"])
             )
         self.made_dmatrix = True
         return

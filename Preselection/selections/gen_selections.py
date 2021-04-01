@@ -1,17 +1,17 @@
 import awkward as ak
 
-def set_genZ(events, selection_options, debug):
-    electron_idxs = abs(events.GenPart_pdgId) == 11
-    muon_idxs = abs(events.GenPart_pdgId) == 13
-    tau_idxs = abs(events.GenPart_pdgId) == 15
+def set_genZ(events, genBranches, selection_options, debug):
+    electron_idxs = abs(genBranches.pdgId) == 11
+    muon_idxs = abs(genBranches.pdgId) == 13
+    tau_idxs = abs(genBranches.pdgId) == 15
 
-    motherOfElectrons = events.GenPart_genPartIdxMother[electron_idxs]
-    motherOfMuons = events.GenPart_genPartIdxMother[muon_idxs]
-    motherOfTaus = events.GenPart_genPartIdxMother[tau_idxs]
+    motherOfElectrons = genBranches.genPartIdxMother[electron_idxs]
+    motherOfMuons = genBranches.genPartIdxMother[muon_idxs]
+    motherOfTaus = genBranches.genPartIdxMother[tau_idxs]
 
-    ZToEleEvents = ak.sum((events.GenPart_pdgId[motherOfElectrons] == 23), axis=1) >= 2
-    ZToMuEvents = ak.sum((events.GenPart_pdgId[motherOfMuons] == 23), axis=1) >= 2
-    ZToTauEvents = ak.sum((events.GenPart_pdgId[motherOfTaus] == 23), axis=1) >= 2
+    ZToEleEvents = ak.sum((genBranches.pdgId[motherOfElectrons] == 23), axis=1) >= 2
+    ZToMuEvents = ak.sum((genBranches.pdgId[motherOfMuons] == 23), axis=1) >= 2
+    ZToTauEvents = ak.sum((genBranches.pdgId[motherOfTaus] == 23), axis=1) >= 2
 
     events["genZ_decayMode"] = 1 * ZToEleEvents + 2 * ZToMuEvents + 3 * ZToTauEvents
 
