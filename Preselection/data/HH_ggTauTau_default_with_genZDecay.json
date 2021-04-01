@@ -5,10 +5,10 @@
         "Muon_pt", "Muon_eta", "Muon_phi", "Muon_mass", "Muon_charge", "Muon_pfRelIso03_all", "Muon_dxy", "Muon_dz",
         "Electron_pt", "Electron_eta", "Electron_phi", "Electron_mass", "Electron_charge", "Electron_mvaFall17V2Iso_WP90", "Electron_mvaFall17V2noIso_WP90", "Electron_pfRelIso03_all", "Electron_dxy", "Electron_dz",
         "Jet_pt", "Jet_eta", "Jet_phi", "Jet_mass", "Jet_btagDeepFlavB",
-        "ggMass", "nJet", "MET_pt", "genWeight", "tautauMassAll_SVFit","GenPart_pdgId","GenPart_genPartIdxMother"
+        "ggMass", "nJet", "MET_pt", "genWeight", "tautauMassLoose_SVFit", "GenPart_pdgId", "GenPart_genPartIdxMother"
     ],
     "save_branches" : [
-        "ggMass", "nJet", "MET_pt", "tautauMassAll_SVFit",
+        "ggMass", "nJet", "MET_pt", "tautauMassLoose_SVFit",
         "lead_pho_ptmgg", "sublead_pho_ptmgg", "lead_pho_eta", "sublead_pho_eta", "lead_pho_idmva", "sublead_pho_idmva",
         "ele1_pt", "ele1_eta", "ele2_pt", "ele2_eta", 
         "muon1_pt", "muon1_eta", "muon2_pt", "muon2_eta",
