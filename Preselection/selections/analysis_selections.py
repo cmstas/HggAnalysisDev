@@ -8,6 +8,7 @@ import selections.lepton_selections as lepton_selections
 import selections.tau_selections as tau_selections
 import selections.photon_selections as photon_selections
 import selections.jet_selections as jet_selections
+import selections.gen_selections as gen_selections
 
 def ggTauTau_inclusive_preselection(events, photons, electrons, muons, taus, jets, dR, genPart, options, debug):
     """

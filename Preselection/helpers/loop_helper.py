@@ -10,7 +10,7 @@ import time
 import copy
 
 from selections import diphoton_selections, analysis_selections
-from selections import photon_selections, lepton_selections, tau_selections, jet_selections, gen_selections
+from selections import photon_selections, lepton_selections, tau_selections, jet_selections
 
 class LoopHelper():
     """
