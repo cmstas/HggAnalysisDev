@@ -238,7 +238,7 @@ class LoopHelper():
                 gen_events = diphoton_events.GenPart
             else:
                 gen_events = None
-            selected_events = analysis_selections.ggTauTau_inclusive_preselection(diphoton_events, selected_photons, diphoton_events.Electron, diphoton_events.Muon, diphoton_events.Tau, diphoton_events.Jet, diphoton_events.dR, gen_events, options, self.debug)
+            selected_events = analysis_selections.ggTauTau_inclusive_preselection(diphoton_events, selected_photons, diphoton_events.Electron, diphoton_events.Muon, diphoton_events.Tau, diphoton_events.Jet, diphoton_events.dR_tautauSVFitLoose, gen_events, options, self.debug)
 
         elif self.selections == "ttH_LeptonicPresel":
             selected_events = analysis_selections.tth_leptonic_preselection(diphoton_events, selected_photons, diphoton_events.Electron, diphoton_events.Muon, diphoton_events.Jet, options, self.debug)
@@ -260,7 +260,6 @@ class LoopHelper():
         else:
             print("[LoopHelper] Selection: %s is not currently implemented, please check." % self.selections)
             return
-
         return selected_events
 
     def trim_events(self, events, data):
@@ -303,7 +302,6 @@ class LoopHelper():
                 self.outputs.pop(output)
                 return
             events = self.select_events(events, photons, selection_metadata)
-
             events["process_id"] = numpy.ones(len(events)) * process_id
             if data:
                 events["weight"] = numpy.ones(len(events))

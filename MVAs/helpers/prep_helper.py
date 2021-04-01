@@ -60,33 +60,7 @@ class PrepHelper():
                 print("[PrepHelper] After scaling signal yield, total weighted signal/background events are %.6f/%.6f" % (self.n_signal_reweighted, self.n_background_weighted))
 
         #TODO: add options for feature preprocessing, scaling up resonant backgrounds, etc
-        self.df.loc[self.df["tautauMassLoose_SVFit"] < 0,"tautauMassLoose_SVFit"] = np.nan
 
-        self.df.loc[self.df["ele1_pt"] < 0, "ele1_pt"] = np.nan
-        self.df.loc[np.isnan(self.df["ele1_pt"]),"ele1_eta"] = np.nan
-
-        self.df.loc[self.df["ele2_pt"] < 0, "ele2_pt"] = np.nan
-        self.df.loc[np.isnan(self.df["ele2_pt"]),"ele2_eta"] = np.nan
-
-        self.df.loc[self.df["muon1_pt"] < 0, "muon1_pt"] = np.nan
-        self.df.loc[np.isnan(self.df["muon1_pt"]),"muon1_eta"] = np.nan
-
-        self.df.loc[self.df["muon2_pt"] < 0, "muon2_pt"] = np.nan
-        self.df.loc[np.isnan(self.df["muon2_pt"]),"muon2_eta"] = np.nan
-
-        self.df.loc[self.df["tau1_pt"] < 0, "tau1_pt"] = np.nan
-        self.df.loc[np.isnan(self.df["tau1_pt"]),"tau1_eta"] = np.nan
-
-        self.df.loc[self.df["tau2_pt"] < 0, "tau2_pt"] = np.nan
-        self.df.loc[np.isnan(self.df["tau2_pt"]),"tau2_eta"] = np.nan
-
-        self.df.loc[np.isnan(self.df["tau1_pt"]),"tau1_id_vs_e"] = np.nan
-        self.df.loc[np.isnan(self.df["tau1_pt"]),"tau1_id_vs_m"] = np.nan
-        self.df.loc[np.isnan(self.df["tau1_pt"]),"tau1_id_vs_j"] = np.nan
-
-        self.df.loc[np.isnan(self.df["tau2_pt"]),"tau2_id_vs_e"] = np.nan
-        self.df.loc[np.isnan(self.df["tau2_pt"]),"tau2_id_vs_m"] = np.nan
-        self.df.loc[np.isnan(self.df["tau2_pt"]),"tau2_id_vs_j"] = np.nan
         return
 
     def prepare_samples(self):
