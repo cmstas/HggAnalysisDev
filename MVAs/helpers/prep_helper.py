@@ -42,6 +42,24 @@ class PrepHelper():
         self.write_hdf5()
         return
 
+
+
+    def apply_preselections(self):
+        if "preselections" in self.config.keys():
+            if self.debug > 0:
+                print("[PrepHelper] applying preselections")
+            preselections = self.config["preselections"]
+            if "positive_svfit" in preselections.keys() and preselections["positive_svfit"]:
+                if "m_tautauSVFitLoose" in self.df.columns:
+                    self.df = self.df.loc[self.df["m_tautauSVFitLoose"] >= 0]
+           
+            if "Z_tauOnly" in preselections.keys() and preselections["Z_tauOnly"]:
+                if "genZ_decayMode" in self.df.columns:
+                    VH_process_id = self.process_id_map["VH"]
+                    self.df = self.df.loc[((self.df["genZ_decayMode"] == 3) & (self.df["process_id"] == VH_process_id)) | ~(self.df["process_id"] == VH_process_id)]
+        if self.debug > 0:
+            print("[PrepHelper] After preselections, dataframe contains %d events" %(len(self.df)))
+
     def make_process_id_map(self):
         self.process_id_map = {}
         for sample, info in self.input_config["samples_dict"].items():
@@ -73,6 +91,9 @@ class PrepHelper():
            self.process_ids.append(self.process_id_map[process])
 
         self.df = self.df[self.df["process_id"].isin(self.process_ids)]
+
+        #applying preselections
+        self.apply_preselections()
 
         if self.debug > 0:
             print("[PrepHelper] After selecting for signals and backgrounds, dataframe contains %d events" % (len(self.df)))
