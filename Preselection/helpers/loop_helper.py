@@ -54,8 +54,9 @@ class LoopHelper():
 
         self.save_branches += ["process_id", "weight", "year"]
 
-        self.branches_data = [branch for branch in self.branches if "gen" not in branch]
+        self.branches_data = [branch for branch in self.branches if "Gen" not in branch and "gen" not in branch]
         self.save_branches_data = [branch for branch in self.save_branches if "gen" not in branch]
+        self.save_branches_data += ["genZ_decayMode"]
 
         if self.debug > 0:
             print("[LoopHelper] Opening options file: %s" % self.options)
@@ -114,6 +115,7 @@ class LoopHelper():
                     continue
                 for path in year_info["paths"]:
                     files += glob.glob(path + "/*.root")
+                    files += glob.glob(path + "/*/*.root")
                     files += glob.glob(path + "/*/*/*/*.root") # to be compatible with CRAB
 
                 if len(files) == 0:
@@ -227,6 +229,7 @@ class LoopHelper():
             options[key] = value
 
         # Diphoton preselection: NOTE we assume diphoton preselection is common to every analysis
+
         diphoton_events = events # most of dipho preselection already applied, still need to enforce pt/mgg and mgg cuts
         selected_photons = photon_selections.create_selected_photons(photons, self.branches, self.debug) # create record manually since it doesn't seem to work for selectedPhoton
         diphoton_events, selected_photons = diphoton_selections.diphoton_preselection(diphoton_events, selected_photons, options, self.debug)
@@ -234,11 +237,11 @@ class LoopHelper():
         events_and_objects = {}
 
         if "HHggTauTau_InclusivePresel" in self.selections:
-            if "genZStudy" in self.selections:
+            if "genZStudy" in self.selections and not options["data"]:
                 gen_events = diphoton_events.GenPart
             else:
                 gen_events = None
-            selected_events = analysis_selections.ggTauTau_inclusive_preselection(diphoton_events, selected_photons, diphoton_events.Electron, diphoton_events.Muon, diphoton_events.Tau, diphoton_events.Jet, diphoton_events.dR_tautauSVFitLoose, gen_events, options, self.debug)
+            selected_events = analysis_selections.ggTauTau_inclusive_preselection(diphoton_events, selected_photons, diphoton_events.Electron, diphoton_events.Muon, diphoton_events.Tau, diphoton_events.Jet, diphoton_events.dR_tautauSVFitLoose, gen_events, diphoton_events.Category_pairsLoose,options, self.debug)
 
         elif self.selections == "ttH_LeptonicPresel":
             selected_events = analysis_selections.tth_leptonic_preselection(diphoton_events, selected_photons, diphoton_events.Electron, diphoton_events.Muon, diphoton_events.Jet, options, self.debug)
@@ -346,7 +349,7 @@ class LoopHelper():
                     triggers = ["HLT_Diphoton30_22_R9Id_OR_IsoCaloId_AND_HE_R9Id_Mass90"]
                 branches_no_pho += triggers
 
-
+           
             events = tree.arrays(branches_no_pho, library = "ak", how = "zip")
 
             branches_pho = [branch for branch in branches if "selectedPhoton" in branch]

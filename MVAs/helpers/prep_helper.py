@@ -49,14 +49,16 @@ class PrepHelper():
             if self.debug > 0:
                 print("[PrepHelper] applying preselections")
             preselections = self.config["preselections"]
+            VH_process_id = self.process_id_map["VH"]
             if "positive_svfit" in preselections.keys() and preselections["positive_svfit"]:
                 if "m_tautauSVFitLoose" in self.df.columns:
                     self.df = self.df.loc[self.df["m_tautauSVFitLoose"] >= 0]
            
             if "Z_tauOnly" in preselections.keys() and preselections["Z_tauOnly"]:
                 if "genZ_decayMode" in self.df.columns:
-                    VH_process_id = self.process_id_map["VH"]
                     self.df = self.df.loc[((self.df["genZ_decayMode"] == 3) & (self.df["process_id"] == VH_process_id)) | ~(self.df["process_id"] == VH_process_id)]
+            self.df["weight"] *= 100
+
         if self.debug > 0:
             print("[PrepHelper] After preselections, dataframe contains %d events" %(len(self.df)))
 
@@ -78,7 +80,6 @@ class PrepHelper():
                 print("[PrepHelper] After scaling signal yield, total weighted signal/background events are %.6f/%.6f" % (self.n_signal_reweighted, self.n_background_weighted))
 
         #TODO: add options for feature preprocessing, scaling up resonant backgrounds, etc
-
         return
 
     def prepare_samples(self):

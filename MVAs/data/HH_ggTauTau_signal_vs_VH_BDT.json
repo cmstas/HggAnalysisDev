@@ -23,7 +23,7 @@
     "mva" : {
         "type" : "binary_classification_bdt",
         "param" : {
-            "max_depth": 6,
+            "max_depth": 10,
             "eta" : 0.3,
             "nthread" : 12,
             "objective":"binary:logistic",
