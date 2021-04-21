@@ -123,7 +123,7 @@ class LoopHelper():
                     "sample" : sample,
                     "process_id" : info["process_id"],
                     "year" : year,
-                    "scale1fb" : 1 if sample == "Data" else year_info["metadata"]["scale1fb"],
+                    "scale1fb" : 1 if sample == "Data" else year_info["metadata"].get("scale1fb",1),
                     "lumi" : self.lumi_map[year],
                     "resonant" : info["resonant"]
                 }
