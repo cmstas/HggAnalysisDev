@@ -18,6 +18,7 @@ git clone git@github.com:cms-analysis/HiggsAnalysis-CombinedLimit.git HiggsAnaly
 # compile
 cmsenv
 scram b -j 20
+```
 
 After doing that once, you can set up the `combine` and `CMSSW` environments with
 ```
