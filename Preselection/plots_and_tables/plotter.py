@@ -291,11 +291,10 @@ class Plotter:
 
             if stack:
                 hist_stack = sorted(hist_stack, key=lambda x: x.integral)
-                total_sum = sum([x.integral for x in stack])
+                total_sum = sum([x.integral for x in hist_stack])
                 if unit_normalize:  # Special case - normalize stack!
-                    for hist in hist_stack:
-                        hist /= total_sum
-
+                    for i in range(len(hist_stack)):
+                        hist_stack[i] /= total_sum
                 plot_stack(hist_stack, ax=ax1, histtype="stepfilled")
             else:
                 if self.debug:

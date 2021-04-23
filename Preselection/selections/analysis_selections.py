@@ -18,8 +18,6 @@ def ggTauTau_inclusive_preselection(events, photons, electrons, muons, taus, jet
     """
     cut_diagnostics = utils.CutDiagnostics(events = events, debug = debug, cut_set = "[analysis_selections.py : ggTauTau_inclusive_preselection]")
     
-    # only events with hadronic taus (no leptonic taus!!!!!!!!!!)
-    atleast_one_had_cut = (Category_pairsLoose == 3) | (Category_pairsLoose == 1) | (Category_pairsLoose == 2)
 
 
     # Get number of electrons, muons, taus
@@ -35,7 +33,8 @@ def ggTauTau_inclusive_preselection(events, photons, electrons, muons, taus, jet
     n_leptons_and_taus = n_electrons + n_muons + n_taus
     lep_tau_cut = n_leptons_and_taus >= options["n_leptons_and_taus"]
     
-
+    # only events with hadronic taus (no leptonic taus!!!!!!!!!!)
+    atleast_one_had_cut = (n_taus >= 1)
     # Require OS leptons/taus for events with 2 leptons/taus
     sum_charge = awkward.sum(selected_electrons.charge, axis=1) + awkward.sum(selected_muons.charge, axis=1) + awkward.sum(selected_taus.charge, axis=1)
     charge_cut = sum_charge == 0
