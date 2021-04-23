@@ -186,6 +186,10 @@ class Plotter:
                     break
                 toFill = self.master_dataframe[process][branch]
                 weights = self.master_dataframe[process]["weight"]
+
+                # Remove NaNs
+                weights = weights.loc[~np.isnan(toFill)]
+                toFill = toFill.loc[~np.isnan(toFill)]
                 # bin parsing
                 if (
                     self.plot_options[branch]["bin_type"] == "linspace"
