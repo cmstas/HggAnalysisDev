@@ -266,26 +266,32 @@ class Plotter:
                     hist_stack.append(hist)
 
             # stack plotting
-            unit_normalize = False
+
+            # Extra fancy feature - normalize and plot stack!
+            if (
+                "normalize" in self.plot_options[branch].keys()
+                and self.plot_options[branch]["normalize"] == "unit_area"
+            ):
+                unit_normalize = True
+            else:
+                unit_normalize = False
+
             if (
                 "stack" in self.plot_options[branch].keys()
                 and self.plot_options[branch]["stack"] == 0
             ):
                 stack = False
 
-            elif (
-                "normalize" in self.plot_options[branch].keys()
-                and self.plot_options[branch]["normalize"] == "unit_area"
-            ):
-                unit_normalize = True
-                stack = False
             else:
                 stack = True
 
             if stack:
                 hist_stack = sorted(hist_stack, key=lambda x: x.integral)
-                for i in hist_stack:
-                    print(i.metadata.get("label"), i.integral)
+                total_sum = sum([x.integral for x in stack])
+                if unit_normalize:  # Special case - normalize stack!
+                    for hist in hist_stack:
+                        hist /= total_sum
+
                 plot_stack(hist_stack, ax=ax1, histtype="stepfilled")
             else:
                 if self.debug:
