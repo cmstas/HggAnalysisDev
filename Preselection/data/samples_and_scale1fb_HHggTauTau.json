@@ -301,7 +301,7 @@
                 "xs": 8.839e-06
             },
             "paths": [
-                "/hadoop/cms/store/user/legianni/skimNano-HggHtautauselection/HHggtautau_Era2018_private_mc18"
+                "/hadoop/cms/store/user/legianni/skimNano-HggHtautauselection/HHggtautau_Era2018_private_mc18/skimNano-HggHtautauselection__v5/210222_233127/"
             ]
         },
         "fpo": 10,
@@ -655,5 +655,119 @@
         "fpo": 10,
         "process_id": 2,
         "resonant": false
+    },
+    "ttH": {
+        "2016": {
+            "metadata": {
+                "n_events": 414189,
+                "scale1fb": 2.8125621522831723e-06,
+                "sumWeights": 409277,
+                "xs": 0.001151117
+            },
+            "paths": [
+                "/hadoop/cms/store/user/legianni/skimNano-HggHtautauselection/ttHJetToGG_M125_13TeV_amcatnloFXFX_madspin_pythia8_private_mc17/"
+            ]
+        },
+        "2017": {
+            "metadata": {
+                "n_events": 414189,
+                "scale1fb": 2.8125621522831723e-06,
+                "sumWeights": 409277,
+                "xs": 0.001151117
+            },
+            "paths": [
+                "/hadoop/cms/store/user/legianni/skimNano-HggHtautauselection/ttHJetToGG_M125_13TeV_amcatnloFXFX_madspin_pythia8_private_mc17/"
+            ]
+        },
+        "2018": {
+            "metadata": {
+                "n_events": 260398,
+                "scale1fb": 4.374891208920678e-06,
+                "sumWeights": 263119,
+                "xs": 0.001151117
+            },
+            "paths": [
+                "/hadoop/cms/store/user/legianni/skimNano-HggHtautauselection/ttHJetToGG_M125_13TeV_amcatnloFXFX_madspin_pythia8_private_mc18/"
+            ]
+        },
+        "fpo": 10,
+        "process_id": -4,
+        "resonant": true
+    },
+     "ggH": {
+        "2016": {
+            "metadata": {
+                "n_events":812652,
+                "scale1fb":1.253673e-06,
+                "sumWeights":89212190.2,
+                "xs":0.1118429
+            },
+            "paths": [
+                "/hadoop/cms/store/user/legianni/skimNano-HggHtautauselection/GluGluHToGG_M125_13TeV_amcatnloFXFX_pythia8_private_mc16/"
+            ]
+        },
+        "2017": {
+            "metadata": {
+                "n_events":1995838,
+                "scale1fb":5.09759e-07,
+                "sumWeights":219403545.718,
+                "xs":0.1118429
+            },
+            "paths": [
+                "/hadoop/cms/store/user/legianni/skimNano-HggHtautauselection/GluGluHToGG_M125_13TeV_amcatnloFXFX_pythia8_private_mc17/"
+            ]
+        },
+        "2018": {
+            "metadata": {
+                "n_events":1995838,
+                "sumWeights":219403545.718,
+                "scale1fb":5.09759e-07,
+                "xs":0.1118429
+            },
+            "paths": [
+                "/hadoop/cms/store/user/legianni/skimNano-HggHtautauselection/GluGluHToGG_M125_13TeV_amcatnloFXFX_pythia8_private_mc17/"
+            ]
+        },
+        "fpo": 10,
+        "process_id": -5,
+        "resonant": true
+    },
+    "VBFH": {
+        "2016": {
+            "metadata": {
+                "n_events":1198800,
+                "scale1fb":1.85372e-06,
+                "sumWeights":4631307.3,
+                "xs":0.00858514
+            },
+            "paths": [
+                "/hadoop/cms/store/user/legianni/skimNano-HggHtautauselection/VBFHToGG_M125_13TeV_amcatnlo_pythia8_private_mc16"
+            ]
+        },
+        "2017": {
+            "metadata": {
+                "n_events":1854350,
+                "scale1fb":1.15614e-06,
+                "sumWeights":7425658.0,
+                "xs":0.00858514
+            },
+            "paths": [
+                "/hadoop/cms/store/user/legianni/skimNano-HggHtautauselection/VBFHToGG_M125_13TeV_amcatnlo_pythia8_private_mc17/"
+            ]
+        },
+        "2018": {
+            "metadata": {
+                "n_events":1918000,
+                "sumWeights":7681928.5,
+                "scale1fb":1.117576e-06,
+                "xs":0.00858514
+            },
+            "paths": [
+                "/hadoop/cms/store/user/legianni/skimNano-HggHtautauselection/VBFHToGG_M125_13TeV_amcatnlo_pythia8_private_mc18/"
+            ]
+        },
+        "fpo": 10,
+        "process_id": -6,
+        "resonant": true
     }
 }
