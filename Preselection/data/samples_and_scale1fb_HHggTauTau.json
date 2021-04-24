@@ -691,7 +691,7 @@
             ]
         },
         "fpo": 10,
-        "process_id": -4,
+        "process_id": 10,
         "resonant": true
     },
      "ggH": {
@@ -729,7 +729,7 @@
             ]
         },
         "fpo": 10,
-        "process_id": -5,
+        "process_id": 11,
         "resonant": true
     },
     "VBFH": {
@@ -767,7 +767,7 @@
             ]
         },
         "fpo": 10,
-        "process_id": -6,
+        "process_id": 12,
         "resonant": true
     }
 }
