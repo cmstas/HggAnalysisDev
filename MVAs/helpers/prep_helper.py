@@ -57,7 +57,7 @@ class PrepHelper():
             if "Z_tauOnly" in preselections.keys() and preselections["Z_tauOnly"]:
                 if "genZ_decayMode" in self.df.columns:
                     self.df = self.df.loc[((self.df["genZ_decayMode"] == 3) & (self.df["process_id"] == VH_process_id)) | ~(self.df["process_id"] == VH_process_id)]
-            self.df["weight"] *= 100
+        self.df["weight"] *= 100
 
         if self.debug > 0:
             print("[PrepHelper] After preselections, dataframe contains %d events" %(len(self.df)))
