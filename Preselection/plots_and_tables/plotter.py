@@ -171,6 +171,7 @@ class Plotter:
         self.histograms = {}
         if self.branches == ["all"]:
             self.branches = list(self.plot_options.keys())
+        validBranches = []
         for idx, branch in enumerate(self.branches):
             self.histograms[branch] = {}  # one histogram per process
             for process in self.plot_options[branch]["processes"]:
@@ -182,10 +183,15 @@ class Plotter:
                         )
                     )
                     del self.histograms[branch]
-                    del self.branches[idx]
                     break
+                if branch not in validBranches:
+                    validBranches.append(branch)
                 toFill = self.master_dataframe[process][branch]
                 weights = self.master_dataframe[process]["weight"]
+
+                # Remove NaNs
+                weights = weights.loc[~np.isnan(toFill)]
+                toFill = toFill.loc[~np.isnan(toFill)]
                 # bin parsing
                 if (
                     self.plot_options[branch]["bin_type"] == "linspace"
@@ -203,6 +209,7 @@ class Plotter:
                     toFill.values, bins=bins, weights=weights, label=process
                 )
 
+        self.branches = validBranches
     def make_tables(self):
         """Composes a common table using the YaHists created"""
         # Create the histograms if required
@@ -266,26 +273,31 @@ class Plotter:
                     hist_stack.append(hist)
 
             # stack plotting
-            unit_normalize = False
+
+            # Extra fancy feature - normalize and plot stack!
+            if (
+                "normalize" in self.plot_options[branch].keys()
+                and self.plot_options[branch]["normalize"] == "unit_area"
+            ):
+                unit_normalize = True
+            else:
+                unit_normalize = False
+
             if (
                 "stack" in self.plot_options[branch].keys()
                 and self.plot_options[branch]["stack"] == 0
             ):
                 stack = False
 
-            elif (
-                "normalize" in self.plot_options[branch].keys()
-                and self.plot_options[branch]["normalize"] == "unit_area"
-            ):
-                unit_normalize = True
-                stack = False
             else:
                 stack = True
 
             if stack:
                 hist_stack = sorted(hist_stack, key=lambda x: x.integral)
-                for i in hist_stack:
-                    print(i.metadata.get("label"), i.integral)
+                total_sum = sum([x.integral for x in hist_stack])
+                if unit_normalize:  # Special case - normalize stack!
+                    for i in range(len(hist_stack)):
+                        hist_stack[i] /= total_sum
                 plot_stack(hist_stack, ax=ax1, histtype="stepfilled")
             else:
                 if self.debug:
@@ -353,7 +365,7 @@ class Plotter:
                 total_background_counts = hist_stack[0].copy()
 
                 for i in hist_stack[1:]:
-                    total_background_counts += i.copy()
+                    total_background_counts += i                     
                 ratio_hist = self.histograms[branch]["Data"].copy()
                 ratio_hist /= total_background_counts
                 plt.sca(ax2)
@@ -418,7 +430,7 @@ if __name__ == "__main__":
         save_filenames=["abc", "bcd", "cda"],
     )
     p.run()
-
+ 
     table_test = Plotter(
         df="HggUnitTest.pkl",
         plot_options="plot_options_test.json",
