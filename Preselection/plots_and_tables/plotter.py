@@ -171,6 +171,7 @@ class Plotter:
         self.histograms = {}
         if self.branches == ["all"]:
             self.branches = list(self.plot_options.keys())
+        validBranches = []
         for idx, branch in enumerate(self.branches):
             self.histograms[branch] = {}  # one histogram per process
             for process in self.plot_options[branch]["processes"]:
@@ -182,8 +183,9 @@ class Plotter:
                         )
                     )
                     del self.histograms[branch]
-                    del self.branches[idx]
                     break
+                if branch not in validBranches:
+                    validBranches.append(branch)
                 toFill = self.master_dataframe[process][branch]
                 weights = self.master_dataframe[process]["weight"]
 
@@ -207,6 +209,7 @@ class Plotter:
                     toFill.values, bins=bins, weights=weights, label=process
                 )
 
+        self.branches = validBranches
     def make_tables(self):
         """Composes a common table using the YaHists created"""
         # Create the histograms if required
@@ -362,7 +365,7 @@ class Plotter:
                 total_background_counts = hist_stack[0].copy()
 
                 for i in hist_stack[1:]:
-                    total_background_counts += i.copy()
+                    total_background_counts += i                     
                 ratio_hist = self.histograms[branch]["Data"].copy()
                 ratio_hist /= total_background_counts
                 plt.sca(ax2)
@@ -427,7 +430,7 @@ if __name__ == "__main__":
         save_filenames=["abc", "bcd", "cda"],
     )
     p.run()
-
+ 
     table_test = Plotter(
         df="HggUnitTest.pkl",
         plot_options="plot_options_test.json",
