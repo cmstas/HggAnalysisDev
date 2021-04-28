@@ -9,6 +9,7 @@ pip install uproot awkward
 pip install pandas
 pip install numba==0.50.1
 pip install mplhep
+pip install vector
 
 # For plotting
 pip install yahist
@@ -23,6 +24,7 @@ pip install matplotlib
 # For SR Optimization
 pip install zfit
 pip install tensorflow
+
 
 mkdir -p Preselection/output/
 mkdir -p MVAs/output/
