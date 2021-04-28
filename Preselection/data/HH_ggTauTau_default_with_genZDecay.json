@@ -29,7 +29,7 @@
         "photons" : {
             "pt" : 25,
             "eta" : 2.5,
-            "transition_region_eta": [1.4442, 1.566],
+            "transition_region_eta": [1.442, 1.566],
             "idmva_cut" : -0.7,
             "lead_pt_mgg_cut" : 0.33,
             "sublead_pt_mgg_cut" : 0.25,
