@@ -9,6 +9,7 @@ import selections.tau_selections as tau_selections
 import selections.photon_selections as photon_selections
 import selections.jet_selections as jet_selections
 import selections.gen_selections as gen_selections
+import selections.compound_selections as compound_selections
 
 def ggTauTau_inclusive_preselection(events, photons, electrons, muons, taus, jets, dR, genPart, Category_pairsLoose, options, debug):
     """
@@ -17,7 +18,7 @@ def ggTauTau_inclusive_preselection(events, photons, electrons, muons, taus, jet
     Also calculates relevant event-level variables.
     """
     cut_diagnostics = utils.CutDiagnostics(events = events, debug = debug, cut_set = "[analysis_selections.py : ggTauTau_inclusive_preselection]")
-    
+
 
 
     # Get number of electrons, muons, taus
@@ -32,7 +33,7 @@ def ggTauTau_inclusive_preselection(events, photons, electrons, muons, taus, jet
     # Require >= 1 lep/tau
     n_leptons_and_taus = n_electrons + n_muons + n_taus
     lep_tau_cut = n_leptons_and_taus >= options["n_leptons_and_taus"]
-    
+
     # only events with hadronic taus (no leptonic taus!!!!!!!!!!)
     atleast_one_had_cut = (n_taus >= 1)
     # Require OS leptons/taus for events with 2 leptons/taus
@@ -64,9 +65,11 @@ def ggTauTau_inclusive_preselection(events, photons, electrons, muons, taus, jet
     selected_events = jet_selections.set_jets(selected_events, selected_jets, options, debug)
     if genPart is not None:
         genPart = genPart[all_cuts]
-        selected_events = gen_selections.set_genZ(selected_events, genPart, options, debug) 
+        selected_events = gen_selections.set_genZ(selected_events, genPart, options, debug)
     else:
         selected_events["genZ_decayMode"] = awkward.from_numpy(numpy.ones(len(selected_events)) * -1)
+
+    selected_events = compound_selections.compound_selections(selected_events, options, debug)
     return selected_events
 
 def tth_leptonic_preselection(events, photons, electrons, muons, jets, options, debug):
