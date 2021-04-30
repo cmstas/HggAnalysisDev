@@ -56,7 +56,6 @@ class LoopHelper():
 
         self.branches_data = [branch for branch in self.branches if "Gen" not in branch and "gen" not in branch]
         self.save_branches_data = [branch for branch in self.save_branches if "gen" not in branch]
-        self.save_branches_data += ["genZ_decayMode"]
 
         if self.debug > 0:
             print("[LoopHelper] Opening options file: %s" % self.options)
