@@ -19,6 +19,7 @@ As an example, we will develop an analysis for measuring ttH (H->gg) in the lept
    The `json` file will have an entry for each sample you want to run on. We can construct it like this:
 
 ```
+{
     "ttH" : {
         "resonant" : true,
         "fpo" : 10,
@@ -36,6 +37,11 @@ As an example, we will develop an analysis for measuring ttH (H->gg) in the lept
             "metadata" : { "xs" : 0.001151117 }
         }
     },
+    "Data" : {
+    ...
+    }
+}
+```
 ```
  
     The full `json` file is available [here](https://github.com/cmstas/HggAnalysisDev/blob/3d00f19482a93fa6bf824c32d54bb3e9cfe0bad7/Preselection/data/samples_ttH.json).
