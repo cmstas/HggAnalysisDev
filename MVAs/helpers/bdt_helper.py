@@ -52,7 +52,7 @@ class BDTHelper():
             self.events[split]["dmatrix"] = xgboost.DMatrix(
                 self.events[split]["X"],
                 self.events[split]["y"],
-                weight = self.events[split]["weight"]
+                weight = abs(self.events[split]["weight"])
             )
         self.made_dmatrix = True
         return
@@ -77,8 +77,8 @@ class BDTHelper():
             "config" : self.config,
             "weights" : self.weights_file
         }
-        #with open(self.summary_file, "w") as f_out:
-        #    json.dump(summary, f_out, sort_keys = True, indent = 4)
+        with open(self.summary_file, "w") as f_out:
+            json.dump(summary, f_out, sort_keys = True, indent = 4)
 
         return summary
 

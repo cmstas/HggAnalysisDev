@@ -103,6 +103,7 @@ class MVAHelper():
             ax1 = fig.add_subplot(111)
             ax1.yaxis.set_ticks_position('both')
             ax1.grid(True)
+
             ax1.plot(self.performance[split]["fpr"],
                      self.performance[split]["tpr"],
                      color = "red",
