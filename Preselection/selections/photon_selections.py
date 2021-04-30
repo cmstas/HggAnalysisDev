@@ -1,5 +1,5 @@
 import awkward
-import numpy as np
+import numpy
 
 import numba
 

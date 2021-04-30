@@ -32,22 +32,21 @@ def ggTauTau_inclusive_preselection(events, photons, electrons, muons, taus, jet
 
     # Require >= 1 lep/tau
     n_leptons_and_taus = n_electrons + n_muons + n_taus
-    lep_tau_cut = n_leptons_and_taus >= options["n_leptons_and_taus"]
 
     # only events with hadronic taus (no leptonic taus!!!!!!!!!!)
-    atleast_one_had_cut = (n_taus >= 1)
+    atleast_one_had_tau_cut = (n_taus >= 1)
     # Require OS leptons/taus for events with 2 leptons/taus
     sum_charge = awkward.sum(selected_electrons.charge, axis=1) + awkward.sum(selected_muons.charge, axis=1) + awkward.sum(selected_taus.charge, axis=1)
     charge_cut = sum_charge == 0
     two_leptons = n_leptons_and_taus == 2
     not_two_leptons = n_leptons_and_taus != 2
-    os_cut = (two_leptons & charge_cut) | not_two_leptons # only require 2 OS leptons if there are ==2 leptons in the event
+    os_cut = (two_leptons & charge_cut) | not_two_leptons  # only require 2 OS leptons if there are ==2 leptons in the event
 
     # Select jets (don't cut on jet quantities for selection, but they will be useful for BDT training)
     selected_jets = jets[jet_selections.select_jets(events, photons, selected_electrons, selected_muons, selected_taus, jets, options, debug)]
 
-    all_cuts = lep_tau_cut & os_cut & atleast_one_had_cut
-    cut_diagnostics.add_cuts([lep_tau_cut, os_cut, all_cuts], ["N_leptons + N_taus >= 1", "OS dileptons", "all"])
+    all_cuts = os_cut & atleast_one_had_tau_cut
+    cut_diagnostics.add_cuts([atleast_one_had_tau_cut, os_cut, all_cuts], ["N_taus >= 1", "OS dileptons", "all"])
 
     # Keep only selected events
     selected_events = events[all_cuts]
