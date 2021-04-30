@@ -68,6 +68,7 @@ def ggTauTau_inclusive_preselection(events, photons, electrons, muons, taus, jet
         selected_events = gen_selections.set_genZ(selected_events, genPart, options, debug)
     else:
         selected_events["genZ_decayMode"] = awkward.from_numpy(numpy.ones(len(selected_events)) * -1)
+        selected_events["tau_motherID"] = awkward.from_numpy(numpy.ones(len(selected_events)) * -1)
 
     selected_events = compound_selections.compound_selections(selected_events, options, debug)
     return selected_events
