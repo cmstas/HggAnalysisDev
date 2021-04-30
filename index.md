@@ -110,10 +110,12 @@ elif self.selections == "ttH_LeptonicPresel":
 
 4) Loop over samples and perform the preselection, writing events to a `pandas` dataframe.
    First we will need to construct an options `json` for the ttH leptonic preselection. An example is available [here](https://github.com/cmstas/HggAnalysisDev/blob/3d00f19482a93fa6bf824c32d54bb3e9cfe0bad7/Preselection/data/ttH_Leptonic.json).
+
    The important fields in this `json` are:
-    - `"branches"` : list of branches to read from nanoAOD. Ensure that any branches that your code will access are specified here.
-    - `"save_branches"` : list of branches to be written to the output dataframe. This could include branches that are read directly from nanoAOD, as well as variables that you might compute during your preselection. For example, we probably want to store things like the kinematics of selected leptons and jets in the preselection. If you add variables to save here, make sure they are either present in `"branches"` or computed somewhere in your code. [Here](https://github.com/cmstas/HggAnalysisDev/blob/3d00f19482a93fa6bf824c32d54bb3e9cfe0bad7/Preselection/selections/lepton_selections.py#L45-L63) is an example of adding branches to the events object in the looper. **NB**: the output dataframe is assumed to be flat. Any "awkward"-shaped arrays should be transformed into a flat structure, as in the example linked above (i.e. rather than save `electron_pt` as a vector for each event, we save `electron1_pt`, `electron2_pt`, etc. and pad empty entries with dummy values).
-    - `"selection_options"` : specify the values for cuts in your looper (e.g. jet `pt` cut).
+* `"branches"` : list of branches to read from nanoAOD. Ensure that any branches that your code will access are specified here.
+* `"save_branches"` : list of branches to be written to the output dataframe. This could include branches that are read directly from nanoAOD, as well as variables that you might compute during your preselection. For example, we probably want to store things like the kinematics of selected leptons and jets in the preselection. If you add variables to save here, make sure they are either present in `"branches"` or computed somewhere in your code. [Here](https://github.com/cmstas/HggAnalysisDev/blob/3d00f19482a93fa6bf824c32d54bb3e9cfe0bad7/Preselection/selections/lepton_selections.py#L45-L63) is an example of adding branches to the events object in the looper. **NB**: the output dataframe is assumed to be flat. Any "awkward"-shaped arrays should be transformed into a flat structure, as in the example linked above (i.e. rather than save `electron_pt` as a vector for each event, we save `electron1_pt`, `electron2_pt`, etc. and pad empty entries with dummy values).
+* `"selection_options"` : specify the values for cuts in your looper (e.g. jet `pt` cut).
+
    Finally, you can run the looper with:
 
 ```
@@ -122,11 +124,11 @@ elif self.selections == "ttH_LeptonicPresel":
 
    Prepending the `loop.py` call with `/bin/nice -n 19` allows us to run on a large number of cores locally without hogging resources and negatively affecting other users.
    The other relevant arguments are:
-    - `selections` : specify the string you put into `Preselection/helpers/loop_helper.py` that links to your analysis preselection.
-    - `debug` : specifies how much debug info you want printed out (higher = more)
-    - `options` : the options `json` you constructed
-    - `samples` : the scale1fb `json` you constructed in step 2
-    - `output_tag` : a string to identify the output dataframe file and the summary `json` which is also output by `loop.py`
+    * `selections` : specify the string you put into `Preselection/helpers/loop_helper.py` that links to your analysis preselection.
+    * `debug` : specifies how much debug info you want printed out (higher = more)
+    * `options` : the options `json` you constructed
+    * `samples` : the scale1fb `json` you constructed in step 2
+    * `output_tag` : a string to identify the output dataframe file and the summary `json` which is also output by `loop.py`
  
 5) Plots and tables
    TODO
