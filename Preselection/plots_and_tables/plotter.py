@@ -124,6 +124,9 @@ class Plotter:
             print(
                 "plot_options not properly provided! Provide json file or dict"
             )
+        for var, plot_info in self.plot_options.items():
+            if not "signal" in plot_info.keys():
+                plot_info["signal"] = ["HH_ggTauTau"]
         if self.debug:
             print("[plotter.py] Loaded dataframe and options")
 
@@ -140,13 +143,14 @@ class Plotter:
         for sample, info in self.input_options["samples_dict"].items():
             if self.debug:
                 print("[plotter.py] sample = ", sample)
-            # FIXME: Hardcoded signal as HH_ggTauTau
-            if sample == "HH_ggTauTau":
-                self.process_id_map["signal"] = info["process_id"]
-                self.master_dataframe["signal"] = self.input[
-                    self.input["process_id"] == info["process_id"]
-                ]
-            elif "GJets" in sample:
+            for var, plot_info in self.plot_options.items():
+                if sample in plot_info["signal"]: # FIXME: this assumes the same signal for every plot
+                    self.process_id_map["signal"] = info["process_id"]
+                    self.master_dataframe["signal"] = self.input[
+                        self.input["process_id"] == info["process_id"]
+                    ]
+                    break
+            if "GJets" in sample:
                 if "GJets" in self.process_id_map:
                     continue
                 else:
