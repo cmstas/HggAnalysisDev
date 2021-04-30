@@ -124,11 +124,11 @@ elif self.selections == "ttH_LeptonicPresel":
 
    Prepending the `loop.py` call with `/bin/nice -n 19` allows us to run on a large number of cores locally without hogging resources and negatively affecting other users.
    The other relevant arguments are:
-    * `selections` : specify the string you put into `Preselection/helpers/loop_helper.py` that links to your analysis preselection.
-    * `debug` : specifies how much debug info you want printed out (higher = more)
-    * `options` : the options `json` you constructed
-    * `samples` : the scale1fb `json` you constructed in step 2
-    * `output_tag` : a string to identify the output dataframe file and the summary `json` which is also output by `loop.py`
+* `selections` : specify the string you put into `Preselection/helpers/loop_helper.py` that links to your analysis preselection.
+* `debug` : specifies how much debug info you want printed out (higher = more)
+* `options` : the options `json` you constructed
+* `samples` : the scale1fb `json` you constructed in step 2
+* `output_tag` : a string to identify the output dataframe file and the summary `json` which is also output by `loop.py`
  
 5) Plots and tables
    TODO
