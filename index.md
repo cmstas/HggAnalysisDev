@@ -1,37 +1,19 @@
-## Welcome to GitHub Pages
+## Introduction 
 
-You can use the [editor on GitHub](https://github.com/cmstas/HggAnalysisDev/edit/gh-pages/index.md) to maintain and preview the content for your website in Markdown files.
+`HggAnalysisDev` is a repository of tools for fast and flexible development of H->gg analyses.
+The main components are:
+1. **Preselection**: loop over nanoAODs and write events to a `pandas` dataframe, make plots and tables from these dataframes
+2. **MVA Training & Evaluation**: starting from output of 1 (`pandas` dataframe), train and evaluate BDTs (using `xgboost`) and deep neural networks (using `tensorflow` and `keras`), plot performance metrics, and zip MVA scores back into dataframes.
+3. **Signal Region Optimization**: scan a variety of cuts on one or more variables (typically MVAs) to define signal regions. Within each signal region, fit `m_gg` distribution to create signal and background (non-resonant and resonant) models, and evaluate a figure of merit (significance, upper limit, etc) in these signal regions.
 
-Whenever you commit to this repository, GitHub Pages will run [Jekyll](https://jekyllrb.com/) to rebuild the pages in your site, from the content in your Markdown files.
+**Note**: step 3 currently relies on old code from the ttH (HIG-19-013/HIG-19-015) and FCNC (TOP-20-007) analyses which has `CMSSW` and `combine` dependencies. Planned to be updated to a pure-python implementation using `zfit` and `hepstats`.
 
-### Markdown
+## Tutorial
+This provides a walkthrough for developing a new H->gg analysis from end-to-end. It assumes you already have custom nanoAOD files with the diphoton preselection applied (see Hgg common tools AN-2019/149) and relevant photon branches for performing the diphoton preselection (these are not present in default nanoAOD at the time of writing).
 
-Markdown is a lightweight and easy-to-use syntax for styling your writing. It includes conventions for
+As an example, we will develop an analysis for measuring ttH (H->gg) in the leptonic (semi-leptonic and di-leptonic decays of ttbar) channel.
 
-```markdown
-Syntax highlighted code block
-
-# Header 1
-## Header 2
-### Header 3
-
-- Bulleted
-- List
-
-1. Numbered
-2. List
-
-**Bold** and _Italic_ and `Code` text
-
-[Link](url) and ![Image](src)
+1. Identify relevant samples
 ```
-
-For more details see [GitHub Flavored Markdown](https://guides.github.com/features/mastering-markdown/).
-
-### Jekyll Themes
-
-Your Pages site will use the layout and styles from the Jekyll theme you have selected in your [repository settings](https://github.com/cmstas/HggAnalysisDev/settings). The name of this theme is saved in the Jekyll `_config.yml` configuration file.
-
-### Support or Contact
-
-Having trouble with Pages? Check out our [documentation](https://docs.github.com/categories/github-pages-basics/) or [contact support](https://support.github.com/contact) and we’ll help you sort it out.
+code
+```
