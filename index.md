@@ -14,12 +14,11 @@ This provides a walkthrough for developing a new H->gg analysis from end-to-end.
 As an example, we will develop an analysis for measuring ttH (H->gg) in the leptonic (semi-leptonic and di-leptonic decays of ttbar) channel.
 
 ### Preselection
-1. Identify relevant samples: start by constructing a `json` file with all of the relevant samples for your analysis.
+1) Identify relevant samples: start by constructing a `json` file with all of the relevant samples for your analysis.
    For ttH, we can start with signal samples (ttH), data, and a couple relevant backgrounds: gamma + jets, diphoton + jets, and ttbar + 0-2 photons.
    The `json` file will have an entry for each sample you want to run on. We can construct it like this:
 
 ```
-{
     "ttH" : {
         "resonant" : true,
         "fpo" : 10,
@@ -37,24 +36,20 @@ As an example, we will develop an analysis for measuring ttH (H->gg) in the lept
             "metadata" : { "xs" : 0.001151117 }
         }
     },
-    "Data" : {
-    ...
-    }
-}
 ```
  
     The full `json` file is available [here](https://github.com/cmstas/HggAnalysisDev/blob/3d00f19482a93fa6bf824c32d54bb3e9cfe0bad7/Preselection/data/samples_ttH.json).
 
-2. Calculate `scale1fb` and other relevant metadata for the samples. This can be done using the script `Preselection/scripts/scale1fb.py`:
+2) Calculate `scale1fb` and other relevant metadata for the samples. This can be done using the script `Preselection/scripts/scale1fb.py`:
 
 ```
 python scale1fb.py --input <path_to_above_json> --output "data/samples_and_scale1fb.json" --debug 1
 ```
 
-3. Implement a preselection.
+3) Implement a preselection.
    This can be done by adding a function to `Preselection/selections/analysis_selections.py`:
 
-```
+```python
 def tth_leptonic_preselection(events, photons, electrons, muons, jets, options, debug):
     """
     Performs tth leptonic preselection, requiring >= 1 lepton and >= 1 jet
@@ -107,7 +102,7 @@ elif self.selections == "ttH_LeptonicPresel":
     selected_events = analysis_selections.tth_leptonic_preselection(diphoton_events, selected_photons, diphoton_events.Electron, diphoton_events.Muon, diphoton_events.Jet, options, self.debug)
 ```
 
-4. Loop over samples and perform the preselection, writing events to a `pandas` dataframe.
+4) Loop over samples and perform the preselection, writing events to a `pandas` dataframe.
    First we will need to construct an options `json` for the ttH leptonic preselection. An example is available [here](https://github.com/cmstas/HggAnalysisDev/blob/3d00f19482a93fa6bf824c32d54bb3e9cfe0bad7/Preselection/data/ttH_Leptonic.json).
    The important fields in this `json` are:
     - `"branches"` : list of branches to read from nanoAOD. Ensure that any branches that your code will access are specified here.
@@ -127,7 +122,7 @@ elif self.selections == "ttH_LeptonicPresel":
     - `samples` : the scale1fb `json` you constructed in step 2
     - `output_tag` : a string to identify the output dataframe file and the summary `json` which is also output by `loop.py`
  
-5. Plots and tables
+5) Plots and tables
    TODO
 
 ## Training a BDT
