@@ -8,12 +8,12 @@ The main components are:
 
 **Note**: step 3 currently relies on old code from the ttH (HIG-19-013/HIG-19-015) and FCNC (TOP-20-007) analyses which has `CMSSW` and `combine` dependencies. Planned to be updated to a pure-python implementation using `zfit` and `hepstats`.
 
-## Tutorial
+## Tutorial: ttH Leptonic analysis
 This provides a walkthrough for developing a new H->gg analysis from end-to-end. It assumes you already have custom nanoAOD files with the diphoton preselection applied (see Hgg common tools AN-2019/149) and relevant photon branches for performing the diphoton preselection (these are not present in default nanoAOD at the time of writing).
 
 As an example, we will develop an analysis for measuring ttH (H->gg) in the leptonic (semi-leptonic and di-leptonic decays of ttbar) channel.
 
-1. Identify relevant samples
-```
-code
-```
+1. Identify relevant samples: start by constructing a `json` file with all of the relevant samples for your analysis.
+   For ttH, we can start with signal samples (ttH), data, and a couple relevant backgrounds: gamma + jets, diphoton + jets, and ttbar + 0-2 photons.
+
+
