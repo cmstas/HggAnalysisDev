@@ -11,6 +11,7 @@ cmsrel CMSSW_10_2_13
 cd CMSSW_10_2_13/src
 cmsenv
 git cms-init
+```
 
 # Install combine
 git clone git@github.com:cms-analysis/HiggsAnalysis-CombinedLimit.git HiggsAnalysis/CombinedLimit
