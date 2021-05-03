@@ -70,6 +70,7 @@ def ggTauTau_inclusive_preselection(events, photons, electrons, muons, taus, jet
         selected_events["tau_motherID"] = awkward.from_numpy(numpy.ones(len(selected_events)) * -1)
 
     selected_events = compound_selections.compound_selections(selected_events, options, debug)
+    selected_events = compound_selections.set_helicity_angles(selected_events, selected_taus, selected_photons)
     return selected_events
 
 def tth_leptonic_preselection(events, photons, electrons, muons, jets, options, debug):
