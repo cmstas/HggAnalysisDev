@@ -150,13 +150,22 @@ cython_debug/
 dask-worker-space/
 .singularity*
 
-#result files
+# result files
 hists/
 logs/
 =======
 # output dirs
 */output/
 */output/*
+
+# Plots and tables
+*/plots_and_tables/*.pdf
+*/plots_and_tables/*.pkl
+
+# ttH optimization output
+*/*results*/*
+*/models/*
+*/*.root
 
 # CMSSW
 *CMSSW*
