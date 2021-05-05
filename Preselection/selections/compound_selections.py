@@ -28,20 +28,16 @@ def set_helicity_angles(events, taus, photons):
 
 
 @numba.njit
-def compute_helicity_angles(leadingTauVector, SVFitVector, HggVector):
-    nEvents = len(leadingTauVector)
+def compute_helicity_angles(daughterVector, parentVector):
+    nEvents = len(daughterVector)
     cosTheta = numpy.zeros(nEvents)
     for i in range(nEvents):
-        HTauTau = SVFitVector[i]
+        parent = parentVector[i]
         if HTauTau.pt < 0:
             cosTheta[i] = -9
             continue
-        Hgg = HggVector[i]
-        leadingTau = leadingTauVector[i]
-        triHVertex = HTauTau + Hgg
-        leadingTauInSVFitFrame = leadingTau.boost_p4(-HTauTau)
-        HTauTauInTriVertexFrame = HTauTau.boost_pr(-triHVertex)
-
-        cosTheta[i] = HTauTauInTriVertexFrame.dot(leadingTauInSVFitFrame)/(HTauTauInTriVertexFrame.mag * leadingTauInSVFitFrame.mag)
-
+        daughter = daughterVector[i]
+        daughterInParentFrame = daughter.boost_p4(-parent)
+        cosTheta[i] = parent.dot(daughterInParentFrame)/(parent.mag * daughter.mag)
+        cosTheta[i] = (parent.x * daughterInParentFrame.x + parent.y * daughterInParentFrame.y + parent.z * daughterInParentFrame.z)/(parent.mag * daughterInParentFrame.mag)
     return cosTheta
