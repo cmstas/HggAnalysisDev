@@ -23,7 +23,7 @@ def set_helicity_angles(events, taus, photons):
     g1Vector = vector.awk({"pt": photons[:,0].pt, "eta": photons[:,0].eta, "phi": photons[:,0].phi, "mass": photons[:,0].mass})
     g2Vector = vector.awk({"pt": photons[:,1].pt, "eta": photons[:,1].eta, "phi": photons[:,1].phi, "mass": photons[:,1].mass})
     HggVector = g1Vector + g2Vector
-    cosTheta = compute_helicity_angles(leadingTauVector, SVFitVector, HggVector)
+    cosTheta = compute_helicity_angles(leadingTauVector, SVFitVector)
     events["cos_theta_helicity"] = awkward.from_numpy(cosTheta)
 
     return events
@@ -60,14 +60,14 @@ def set_gen_helicity_angles(events, genBranches, options, debug):
 @numba.njit
 def compute_helicity_angles(daughterVector, parentVector):
     nEvents = len(daughterVector)
-    cosTheta = numpy.zeros(nEvents)
+    cosTheta = numpy.ones(nEvents) * -9
     for i in range(nEvents):
         parent = parentVector[i]
         if parent.pt < 0:
-            cosTheta[i] = -9
             continue
         daughter = daughterVector[i]
         daughterInParentFrame = daughter.boost_p4(-parent)
-
-        cosTheta[i] = (parent.x * daughterInParentFrame.x + parent.y * daughterInParentFrame.y + parent.z * daughterInParentFrame.z)/(parent.mag * daughterInParentFrame.mag)
+        vParent = parent.to_Vector3D()
+        vDaughter = daughterInParentFrame.to_Vector3D()
+        cosTheta[i] = vParent.dot(vDaughter)/(vParent.mag * vDaughter.mag)
     return cosTheta

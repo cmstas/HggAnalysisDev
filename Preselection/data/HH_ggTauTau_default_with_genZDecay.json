@@ -58,9 +58,9 @@
             "pt" : 20.0,
             "eta" : 2.3,
             "dz" : 0.2,
-            "DeepTau_vs_e" : 2,
-            "DeepTau_vs_mu" : 1,
-            "DeepTau_vs_jet" : 8,
+            "DeepTau_vs_e" : 1,
+            "DeepTau_vs_mu" : 0,
+            "DeepTau_vs_jet" : 7,
             "dR_pho" : 0.2,
             "dR_lep" : 0.2
         },
