@@ -33,7 +33,7 @@ def set_gen_helicity_angles(events, genBranches, options, debug):
     if genBranches is None:
         events["cos_theta_helicity_gen"] = awkward.from_numpy(-9 * numpy.ones(len(events)))
     else:
-        tau_idxs = (abs(genBranches.pdgId) == 15)) & ((genBranches.status == 2) | (genBranches.status == 23))
+        tau_idxs = (abs(genBranches.pdgId) == 15) & ((genBranches.status == 2) | (genBranches.status == 23))
 
         tau_idxs = tau_idxs[ak.sum(tau_idxs, axis = 1) == 2] # Require two prompt taus
         motherOfTaus = genBranches.genPartIdxMother[tau_idxs]
