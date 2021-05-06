@@ -2,7 +2,7 @@ import numpy
 import awkward
 import vector
 import numba
-
+import selections.selection_utils as utils
 
 def compound_selections(events, options, debug):
 
@@ -29,6 +29,34 @@ def set_helicity_angles(events, taus, photons):
     return events
 
 
+def set_gen_helicity_angles(events, genBranches, options, debug):
+    if genBranches is None:
+        events["cos_theta_helicity_gen"] = awkward.from_numpy(-9 * numpy.ones(len(events)))
+    else:
+        tau_idxs = (abs(genBranches.pdgId) == 15)) & ((genBranches.status == 2) | (genBranches.status == 23))
+
+        tau_idxs = tau_idxs[ak.sum(tau_idxs, axis = 1) == 2] # Require two prompt taus
+        motherOfTaus = genBranches.genPartIdxMother[tau_idxs]
+
+        VToTauMask = motherOfTaus[(genBranches.pdgId[motherOfTaus] == 23) | (genBranches.pdgId[motherOfTaus] == 25)] # Selecting only those Z/H whose daughters are taus
+        genVPt = pad_awkward_array(genBranches.pt[VToTauMask], 2, -1)
+        genVEta = pad_awkward_array(genBranches.eta[VToTauMask], 2, -1)
+        genVPhi = pad_awkward_array(genBranches.phi[VToTauMask], 2, -1)
+        genVMass = pad_awkward_array(genBranches.mass[VToTauMask], 2, -1)
+
+        leadingTauPt = pad_awkward_array(genBranches.pt[tau_idxs], 2, -1)[:,0]
+        leadingTauEta = pad_awkward_array(genBranches.eta[tau_idxs], 2, -1)[:,0]
+        leadingTauPhi = pad_awkward_array(genBranches.phi[tau_idxs], 2, -1)[:,0]
+        leadingTauMass = pad_awkward_array(genBranches.mass[tau_idxs], 2, -1)[:,0]
+
+        genVVector = vector.awk({"pt":genVPt, "eta":genVEta, "phi":genVPhi, "mass":genVMass})
+        leadingTauVector = vector.awk({"pt":leadingTauPt, "eta":leadingTauEta, "phi":leadingTauPhi, "mass":leadingTauMass})
+
+        cosThetaGen = compute_helicity_angles(leadingTauVector, genVVector)
+        events["cos_theta_helicity_gen"] = awkward.from_numpy(cosThetaGen)
+
+    return events
+
 @numba.njit
 def compute_helicity_angles(daughterVector, parentVector):
     nEvents = len(daughterVector)
@@ -40,6 +68,6 @@ def compute_helicity_angles(daughterVector, parentVector):
             continue
         daughter = daughterVector[i]
         daughterInParentFrame = daughter.boost_p4(-parent)
-        cosTheta[i] = parent.dot(daughterInParentFrame)/(parent.mag * daughter.mag)
+
         cosTheta[i] = (parent.x * daughterInParentFrame.x + parent.y * daughterInParentFrame.y + parent.z * daughterInParentFrame.z)/(parent.mag * daughterInParentFrame.mag)
     return cosTheta
