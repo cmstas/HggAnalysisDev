@@ -65,7 +65,7 @@ def ggTauTau_inclusive_preselection(events, photons, electrons, muons, taus, jet
     if genPart is not None:
         genPart = genPart[all_cuts]
         selected_events = gen_selections.set_genZ(selected_events, genPart, options, debug)
-        selected_events = compound_selections.set_gen_helicity_angles(events, genPart, options, debug)
+        selected_events = compound_selections.set_gen_helicity_angles(selected_events, genPart, options, debug)
     else:
         selected_events["genZ_decayMode"] = awkward.from_numpy(numpy.ones(len(selected_events)) * -1)
         selected_events["tau_motherID"] = awkward.from_numpy(numpy.ones(len(selected_events)) * -1)

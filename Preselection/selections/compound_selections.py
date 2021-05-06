@@ -35,19 +35,17 @@ def set_gen_helicity_angles(events, genBranches, options, debug):
     else:
         tau_idxs = (abs(genBranches.pdgId) == 15) & ((genBranches.status == 2) | (genBranches.status == 23))
 
-        tau_idxs = tau_idxs[ak.sum(tau_idxs, axis = 1) == 2] # Require two prompt taus
         motherOfTaus = genBranches.genPartIdxMother[tau_idxs]
-
         VToTauMask = motherOfTaus[(genBranches.pdgId[motherOfTaus] == 23) | (genBranches.pdgId[motherOfTaus] == 25)] # Selecting only those Z/H whose daughters are taus
-        genVPt = pad_awkward_array(genBranches.pt[VToTauMask], 2, -1)
-        genVEta = pad_awkward_array(genBranches.eta[VToTauMask], 2, -1)
-        genVPhi = pad_awkward_array(genBranches.phi[VToTauMask], 2, -1)
-        genVMass = pad_awkward_array(genBranches.mass[VToTauMask], 2, -1)
+        genVPt = utils.pad_awkward_array(genBranches.pt[VToTauMask], 2, -1)[:,0]
+        genVEta = utils.pad_awkward_array(genBranches.eta[VToTauMask], 2, -1)[:,0]
+        genVPhi = utils.pad_awkward_array(genBranches.phi[VToTauMask], 2, -1)[:,0]
+        genVMass = utils.pad_awkward_array(genBranches.mass[VToTauMask], 2, -1)[:,0]
 
-        leadingTauPt = pad_awkward_array(genBranches.pt[tau_idxs], 2, -1)[:,0]
-        leadingTauEta = pad_awkward_array(genBranches.eta[tau_idxs], 2, -1)[:,0]
-        leadingTauPhi = pad_awkward_array(genBranches.phi[tau_idxs], 2, -1)[:,0]
-        leadingTauMass = pad_awkward_array(genBranches.mass[tau_idxs], 2, -1)[:,0]
+        leadingTauPt = utils.pad_awkward_array(genBranches.pt[tau_idxs], 2, -1)[:,0]
+        leadingTauEta = utils.pad_awkward_array(genBranches.eta[tau_idxs], 2, -1)[:,0]
+        leadingTauPhi = utils.pad_awkward_array(genBranches.phi[tau_idxs], 2, -1)[:,0]
+        leadingTauMass = utils.pad_awkward_array(genBranches.mass[tau_idxs], 2, -1)[:,0]
 
         genVVector = vector.awk({"pt":genVPt, "eta":genVEta, "phi":genVPhi, "mass":genVMass})
         leadingTauVector = vector.awk({"pt":leadingTauPt, "eta":leadingTauEta, "phi":leadingTauPhi, "mass":leadingTauMass})
