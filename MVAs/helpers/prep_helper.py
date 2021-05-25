@@ -1,7 +1,7 @@
 import h5py
 import pandas
 import json
-import numpy
+import numpy as np
 import random
 
 from helpers import utils
@@ -35,12 +35,15 @@ class PrepHelper():
             print("[PrepHelper] Loaded file %s, containing %d events" % (self.input, len(self.df)))
 
     def run(self):
-        self.prepare_samples()    
+        self.prepare_samples()
         self.preprocess() # scale sig/bkg yields, preprocess individual features, etc
         self.prepare_features()
         self.make_train_test_validation_split()
         self.write_hdf5()
         return
+
+    def apply_preselections(self):
+        self.df["weight"] *= 100
 
     def make_process_id_map(self):
         self.process_id_map = {}
@@ -60,7 +63,6 @@ class PrepHelper():
                 print("[PrepHelper] After scaling signal yield, total weighted signal/background events are %.6f/%.6f" % (self.n_signal_reweighted, self.n_background_weighted))
 
         #TODO: add options for feature preprocessing, scaling up resonant backgrounds, etc
-
         return
 
     def prepare_samples(self):
@@ -74,23 +76,26 @@ class PrepHelper():
 
         self.df = self.df[self.df["process_id"].isin(self.process_ids)]
 
+        #applying preselections
+        self.apply_preselections()
+
         if self.debug > 0:
             print("[PrepHelper] After selecting for signals and backgrounds, dataframe contains %d events" % (len(self.df)))
 
-        label = list(numpy.zeros(len(self.df)))
-        
+        label = list(np.zeros(len(self.df)))
+
         self.df["label"] = label
         self.df = self.df.reset_index(drop = True) # reassign indices so we can do test/train/val splits more easily later
 
         # Assign signal events label of 1
         for process in self.config["signal"]:
-            self.df.loc[self.df["process_id"] == self.process_id_map[process], "label"] = 1 
+            self.df.loc[self.df["process_id"] == self.process_id_map[process], "label"] = 1
 
         self.n_signal = len(self.df[self.df["label"] == 1])
         self.n_signal_weighted = self.df["weight"][self.df["label"] == 1].sum()
 
         self.n_background = len(self.df[self.df["label"] == 0])
-        self.n_background_weighted = self.df["weight"][self.df["label"] == 0].sum() 
+        self.n_background_weighted = self.df["weight"][self.df["label"] == 0].sum()
 
         if self.debug > 0:
             print("[PrepHelper] After labeling, have %d signal events (%.6f weighted) and %d background events (%.6f weighted)" % (self.n_signal, self.n_signal_weighted, self.n_background, self.n_background_weighted))
@@ -105,7 +110,7 @@ class PrepHelper():
     def make_train_test_validation_split(self):
         """
         In order to have a consistent way of identifying test/train/validation events
-        in multiple places throughout the workflow (training MVAs, zipping MVA score back 
+        in multiple places throughout the workflow (training MVAs, zipping MVA score back
         into dataframe, optimizing SRs), use the following convention:
         To assign an event to test/train/val, take the decimal digits of its mgg value.
         E.g. 125.342682 -> 342682
@@ -113,7 +118,7 @@ class PrepHelper():
             digits % 3 == 1 : test
             digits % 3 == 2 : validation
 
-        Different test/train splits can be selected later in training for e.g. 
+        Different test/train splits can be selected later in training for e.g.
         optimizing hyperparameters, but this ensures consistency in knowing what is
         train/test/validation throughout the workflow
         """
@@ -127,7 +132,7 @@ class PrepHelper():
         self.y_test = self.y.iloc[idx_test]
         self.weight_test = self.weight.iloc[idx_test]
         self.X_validation = self.X.iloc[idx_validation]
-        self.y_validation = self.y.iloc[idx_validation] 
+        self.y_validation = self.y.iloc[idx_validation]
         self.weight_validation = self.weight.iloc[idx_validation]
 
         self.df.iloc[idx_train, self.df.columns.get_loc("train_label")] = 0
@@ -151,4 +156,4 @@ class PrepHelper():
         self.y_test.to_hdf(self.output, "y_test")
         self.weight_test.to_hdf(self.output, "weight_test")
 
-        return 
+        return

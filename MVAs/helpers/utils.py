@@ -78,8 +78,7 @@ def calc_roc_and_unc(y, pred, sample_weight, n_bootstrap = 10, interp = 10000):
         fprs.append(fpr_b)
         tprs.append(tpr_b)
         aucs.append(auc_b)
-
-    unc = numpy.std(auc)
+    unc = numpy.std(aucs)
     tpr_mean = numpy.mean(tprs, axis=0)
     tpr_unc = numpy.std(tprs, axis=0)
     fpr_mean = numpy.mean(fprs, axis=0)

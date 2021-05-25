@@ -1,5 +1,6 @@
 import awkward
 import numpy
+
 import numba
 
 import selections.selection_utils as utils
@@ -32,16 +33,15 @@ def create_selected_photons(photons, branches, debug):
     return selected_photons
 
 def select_photons(events, photons, options, debug):
-    #cut_diagnostics = utils.ObjectCutDiagnostics(objects = photons, cut_set = "[photon_selections.py : select_photons]", debug = debug)
-    
+
     pt_cut = photons.pt > options["photons"]["pt"]
 
-    eta_cut1 = abs(photons.eta) < options["photons"]["eta"] 
+    eta_cut1 = abs(photons.eta) < options["photons"]["eta"]
     eta_cut2 = abs(photons.eta) < options["photons"]["transition_region_eta"][0]
     eta_cut3 = abs(photons.eta) > options["photons"]["transition_region_eta"][1]
     eta_cut = eta_cut1 & (eta_cut2 | eta_cut3)
 
-    idmva_cut = photons.mvaID > options["photons"]["idmva_cut"] 
+    idmva_cut = photons.mvaID > options["photons"]["idmva_cut"]
     eveto_cut = photons.electronVeto >= options["photons"]["eveto_cut"]
     photon_cut = pt_cut & eta_cut & idmva_cut & eveto_cut
 
@@ -53,6 +53,8 @@ def set_photons(events, photons, debug):
     events["sublead_pho_ptmgg"] = photons.pt[:,1] / events.gg_mass
     events["lead_pho_eta"] = photons.eta[:,0]
     events["sublead_pho_eta"] = photons.eta[:,1]
+    events["lead_pho_phi"] = photons.phi[:,0]
+    events["sublead_pho_phi"] = photons.phi[:,1]
     events["lead_pho_idmva"] = photons.mvaID[:,0]
     events["sublead_pho_idmva"] = photons.mvaID[:,1]
     events["lead_pixelSeed"] = photons.pixelSeed[:,0]

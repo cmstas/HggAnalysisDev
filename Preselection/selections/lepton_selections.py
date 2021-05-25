@@ -1,6 +1,4 @@
 import awkward
-import numpy
-import numba
 
 import selections.selection_utils as utils
 import selections.object_selections as object_selections
@@ -20,7 +18,7 @@ def select_electrons(events, photons, electrons, options, debug):
     id_cut = electron_id(electrons, options)
     dR_cut = object_selections.select_deltaR(events, electrons, photons, options["electrons"]["dR_pho"], debug)
     mZ_cut = object_selections.select_mass(events, electrons, photons, options["electrons"]["mZ_cut"], debug)
-    
+
 
     electron_cut = pt_cut & eta_cut & ip_xy_cut & ip_z_cut & id_cut & dR_cut & mZ_cut
 
@@ -82,7 +80,7 @@ def set_muons(events, muons, debug):
     events["muon1_phi"] = muon_phi_padded[:,0]
     events["muon2_phi"] = muon_phi_padded[:,1]
     events["muon1_mass"] = muon_mass_padded[:,0]
-    events["muon2_mass"] = muon_mass_padded[:,1] 
+    events["muon2_mass"] = muon_mass_padded[:,1]
     events["muon1_tightId"] = muon_tightID_padded[:,0]
     events["muon2_tightId"] = muon_tightID_padded[:,1]
 
@@ -99,7 +97,7 @@ def electron_id(electrons, options):
 
 def muon_id(muons, options):
     if options["electrons"]["id"] == "hh":
-        iso_cut = muons.pfRelIso03_all < options["muons"]["rel_iso"] 
+        iso_cut = muons.pfRelIso03_all < options["muons"]["rel_iso"]
         id_cut = muons.pt > 0 # dummy selection, TODO: update muon id for hh->ggtautau
         cut = iso_cut & id_cut
     elif options["electrons"]["id"] == "hig_19_013":
@@ -108,5 +106,3 @@ def muon_id(muons, options):
         track_purity = muons.highPurity == True
         cut = iso_cut & id_cut & track_purity
     return cut
-
-#TODO: implement varying definitions for leptons (e.g. "Loose", "Medium", "Tight") 
