@@ -156,11 +156,11 @@ logs/
 =======
 # output dirs
 */output/
-*/output/*
+*/*/output/
 
 # Plots and tables
-*/plots_and_tables/*.pdf
-*/plots_and_tables/*.pkl
+*/plots_and_tables/*/*.pdf
+*/plots_and_tables/*/*.pkl
 
 # ttH optimization output
 */*results*/*
