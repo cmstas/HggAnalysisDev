@@ -130,6 +130,7 @@ class Plotter:
     def run(self):
         self.preprocess()
         self.fill_hists()
+        self.make_tables()
         self.make_plots()
         return
 
@@ -177,9 +178,10 @@ class Plotter:
             for process in self.plot_options[branch]["processes"]:
                 if branch not in self.master_dataframe[process].columns:
                     print(
-                        "[plotter.py] {} not found in the dataframe. Skipping..\
+                        "[plotter.py] {} not found in the dataframe, you can choose from {} \\ Skipping..\
                                 .".format(
-                            branch
+                            branch,
+                            self.master_dataframe[process].columns
                         )
                     )
                     del self.histograms[branch]
@@ -403,13 +405,12 @@ class Plotter:
             if self.save_filenames:
                 plt.savefig(self.save_filenames[idx])
             elif "output_name" in self.plot_options[branch].keys():
-                plt.savefig(self.plot_options[branch]["output_name"])
-                if self.debug:
-                    print(
-                        "[plotter.py] Saved plot at {}".format(
-                            self.plot_options[branch]["output_name"]
+                for outname in self.plot_options[branch]["output_name"]:
+                    plt.savefig(outname)
+                    if self.debug:
+                        print("[plotter.py] Saved plot at {}".format(
+                            outname)
                         )
-                    )
             else:
                 plt.savefig("plot_{}.pdf".format(branch))
                 if self.debug:
