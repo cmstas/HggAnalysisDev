@@ -6,7 +6,7 @@ import random
 
 from helpers import utils
 
-class RegressionPrepHelper():
+class PrepHelper():
     """
     Class to read events in from an ntuple and perform necessary
     preprocessing, sample labeling, etc and then write them
@@ -24,7 +24,6 @@ class RegressionPrepHelper():
 
         with open(self.input.replace(".pkl", ".json"), "r") as f_in:
             self.input_config = json.load(f_in)
-        self.make_process_id_map()
 
         with open(self.config_file, "r") as f_in:
             self.config = json.load(f_in)
@@ -34,9 +33,20 @@ class RegressionPrepHelper():
             print("[PrepHelper] Loaded file %s, containing %d events" % (self.input, len(self.df)))
 
     def run(self):
+        self.preprocess()
         self.make_train_test_validation_split() # shuffling happens here
         self.write_hdf5()
         return
+
+    def preprocess(self):
+        # eliminate -1 category
+        self.df = self.df.loc[self.df["Category_pairsLoose"] != -1].reset_index(drop=True)
+        # one hot encoding of category : category 1 is all zeros, and then we proceed
+        for i in range(1,6):
+            self.df["Category_onehot_{}".format(i)] = np.zeros(len(self.df))
+
+        for i in range(2,7):
+            self.df.loc[self.df["Category_pairsLoose"] == i,"Category_onehot_{}".format(i-1)] = 1
 
     def make_train_test_validation_split(self):
         # mark events as train/val/test - 75% train, 15% val, 10% test
@@ -47,7 +57,7 @@ class RegressionPrepHelper():
         idx_validation = None
         idx_test =None
         for mass in gen_higgs_masses:
-            tempDF = self.df.loc[df["gen_higgs_mass"] == mass]
+            tempDF = self.df.loc[self.df["gen_higgs_mass"] == mass]
             tempIndices = tempDF.index
             if idx_train is None:
                 idx_train = tempIndices[:int(0.75 * len(tempDF))]
@@ -58,6 +68,7 @@ class RegressionPrepHelper():
                 idx_test = idx_test.append(tempIndices[int(0.75 * len(tempDF)):int(0.9 * len(tempDF))])
                 idx_validation = idx_validation.append(tempIndices[int(0.9 * len(tempDF)):])
 
+        self.df["train_label"] = np.zeros(len(self.df))
         self.df.iloc[idx_train, self.df.columns.get_loc("train_label")] = 0
         self.df.iloc[idx_test, self.df.columns.get_loc("train_label")] = 1
         self.df.iloc[idx_validation, self.df.columns.get_loc("train_label")] = 2

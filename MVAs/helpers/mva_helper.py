@@ -40,7 +40,6 @@ class MVAHelper():
 
     def evaluate(self, weight_file):
         self.load_events()
-        if config
         self.load_weights(weight_file)
         self.predict()
         self.evaluate_performance()

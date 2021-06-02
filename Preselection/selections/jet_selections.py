@@ -29,7 +29,7 @@ def select_jets(events, photons, electrons, muons, taus, jets, options, debug):
     else:
          jet_cut = pt_cut & eta_cut & dR_ele_cut & dR_muon_cut & dR_tau_cut & id_cut
 
-        cut_diagnostics.add_cuts([pt_cut, eta_cut, dR_ele_cut, dR_muon_cut, dR_tau_cut, id_cut, jet_cut], ["pt > 25", "|eta| < 2.4", "dR_electrons", "dR_muons", "dR_taus", "loose jet ID", "all"])
+         cut_diagnostics.add_cuts([pt_cut, eta_cut, dR_ele_cut, dR_muon_cut, dR_tau_cut, id_cut, jet_cut], ["pt > 25", "|eta| < 2.4", "dR_electrons", "dR_muons", "dR_taus", "loose jet ID", "all"])
    
     return jet_cut
 

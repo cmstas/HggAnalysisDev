@@ -18,15 +18,15 @@ def select_electrons(events, photons, electrons, options, debug):
     id_cut = electron_id(electrons, options)
     if "dR_pho" in options["electrons"].keys():    # Accommodation for HTauTau which does not have photons
         dR_cut = object_selections.select_deltaR(events, electrons, photons, options["electrons"]["dR_pho"], debug)
-    mZ_cut = object_selections.select_mass(events, electrons, photons, options["electrons"]["mZ_cut"], debug)
+        mZ_cut = object_selections.select_mass(events, electrons, photons, options["electrons"]["mZ_cut"], debug)
 
 
     if "dR_pho" in options["electrons"].keys():
         electron_cut = pt_cut & eta_cut & ip_xy_cut & ip_z_cut & id_cut & dR_cut & mZ_cut
         cut_diagnostics.add_cuts([pt_cut, eta_cut, ip_xy_cut, ip_z_cut, id_cut, dR_cut, mZ_cut, electron_cut], ["pt", "eta", "ip_xy", "ip_z", "id", "dR", "m_egamma not in m_Z +/- 5 Gev", "all"])
     else:
-        electron_cut = pt_cut & eta_cut & ip_xy_cut & ip_z_cut & id_cut & mZ_cut
-        cut_diagnostics.add_cuts([pt_cut, eta_cut, ip_xy_cut, ip_z_cut, id_cut, mZ_cut, electron_cut], ["pt", "eta", "ip_xy", "ip_z", "id", "m_egamma not in m_Z +/- 5 Gev", "all"])
+        electron_cut = pt_cut & eta_cut & ip_xy_cut & ip_z_cut & id_cut 
+        cut_diagnostics.add_cuts([pt_cut, eta_cut, ip_xy_cut, ip_z_cut, id_cut, electron_cut], ["pt", "eta", "ip_xy", "ip_z", "id", "m_egamma not in m_Z +/- 5 Gev", "all"])
 
 
     return electron_cut

@@ -135,7 +135,7 @@ def set_visible_columns(events):
     decay_2_pt[selection] = events[selection].tau2_pt
     decay_2_eta[selection] = events[selection].tau2_eta
     decay_2_phi[selection] = events[selection].tau2_phi
-    decay_2_mass[selection] = numpy.ones(events[selection]) * (1.77686)
+    decay_2_mass[selection] = numpy.ones(len(events[selection])) * (1.77686)
     decay_2_pdgId[selection] = 15 * events.tau2_charge[selection]
 
     selection = (events.Category_pairsLoose == 1) & (events.muon1_charge * events.tau1_charge < 0)
@@ -277,13 +277,22 @@ def set_collinear_mass(events):
     phi = events["MET_phi"]
     phi1 = events["decay_1_phi"]
     phi2 = events["decay_2_phi"]
-    MET = events["MET"]
+    MET = events["MET_pt"]
     denom = numpy.cos(phi1) * numpy.sin(phi2) - numpy.sin(phi1) * numpy.cos(phi2)
-    MET_1 = MET * (numpy.cos(phi) * numpy.sin(phi2) - numpy.sin(phi) * numpy.cos(phi2))/denom
-    MET_2 = MET * (numpy.cos(phi1) * numpy.sin(phi) - numpy.sin(phi1) * numpy.cos(phi))/denom
-    x1 = events["decay_1_pt"]/(events["decay_1_pt"] + MET_1)
-    x2 = events["decay_2_pt"]/(events["decay_2_pt"] + MET_2)
-    events["m_tautau_collinear"] = events["m_tautau_vis"]/(numpy.sqrt(x1 * x2))
+    m_tautau_collinear = numpy.zeros(len(events))
+    m_tautau_collinear[denom == 0] = events["m_tautau_vis"][denom == 0]
+
+    phi = phi[denom != 0] 
+    phi1 = phi1[denom != 0]
+    phi2 = phi2[denom != 0]
+    MET = MET[denom != 0]
+    # Very unreliable estimator!
+    MET_1 = abs(MET * (numpy.cos(phi) * numpy.sin(phi2) - numpy.sin(phi) * numpy.cos(phi2))/denom[denom != 0])
+    MET_2 = abs(MET * (numpy.cos(phi1) * numpy.sin(phi) - numpy.sin(phi1) * numpy.cos(phi))/denom[denom != 0])
+    x1 = events["decay_1_pt"][denom != 0]/(events["decay_1_pt"][denom != 0] + MET_1)
+    x2 = events["decay_2_pt"][denom != 0]/(events["decay_2_pt"][denom != 0] + MET_2)
+    m_tautau_collinear[denom != 0] = events["m_tautau_vis"][denom != 0]/(numpy.sqrt(x1 * x2))
+    events["m_tautau_collinear"] = m_tautau_collinear
     return events
 
 

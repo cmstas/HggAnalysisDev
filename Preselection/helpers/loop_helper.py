@@ -238,12 +238,12 @@ class LoopHelper():
         events_and_objects = {}
 
         if "singleH" in self.selections:
-            if "nanoAOD" in selections:
+            if "nanoAOD" in self.selections:
                 category = None
             else:
                 category = diphoton_events.Category_pairsLoose
 
-            selected_events = analysis_selections.HTauTau_inclusive_preselection(diphoton_events, diphoton_events.Electron, diphoton_events.Muon, diphoton_events.Tau, diphoton_events.Jets, diphoton_events.GenPart, category, options, self.debug)
+            selected_events = analysis_selections.HTauTau_inclusive_preselection(diphoton_events, diphoton_events.Electron, diphoton_events.Muon, diphoton_events.Tau, diphoton_events.Jet, diphoton_events.GenPart, category, options, self.debug)
 
 
         elif "HHggTauTau_InclusivePresel" in self.selections:
