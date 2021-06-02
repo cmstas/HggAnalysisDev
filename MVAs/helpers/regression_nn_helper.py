@@ -14,10 +14,7 @@ class NNHelper():
         self.config = kwargs.get("config")
         self.output_tag = kwargs.get("output_tag", "")
         self.debug = kwargs.get("debug")
-        self.load_from_disk = kwargs.get("load_from_disk")
         self.made_tensor = False
-        if self.load_from_disk:
-            keras.models.load_model("outputs/{}_model.h5")
         else:
             # self.model = self.init_network()
             self.model = regression_model.TauRegressionModel(self.config["mva"])
@@ -123,3 +120,7 @@ class NNHelper():
     def save_model(self):
         """ Save weights"""
         self.model_save("outputs/{}_model.h5")
+
+    def load_model(self, model_file):
+        self.model = keras.models.load_model("outputs/{}_model.h5")
+

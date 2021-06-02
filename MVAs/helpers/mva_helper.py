@@ -27,22 +27,32 @@ class MVAHelper():
             print("[MVAHelper] Creating MVAHelper instance with options:")
             print("\n".join(["{0}={1!r}".format(a, b) for a, b in kwargs.items()]))
 
+
     def run(self):
-        self.load_events()
-        self.train()
-        self.predict()
         if self.config["mva"]["type"] == "binary_classification_bdt":
+            self.load_events()
+            self.train()
+            self.predict()
             self.evaluate_performance()
             self.save_weights()
         elif self.config["mva"]["type"] == "regression_neural_network":
-            self.evaluate_regressiion_performance()
+            self.load_regression_events()
+            self.train()
+            self.predict()
+            self.evaluate_regression_performance()
             self.save_model()
 
-    def evaluate(self, weight_file):
-        self.load_events()
-        self.load_weights(weight_file)
-        self.predict()
-        self.evaluate_performance()
+    def evaluate(self, model_file):
+        if self.config["mva"]["type"] == "binary_classification_bdt":
+            self.load_events()
+            self.load_weights(weight_file)
+            self.predict()
+            self.evaluate_performance()
+        elif self.config["mva"]["type"] == "regression_neural_network":
+            self.load_regression_events()
+            self.load_model(model_file)
+            self.predict()
+            self.evaluate_regression_performance()
 
     def load_events(self):
         self.events = {}
@@ -58,6 +68,18 @@ class MVAHelper():
                     print("[MVAHelper] For set: %s and label: %s, loaded %.6f (%d) weighted (raw) events" % (split, label, self.events[split]["n_%s_weighted" % label], self.events[split]["n_%s_raw" % label]))
 
         return
+
+
+    def load_regression_events(self):
+        self.events = {}
+        for split in ["train", "test"]:
+            self.events[split] = {}
+            for data in ["X","y"]:
+                self.events[split][data] = pandas.read_hdf(self.input, "%s_%s" % (data, split))
+
+            if self.debug > 0:
+                print("Loaded {} {} events".format(len(self.events[split]["X"], split)))
+
 
     def initialize_train_helper(self):
         if self.config["mva"]["type"] == "binary_classification_bdt":
@@ -80,6 +102,10 @@ class MVAHelper():
         self.initialize_train_helper()
         self.mva = self.train_helper.load_weights(weight_file)
         return
+
+    def load_model(self, model_file):
+        self.initialize_train_helper()
+        self.mva = self.train_helper.load_model(model_file)
 
     def train(self):
         self.initialize_train_helper()
