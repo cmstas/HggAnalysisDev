@@ -18,13 +18,17 @@ def select_taus(events, photons, muons, electrons, taus, options, debug):
     id_muon_cut = taus.idDeepTau2017v2p1VSmu >= options["taus"]["DeepTau_vs_mu"]
     id_jet_cut = taus.idDeepTau2017v2p1VSjet >= options["taus"]["DeepTau_vs_jet"]
 
-    dR_pho_cut = object_selections.select_deltaR(events, taus, photons, options["taus"]["dR_pho"], debug)
     dR_muon_cut = object_selections.select_deltaR(events, taus, muons, options["taus"]["dR_lep"], debug)
     dR_ele_cut = object_selections.select_deltaR(events, taus, electrons, options["taus"]["dR_lep"], debug)
+    if "dR_pho" in options["taus"].keys():
+        dR_pho_cut = object_selections.select_deltaR(events, taus, photons, options["taus"]["dR_pho"], debug)
 
-    tau_cut = pt_cut & eta_cut & decay_mode_cut & dz_cut & id_electron_cut & id_muon_cut & id_jet_cut & dR_pho_cut & dR_muon_cut & dR_ele_cut
+        tau_cut = pt_cut & eta_cut & decay_mode_cut & dz_cut & id_electron_cut & id_muon_cut & id_jet_cut & dR_pho_cut & dR_muon_cut & dR_ele_cut
+        cut_diagnostics.add_cuts([pt_cut, eta_cut, decay_mode_cut, dz_cut, id_electron_cut, id_muon_cut, id_jet_cut, dR_pho_cut, dR_muon_cut, dR_ele_cut, tau_cut], ["pt", "eta", "decay mode", "dz", "DeepTau vs ele", "DeepTau vs mu", "DeepTau vs jet", "dR tau vs. pho", "dR tau vs. muon", "dR tau vs. ele", "all"])
+    else:
+        tau_cut = pt_cut & eta_cut & decay_mode_cut & dz_cut & id_electron_cut & id_muon_cut & id_jet_cut & dR_muon_cut & dR_ele_cut
+        cut_diagnostics.add_cuts([pt_cut, eta_cut, decay_mode_cut, dz_cut, id_electron_cut, id_muon_cut, id_jet_cut, dR_muon_cut, dR_ele_cut, tau_cut], ["pt", "eta", "decay mode", "dz", "DeepTau vs ele", "DeepTau vs mu", "DeepTau vs jet", "dR tau vs. muon", "dR tau vs. ele", "all"])
 
-    cut_diagnostics.add_cuts([pt_cut, eta_cut, decay_mode_cut, dz_cut, id_electron_cut, id_muon_cut, id_jet_cut, dR_pho_cut, dR_muon_cut, dR_ele_cut, tau_cut], ["pt", "eta", "decay mode", "dz", "DeepTau vs ele", "DeepTau vs mu", "DeepTau vs jet", "dR tau vs. pho", "dR tau vs. muon", "dR tau vs. ele", "all"])
 
     return tau_cut
 

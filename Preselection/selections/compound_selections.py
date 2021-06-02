@@ -110,6 +110,29 @@ def set_category(events):
 
     return a
 
+
+def set_visible_columns(events):
+
+   # using fancy vector package for this
+    
+    events["decay_1_pt"]
+    events["decay_1_eta"]
+    events["decay_1_phi"]
+    events["decay_1_energy"]
+    events["decay_1_mass"]
+    
+    events["decay_2_pt"]
+    events["decay_2_eta"]
+    events["decay_2_phi"]
+    events["decay_2_energy"]
+    events["decay_2_mass"]
+    
+    events["m_tautau_vis"]
+
+def set_collinear_mass(events):
+
+    # since the  
+
 @numba.njit
 def mapMotherToDaughter(goodMotherIndices, allMotherIndices):
     """Finds the indices of the daughters such that the mothers are a part of the goodMotherIndices array

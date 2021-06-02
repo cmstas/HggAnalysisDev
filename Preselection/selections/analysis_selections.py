@@ -17,6 +17,7 @@ def HTauTau_inclusive_preselection(events, electrons, muons, taus, jets, genPart
     cut_diagnostics = utils.CutDiagnostics(events = events, debug = debug, cut_set = "[analysis_selections.py : HTauTau_inclusive_preselection]")
 
      # Get number of electrons, muons, taus
+    photons = None  # dummy variable
     selected_electrons = electrons[lepton_selections.select_electrons(events, photons, electrons, options, debug)]
     selected_muons = muons[lepton_selections.select_muons(events, photons, muons, options, debug)]
     selected_taus = taus[tau_selections.select_taus(events, photons, selected_muons, selected_electrons, taus, options, debug)]
@@ -59,6 +60,10 @@ def HTauTau_inclusive_preselection(events, electrons, muons, taus, jets, genPart
         selected_events["Category_pairsLoose"] = compound_selections.set_category(selected_events)
     else:
         selected_events["Category_pairsLoose_custom"] = compound_selections.set_category(selected_events)
+    
+    # setting the visible branches for easy access
+    selected_events = compound_selections.set_visible_columns(selected_events) 
+    selected_events = compound_selections.set_collinear_mass(selected_events)
 
     genPart = genPart[all_cuts]
     selected_events = gen_selections.gen_higgs_mass(selected_events, genPart, options, debug)

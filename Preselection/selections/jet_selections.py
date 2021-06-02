@@ -10,10 +10,11 @@ def select_jets(events, photons, electrons, muons, taus, jets, options, debug):
 
     pt_cut = jets.pt > options["jets"]["pt"]
     eta_cut = abs(jets.eta) < options["jets"]["eta"]
-
-    dR_pho_cut = object_selections.select_deltaR(events, jets, photons, options["jets"]["dR_pho"], debug)
+    
     dR_ele_cut = object_selections.select_deltaR(events, jets, electrons, options["jets"]["dR_lep"], debug)
     dR_muon_cut = object_selections.select_deltaR(events, jets, muons, options["jets"]["dR_lep"], debug)
+    if "dR_pho" in options["jets"].keys():
+        dR_pho_cut = object_selections.select_deltaR(events, jets, photons, options["jets"]["dR_pho"], debug)
 
     if taus is not None:
         dR_tau_cut = object_selections.select_deltaR(events, jets, taus, options["jets"]["dR_tau"], debug)
@@ -21,11 +22,15 @@ def select_jets(events, photons, electrons, muons, taus, jets, options, debug):
         dR_tau_cut = object_selections.select_deltaR(events, jets, photons, 0.0, debug) # dummy cut of all True
 
     id_cut = jet_id(jets, options)
+    if "dR_pho" in options["jets"].keys():
+        jet_cut = pt_cut & eta_cut & dR_pho_cut & dR_ele_cut & dR_muon_cut & dR_tau_cut & id_cut
 
-    jet_cut = pt_cut & eta_cut & dR_pho_cut & dR_ele_cut & dR_muon_cut & dR_tau_cut & id_cut
+        cut_diagnostics.add_cuts([pt_cut, eta_cut, dR_pho_cut, dR_ele_cut, dR_muon_cut, dR_tau_cut, id_cut, jet_cut], ["pt > 25", "|eta| < 2.4", "dR_photons", "dR_electrons", "dR_muons", "dR_taus", "loose jet ID", "all"])
+    else:
+         jet_cut = pt_cut & eta_cut & dR_ele_cut & dR_muon_cut & dR_tau_cut & id_cut
 
-    cut_diagnostics.add_cuts([pt_cut, eta_cut, dR_pho_cut, dR_ele_cut, dR_muon_cut, dR_tau_cut, id_cut, jet_cut], ["pt > 25", "|eta| < 2.4", "dR_photons", "dR_electrons", "dR_muons", "dR_taus", "loose jet ID", "all"])
-    
+        cut_diagnostics.add_cuts([pt_cut, eta_cut, dR_ele_cut, dR_muon_cut, dR_tau_cut, id_cut, jet_cut], ["pt > 25", "|eta| < 2.4", "dR_electrons", "dR_muons", "dR_taus", "loose jet ID", "all"])
+   
     return jet_cut
 
 
