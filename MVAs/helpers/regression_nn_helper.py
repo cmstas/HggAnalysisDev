@@ -2,6 +2,7 @@ from tensorflow import keras
 from tensorflow.keras import layers
 import tensorflow
 import numpy
+import sys
 
 from . import logger
 from . import regression_model
@@ -33,6 +34,9 @@ class NNHelper():
         model = keras.Sequential()
         model.add(layers.InputLayer(input_shape=(n_input,)))
         for i in range(1, n_hidden):
+            if "layer_{}" not in self.config["mva"]["param"].keys():
+                print("Not enough layers!!!")
+                sys.exit(3)
             layer_info = self.config["mva"]["param"]["layer_{}".format(i)]
             n_neurons = layer_info["n_neurons"]
             if "activation" not in layer_info.keys():
@@ -54,7 +58,7 @@ class NNHelper():
             self.model.summary()
         n_max_epochs = self.config["mva"]["n_max_epochs"]
         if self.config["mva"]["early_stopping"]:
-            n_early_stopping = self.config["mva"]["early_stopping_roungs"]
+            n_early_stopping = self.config["mva"]["early_stopping_rounds"]
             print("[DNNHelper] Early stopping with {} rounds ({} maximum)".format(n_early_stopping, n_max_epochs))
         else:
             print("[DNNHelper] Training for {} (no early stopping)".format(n_max_epochs))

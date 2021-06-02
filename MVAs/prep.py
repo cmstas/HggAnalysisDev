@@ -1,7 +1,6 @@
 import argparse
 
-from helpers import prep_helper
-
+from helpers import prep_helper, regression_prep_helper
 """
 This script writes events to an hdf5 file for BDT/DNN training.
 """
@@ -32,7 +31,18 @@ parser.add_argument(
     default = "output/test.hdf5"
 )
 
+parser.add_argument(
+        "--type",
+        help = "type of network (0 for BDT, 1 for regression DNN)",
+        type = int,
+        default = 0
+        )
+
 args = parser.parse_args()
 
-prepper = prep_helper.PrepHelper(**vars(args))
+if args.type == 1:
+    prepper = regression_prep_helper.PrepHelper(**vars(args))
+else:
+    prepper = prep_helper.PrepHelper(**vars(args))
+
 prepper.run()
