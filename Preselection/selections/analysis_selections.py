@@ -28,9 +28,12 @@ def HTauTau_inclusive_preselection(events, electrons, muons, taus, jets, genPart
 
     # Require >= 1 lep/tau
     n_leptons_and_taus = n_electrons + n_muons + n_taus
+    # reviving old cut
+    lep_tau_cut = n_leptons_and_taus >= options["n_leptons_and_taus"]
 
     # only events with hadronic taus (no leptonic taus!!!!!!!!!!)
-    atleast_one_had_tau_cut = (n_taus >= 1)
+    #atleast_one_had_tau_cut = (n_taus >= 1)
+
     # Require OS leptons/taus for events with 2 leptons/taus
     sum_charge = awkward.sum(selected_electrons.charge, axis=1) + awkward.sum(selected_muons.charge, axis=1) + awkward.sum(selected_taus.charge, axis=1)
     charge_cut = sum_charge == 0
@@ -41,8 +44,10 @@ def HTauTau_inclusive_preselection(events, electrons, muons, taus, jets, genPart
     # Select jets (don't cut on jet quantities for selection, but they will be useful for BDT training)
     selected_jets = jets[jet_selections.select_jets(events, photons, selected_electrons, selected_muons, selected_taus, jets, options, debug)]
 
-    all_cuts = os_cut & atleast_one_had_tau_cut
-    cut_diagnostics.add_cuts([atleast_one_had_tau_cut, os_cut, all_cuts], ["N_taus >= 1", "OS dileptons", "all"])
+    all_cuts = os_cut & lep_tau_cut
+#  cut_diagnostics.add_cuts([atleast_one_had_tau_cut, os_cut, all_cuts], ["N_taus >= 1", "OS dileptons", "all"])
+    cut_diagnostics.add_cuts([lep_tau_cut, os_cut, all_cuts], ["N_taus + N_leptons >= 1", "OS dileptons", "all"])
+
 
     # Keep only selected events
     selected_events = events[all_cuts]
@@ -60,9 +65,9 @@ def HTauTau_inclusive_preselection(events, electrons, muons, taus, jets, genPart
         selected_events["Category_pairsLoose"] = compound_selections.set_category(selected_events)
     else:
         selected_events["Category_pairsLoose_custom"] = compound_selections.set_category(selected_events)
-    
+
     # setting the visible branches for easy access
-    selected_events = compound_selections.set_visible_columns(selected_events) 
+    selected_events = compound_selections.set_visible_columns(selected_events)
     selected_events = compound_selections.set_collinear_mass(selected_events)
 
     genPart = genPart[all_cuts]
@@ -95,7 +100,7 @@ def ggTauTau_inclusive_preselection(events, photons, electrons, muons, taus, jet
     n_leptons_and_taus = n_electrons + n_muons + n_taus
 
     # only events with hadronic taus (no leptonic taus!!!!!!!!!!)
-    atleast_one_had_tau_cut = (n_taus >= 1)
+    # atleast_one_had_tau_cut = (n_taus >= 1)
     # Require OS leptons/taus for events with 2 leptons/taus
     sum_charge = awkward.sum(selected_electrons.charge, axis=1) + awkward.sum(selected_muons.charge, axis=1) + awkward.sum(selected_taus.charge, axis=1)
     charge_cut = sum_charge == 0

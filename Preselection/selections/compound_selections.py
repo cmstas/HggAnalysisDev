@@ -112,26 +112,180 @@ def set_category(events):
 
 
 def set_visible_columns(events):
+    decay_1_pt = numpy.zeros(len(events))
+    decay_1_eta = numpy.zeros(len(events))
+    decay_1_phi = numpy.zeros(len(events))
+    decay_1_mass = numpy.zeros(len(events))
+    decay_1_pdgId = numpy.zeros(len(events))
+
+    decay_2_pt = numpy.zeros(len(events))
+    decay_2_eta = numpy.zeros(len(events))
+    decay_2_phi = numpy.zeros(len(events))
+    decay_2_mass = numpy.zeros(len(events))
+    decay_2_pdgId = numpy.zeros(len(events))
+
+    # if conditions - giant wall of text!
+    selection = events.Category_pairsLoose == 3
+    decay_1_pt[selection] = events[selection].tau1_pt
+    decay_1_eta[selection] = events[selection].tau1_eta
+    decay_1_phi[selection] = events[selection].tau1_phi
+    decay_1_mass[selection] = numpy.ones(len(events[selection])) * (1.77686)
+    decay_1_pdgId[selection] = 15 * events.tau1_charge[selection]
+
+    decay_2_pt[selection] = events[selection].tau2_pt
+    decay_2_eta[selection] = events[selection].tau2_eta
+    decay_2_phi[selection] = events[selection].tau2_phi
+    decay_2_mass[selection] = numpy.ones(events[selection]) * (1.77686)
+    decay_2_pdgId[selection] = 15 * events.tau2_charge[selection]
+
+    selection = (events.Category_pairsLoose == 1) & (events.muon1_charge * events.tau1_charge < 0)
+
+    decay_1_pt[selection] = events[selection].muon1_pt
+    decay_1_eta[selection] = events[selection].muon1_eta
+    decay_1_phi[selection] = events[selection].muon1_phi
+    decay_1_mass[selection] = numpy.ones(len(events[selection])) * (0.105658)
+    decay_1_pdgId[selection] = 13 * events.muon1_charge[selection]
+
+    decay_2_pt[selection] = events[selection].tau1_pt
+    decay_2_eta[selection] = events[selection].tau1_eta
+    decay_2_phi[selection] = events[selection].tau1_phi
+    decay_2_mass[selection] = numpy.ones(len(events[selection])) * (1.77686)
+    decay_2_pdgId[selection] = 15 * events.tau1_charge[selection]
+
+    selection = (events.Category_pairsLoose == 1) & (events.muon1_charge * events.tau2_charge < 0) & (events.muon1_charge * events.tau1_charge >= 0)
+
+    decay_1_pt[selection] = events[selection].muon1_pt
+    decay_1_eta[selection] = events[selection].muon1_eta
+    decay_1_phi[selection] = events[selection].muon1_phi
+    decay_1_mass[selection] = numpy.ones(len(events[selection])) * (0.105658)
+    decay_1_pdgId[selection] = 13 * events.muon1_charge[selection]
+
+    decay_2_pt[selection] = events[selection].tau2_pt
+    decay_2_eta[selection] = events[selection].tau2_eta
+    decay_2_phi[selection] = events[selection].tau2_phi
+    decay_2_mass[selection] = numpy.ones(len(events[selection])) * (1.77686)
+    decay_2_pdgId[selection] = 15 * events.tau2_charge[selection]
+
+    selection = (events.Category_pairsLoose == 2) & (events.ele1_charge * events.tau1_charge < 0)
+    decay_1_pt[selection] = events[selection].ele1_pt
+    decay_1_eta[selection] = events[selection].ele1_eta
+    decay_1_phi[selection] = events[selection].ele1_phi
+    decay_1_mass[selection] = numpy.ones(len(events[selection])) * (0.000511)
+    decay_1_pdgId[selection] = 11 * events.ele1_charge[selection]
+
+    decay_2_pt[selection] = events[selection].tau1_pt
+    decay_2_eta[selection] = events[selection].tau1_eta
+    decay_2_phi[selection] = events[selection].tau1_phi
+    decay_2_mass[selection] = numpy.ones(len(events[selection])) * (1.77686)
+    decay_2_pdgId[selection] = 15 * events.tau1_charge[selection]
+
+    selection = (events.Category_pairsLoose == 2) & (events.ele1_charge * events.tau2_charge < 0) & (events.ele1_charge * events.tau1_charge >= 0)
+
+    decay_1_pt[selection] = events[selection].ele1_pt
+    decay_1_eta[selection] = events[selection].ele1_eta
+    decay_1_phi[selection] = events[selection].ele1_phi
+    decay_1_mass[selection] = numpy.ones(len(events[selection])) * (0.000511)
+    decay_1_pdgId[selection] = 11 * events.ele1_charge[selection]
+
+    decay_2_pt[selection] = events[selection].tau2_pt
+    decay_2_eta[selection] = events[selection].tau2_eta
+    decay_2_phi[selection] = events[selection].tau2_phi
+    decay_2_mass[selection] = numpy.ones(len(events[selection])) * (1.77686)
+    decay_2_pdgId[selection] = 15 * events.tau2_charge[selection]
+
+    selection = events.Category_pairsLoose == 5
+
+    decay_1_pt[selection] = events[selection].ele1_pt
+    decay_1_eta[selection] = events[selection].ele1_eta
+    decay_1_phi[selection] = events[selection].ele1_phi
+    decay_1_mass[selection] = numpy.ones(len(events[selection])) * (0.000511)
+    decay_1_pdgId[selection] = 11 * events.ele1_charge[selection]
+
+    decay_2_pt[selection] = events[selection].ele2_pt
+    decay_2_eta[selection] = events[selection].ele2_eta
+    decay_2_phi[selection] = events[selection].ele2_phi
+    decay_2_mass[selection] = numpy.ones(len(events[selection])) * (0.000511)
+    decay_2_pdgId[selection] = 11 * events.ele2_charge[selection]
+
+    selection = events.Category_pairsLoose == 4
+
+    decay_1_pt[selection] = events[selection].muon1_pt
+    decay_1_eta[selection] = events[selection].muon1_eta
+    decay_1_phi[selection] = events[selection].muon1_phi
+    decay_1_mass[selection] = numpy.ones(len(events[selection])) * (0.105658)
+    decay_1_pdgId[selection] = 13 * events.muon1_charge[selection]
+
+    decay_2_pt[selection] = events[selection].muon2_pt
+    decay_2_eta[selection] = events[selection].muon2_eta
+    decay_2_phi[selection] = events[selection].muon2_phi
+    decay_2_mass[selection] = numpy.ones(len(events[selection])) * (0.105658)
+    decay_2_pdgId[selection] = 13 * events.muon2_charge[selection]
+
+    selection = (events.Category_pairsLoose == 6) & (events.muon1_charge * events.ele1_charge < 0)
+    decay_1_pt[selection] = events[selection].muon1_pt
+    decay_1_eta[selection] = events[selection].muon1_eta
+    decay_1_phi[selection] = events[selection].muon1_phi
+    decay_1_mass[selection] = numpy.ones(len(events[selection])) * (0.105658)
+    decay_1_pdgId[selection] = 13 * events.muon1_charge[selection]
+
+    decay_2_pt[selection] = events[selection].ele1_pt
+    decay_2_eta[selection] = events[selection].ele1_eta
+    decay_2_phi[selection] = events[selection].ele1_phi
+    decay_2_mass[selection] = numpy.ones(len(events[selection])) * (0.000511)
+    decay_2_pdgId[selection] = 11 * events.ele1_charge[selection]
+
+
+    selection = (events.Category_pairsLoose == 6) & (events.muon1_charge * events.ele2_charge < 0) & (events.muon1_charge * events.ele1_charge >= 0)
+
+    decay_1_pt[selection] = events[selection].muon1_pt
+    decay_1_eta[selection] = events[selection].muon1_eta
+    decay_1_phi[selection] = events[selection].muon1_phi
+    decay_1_mass[selection] = numpy.ones(len(events[selection])) * (0.105658)
+    decay_1_pdgId[selection] = 13 * events.muon1_charge[selection]
+
+    decay_2_pt[selection] = events[selection].ele2_pt
+    decay_2_eta[selection] = events[selection].ele2_eta
+    decay_2_phi[selection] = events[selection].ele2_phi
+    decay_2_mass[selection] = numpy.ones(len(events[selection])) * (0.000511)
+    decay_2_pdgId[selection] = 11 * events.ele2_charge[selection]
 
    # using fancy vector package for this
-    
-    events["decay_1_pt"]
-    events["decay_1_eta"]
-    events["decay_1_phi"]
-    events["decay_1_energy"]
-    events["decay_1_mass"]
-    
-    events["decay_2_pt"]
-    events["decay_2_eta"]
-    events["decay_2_phi"]
-    events["decay_2_energy"]
-    events["decay_2_mass"]
-    
-    events["m_tautau_vis"]
+
+    decay_1_p4 = vector.awk({"pt": decay_1_pt, "eta": decay_1_eta, "phi": decay_1_phi, "mass": decay_1_mass})
+    decay_2_p4 = vector.awk({"pt": decay_2_pt, "eta": decay_2_eta, "phi": decay_2_phi, "mass": decay_2_mass})
+
+    events["decay_1_pt"] = decay_1_p4.pt
+    events["decay_1_eta"] = decay_1_p4.eta
+    events["decay_1_phi"] = decay_1_p4.phi
+    events["decay_1_energy"] = decay_1_p4.energy
+    events["decay_1_mass"] = decay_1_p4.mass
+    events["decay_1_pdgId"] = decay_1_pdgId
+    events["decay_2_pt"] = decay_2_p4.pt
+    events["decay_2_eta"] = decay_2_p4.eta
+    events["decay_2_phi"] = decay_2_p4.phi
+    events["decay_2_energy"] = decay_2_p4.energy
+    events["decay_2_mass"] = decay_2_p4.mass
+    events["decay_2_pdgId"] = decay_2_pdgId
+    events["m_tautau_vis"] = (decay_1_p4 + decay_2_p4).mass
+
+    return events
+
 
 def set_collinear_mass(events):
 
-    # since the  
+    # get the collinear MET values
+    phi = events["MET_phi"]
+    phi1 = events["decay_1_phi"]
+    phi2 = events["decay_2_phi"]
+    MET = events["MET"]
+    denom = numpy.cos(phi1) * numpy.sin(phi2) - numpy.sin(phi1) * numpy.cos(phi2)
+    MET_1 = MET * (numpy.cos(phi) * numpy.sin(phi2) - numpy.sin(phi) * numpy.cos(phi2))/denom
+    MET_2 = MET * (numpy.cos(phi1) * numpy.sin(phi) - numpy.sin(phi1) * numpy.cos(phi))/denom
+    x1 = events["decay_1_pt"]/(events["decay_1_pt"] + MET_1)
+    x2 = events["decay_2_pt"]/(events["decay_2_pt"] + MET_2)
+    events["m_tautau_collinear"] = events["m_tautau_vis"]/(numpy.sqrt(x1 * x2))
+    return events
+
 
 @numba.njit
 def mapMotherToDaughter(goodMotherIndices, allMotherIndices):
