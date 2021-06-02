@@ -38,6 +38,7 @@ def set_taus(events, taus, debug):
     tau_IDvsElec_padded = utils.pad_awkward_array(taus.idDeepTau2017v2p1VSe, 2, -9)
     tau_IDvsJet_padded = utils.pad_awkward_array(taus.idDeepTau2017v2p1VSjet, 2, -9)
     tau_IDvsMuon_padded = utils.pad_awkward_array(taus.idDeepTau2017v2p1VSmu, 2, -9)
+    tau_charge_padded = utils.pad_awkward_array(taus.charge, 2, 0)
 
     events["tau1_pt"] = tau_pt_padded[:,0]
     events["tau2_pt"] = tau_pt_padded[:,1]
@@ -47,6 +48,8 @@ def set_taus(events, taus, debug):
     events["tau2_phi"] = tau_phi_padded[:,1]
     events["tau1_mass"] = tau_mass_padded[:,0]
     events["tau2_mass"] = tau_mass_padded[:,1]
+    events["tau1_charge"] = tau_charge_padded[:,0]
+    events["tau2_charge"] = tau_charge_padded[:,1]
 
     events["tau1_id_vs_e"] = tau_IDvsElec_padded[:,0]
     events["tau2_id_vs_e"] = tau_IDvsElec_padded[:,1]

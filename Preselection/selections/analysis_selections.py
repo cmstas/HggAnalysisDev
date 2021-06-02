@@ -62,6 +62,7 @@ def ggTauTau_inclusive_preselection(events, photons, electrons, muons, taus, jet
     selected_events = lepton_selections.set_muons(selected_events, selected_muons, debug)
     selected_events = tau_selections.set_taus(selected_events, selected_taus, debug)
     selected_events = jet_selections.set_jets(selected_events, selected_jets, options, debug)
+    selected_events = compound_selections.set_category(selected_events)
     if genPart is not None:
         genPart = genPart[all_cuts]
         selected_events = gen_selections.set_genZ(selected_events, genPart, options, debug)
