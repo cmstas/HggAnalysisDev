@@ -25,3 +25,12 @@ def set_genZ(events, genBranches, selection_options, debug):
         events["genZ_decayMode"] = ak.from_numpy(numpy.zeros(len(events))) + 1 * ZToEleEvents + 2 * ZToMuEvents + 3 * ZToTauEvents + 4 * WToEEvents + 5 * WToMuEvents + 6 * WToTauEvents
         events["tau_motherID"] = ak.fill_none(ak.firsts(genBranches.pdgId[motherOfTaus]),0)
     return events
+
+
+def gen_higgs_mass(events, genBranches, options, debug):
+
+    # find the gen Higgs mass from the genBranches collection
+    higgs_idxs = abs(genBranches.pdgId) == 25
+    higgsMasses = genBranches.mass[higgs_idxs][:, 0]  # To accommodate multiple entries
+    events["gen_higgs_mass"] = higgsMasses
+    return events

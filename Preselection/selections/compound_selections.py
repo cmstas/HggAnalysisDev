@@ -44,16 +44,16 @@ def set_gen_helicity_angles(events, genBranches, options, debug):
         genVEta = utils.pad_awkward_array(genBranches.eta[VToTauMask], 2, -1)[:,0]
         genVPhi = utils.pad_awkward_array(genBranches.phi[VToTauMask], 2, -1)[:,0]
         genVMass = utils.pad_awkward_array(genBranches.mass[VToTauMask], 2, -1)[:,0]
-        
+
         decayTauIndices = awkward.from_numpy(mapMotherToDaughter(VToTauMask, genBranches.genPartIdxMother).astype(int)) # Indices of all the decay taus
-        
+
         # Awkward array redneck engineering right here - This shit works, please don't ask me why
         fancyIndexedTauIndices = awkward.unflatten(awkward.mask(decayTauIndices, decayTauIndices > 0), counts = 1, axis = 0)
         leadingTauPt = awkward.fill_none(genBranches.pt[fancyIndexedTauIndices], -9)[:,0]
         leadingTauEta = awkward.fill_none(genBranches.eta[fancyIndexedTauIndices], -9)[:,0]
         leadingTauPhi = awkward.fill_none(genBranches.phi[fancyIndexedTauIndices], -9)[:,0]
         leadingTauMass = awkward.fill_none(genBranches.mass[fancyIndexedTauIndices], -9)[:,0]
-        
+
 #        leadingTauPt = utils.pad_awkward_array(genBranches.pt[tau_idxs], 2, -1)[:,0]
 #        leadingTauEta = utils.pad_awkward_array(genBranches.eta[tau_idxs], 2, -1)[:,0]
 #        leadingTauPhi = utils.pad_awkward_array(genBranches.phi[tau_idxs], 2, -1)[:,0]
@@ -81,7 +81,7 @@ def set_gen_helicity_angles(events, genBranches, options, debug):
         leadingGammaEta = utils.pad_awkward_array(genBranches.eta[photon_idxs], 2, -1)[:,0]
         leadingGammaPhi = utils.pad_awkward_array(genBranches.phi[photon_idxs], 2, -1)[:,0]
         leadingGammaMass = utils.pad_awkward_array(genBranches.mass[photon_idxs], 2, -1)[:,0]
-        
+
         genHVector = vector.awk({"pt":genHPt, "eta":genHEta, "phi":genHPhi, "mass":genHMass})
         leadingPhotonVector = vector.awk({"pt":leadingGammaPt, "eta":leadingGammaEta, "phi":leadingGammaPhi, "mass":leadingGammaMass})
 
@@ -102,16 +102,13 @@ def set_category(events):
     a[(a < 0) & (events.muon1_charge * events.ele1_charge < 0)] = 6
     a[(a < 0) & (events.muon1_charge * events.ele2_charge < 0)] = 6
     a[(a < 0) & (events.ele1_charge * events.ele2_charge < 0)] = 5
-
     a[(a < 0) & (events.muon1_charge * events.tau1_charge < 0) & (events.n_muons == 1) & (events.n_electrons == 0)] = 1
     a[(a < 0) & (events.muon1_charge * events.tau2_charge < 0) & (events.n_muons == 1) & (events.n_electrons == 0)] = 1
-
     a[(a < 0) & (events.ele1_charge * events.tau1_charge < 0) & (events.n_electrons == 1) & (events.n_muons == 0)] = 2
     a[(a < 0) & (events.ele1_charge * events.tau2_charge < 0) & (events.n_electrons == 1) & (events.n_muons == 0)] = 2
-
     a[(a < 0) & (events.tau1_charge * events.tau2_charge < 0) & (events.n_muons == 0) & (events.n_electrons == 0)] = 3
-    events["Category_pairsLoose_custom"] = a
-    return events
+
+    return a
 
 @numba.njit
 def mapMotherToDaughter(goodMotherIndices, allMotherIndices):
@@ -123,8 +120,8 @@ Will be used to find the taus (among many taus) whose mothers are the good Z/H b
             for j in range(len(allMotherIndices[i])):
                 if goodMotherIndices[i][0] == allMotherIndices[i][j]:
                     a[i] = j
-    return a 
-	
+    return a
+
 
 @numba.njit
 def compute_helicity_angles(daughterVector, parentVector):

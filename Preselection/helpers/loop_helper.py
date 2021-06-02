@@ -231,12 +231,22 @@ class LoopHelper():
         # Diphoton preselection: NOTE we assume diphoton preselection is common to every analysis
 
         diphoton_events = events # most of dipho preselection already applied, still need to enforce pt/mgg and mgg cuts
-        selected_photons = photon_selections.create_selected_photons(photons, self.branches, self.debug) # create record manually since it doesn't seem to work for selectedPhoton
-        diphoton_events, selected_photons = diphoton_selections.diphoton_preselection(diphoton_events, selected_photons, options, self.debug)
+        if "singleH" not in self.selections:
+            selected_photons = photon_selections.create_selected_photons(photons, self.branches, self.debug) # create record manually since it doesn't seem to work for selectedPhoton
+            diphoton_events, selected_photons = diphoton_selections.diphoton_preselection(diphoton_events, selected_photons, options, self.debug)
 
         events_and_objects = {}
 
-        if "HHggTauTau_InclusivePresel" in self.selections:
+        if "singleH" in self.selections:
+            if "nanoAOD" in selections:
+                category = None
+            else:
+                category = diphoton_events.Category_pairsLoose
+
+            selected_events = analysis_selections.HTauTau_inclusive_preselection(diphoton_events, diphoton_events.Electron, diphoton_events.Muon, diphoton_events.Tau, diphoton_events.Jets, diphoton_events.GenPart, category, options, self.debug)
+
+
+        elif "HHggTauTau_InclusivePresel" in self.selections:
             if "genZStudy" in self.selections and not options["data"]:
                 gen_events = diphoton_events.GenPart
             else:
@@ -349,7 +359,7 @@ class LoopHelper():
                     triggers = ["HLT_Diphoton30_22_R9Id_OR_IsoCaloId_AND_HE_R9Id_Mass90"]
                 branches_no_pho += triggers
 
-           
+
             events = tree.arrays(branches_no_pho, library = "ak", how = "zip")
 
             branches_pho = [branch for branch in branches if "selectedPhoton" in branch]

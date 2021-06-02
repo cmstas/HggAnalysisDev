@@ -11,6 +11,62 @@ import selections.jet_selections as jet_selections
 import selections.gen_selections as gen_selections
 import selections.compound_selections as compound_selections
 
+
+def HTauTau_inclusive_preselection(events, electrons, muons, taus, jets, genPart, category, options, debug):
+
+    cut_diagnostics = utils.CutDiagnostics(events = events, debug = debug, cut_set = "[analysis_selections.py : HTauTau_inclusive_preselection]")
+
+     # Get number of electrons, muons, taus
+    selected_electrons = electrons[lepton_selections.select_electrons(events, photons, electrons, options, debug)]
+    selected_muons = muons[lepton_selections.select_muons(events, photons, muons, options, debug)]
+    selected_taus = taus[tau_selections.select_taus(events, photons, selected_muons, selected_electrons, taus, options, debug)]
+
+    n_electrons = awkward.num(selected_electrons)
+    n_muons = awkward.num(selected_muons)
+    n_taus = awkward.num(selected_taus)
+
+    # Require >= 1 lep/tau
+    n_leptons_and_taus = n_electrons + n_muons + n_taus
+
+    # only events with hadronic taus (no leptonic taus!!!!!!!!!!)
+    atleast_one_had_tau_cut = (n_taus >= 1)
+    # Require OS leptons/taus for events with 2 leptons/taus
+    sum_charge = awkward.sum(selected_electrons.charge, axis=1) + awkward.sum(selected_muons.charge, axis=1) + awkward.sum(selected_taus.charge, axis=1)
+    charge_cut = sum_charge == 0
+    two_leptons = n_leptons_and_taus == 2
+    not_two_leptons = n_leptons_and_taus != 2
+    os_cut = (two_leptons & charge_cut) | not_two_leptons  # only require 2 OS leptons if there are ==2 leptons in the event
+
+    # Select jets (don't cut on jet quantities for selection, but they will be useful for BDT training)
+    selected_jets = jets[jet_selections.select_jets(events, photons, selected_electrons, selected_muons, selected_taus, jets, options, debug)]
+
+    all_cuts = os_cut & atleast_one_had_tau_cut
+    cut_diagnostics.add_cuts([atleast_one_had_tau_cut, os_cut, all_cuts], ["N_taus >= 1", "OS dileptons", "all"])
+
+    # Keep only selected events
+    selected_events = events[all_cuts]
+    selected_electrons = selected_electrons[all_cuts]
+    selected_muons = selected_muons[all_cuts]
+    selected_taus = selected_taus[all_cuts]
+    selected_jets = selected_jets[all_cuts]
+
+    # Calculate event-level variables
+    selected_events = lepton_selections.set_electrons(selected_events, selected_electrons, debug)
+    selected_events = lepton_selections.set_muons(selected_events, selected_muons, debug)
+    selected_events = tau_selections.set_taus(selected_events, selected_taus, debug)
+    selected_events = jet_selections.set_jets(selected_events, selected_jets, options, debug)
+    if category is None:
+        selected_events["Category_pairsLoose"] = compound_selections.set_category(selected_events)
+    else:
+        selected_events["Category_pairsLoose_custom"] = compound_selections.set_category(selected_events)
+
+    genPart = genPart[all_cuts]
+    selected_events = gen_selections.gen_higgs_mass(selected_events, genPart, options, debug)
+
+    return selected_events
+
+
+
 def ggTauTau_inclusive_preselection(events, photons, electrons, muons, taus, jets, dR, genPart, Category_pairsLoose, options, debug):
     """
     Performs inclusive ggTauTau preselection, requiring >=1 (leptons + tau_h).

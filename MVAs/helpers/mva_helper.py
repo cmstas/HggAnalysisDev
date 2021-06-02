@@ -31,11 +31,16 @@ class MVAHelper():
         self.load_events()
         self.train()
         self.predict()
-        self.evaluate_performance()
-        self.save_weights()
+        if self.config["mva"]["type"] == "binary_classification_bdt":
+            self.evaluate_performance()
+            self.save_weights()
+        elif self.config["mva"]["type"] == "regression_neural_network":
+            self.evaluate_regressiion_performance()
+            self.save_model()
 
     def evaluate(self, weight_file):
         self.load_events()
+        if config
         self.load_weights(weight_file)
         self.predict()
         self.evaluate_performance()
@@ -63,6 +68,13 @@ class MVAHelper():
                 output_tag = self.output_tag,
                 debug = self.debug
             )
+        elif self.config["mva"]["type"] == "regression_neural_network":
+            self.train_helper = regression_nn_helper.NNHelper(
+                    events = self.events,
+                    config = self.config,
+                    output_tag = self.output_tag,
+                    debug = self.debug
+                    )
         return
 
     def load_weights(self, weight_file):
@@ -80,6 +92,13 @@ class MVAHelper():
 
         return
 
+    def evaluate_regression_performance(self):
+        # Compute MAE
+        mae = {}
+        for split in self.events.keys():
+            mae[split] = abs(self.prediction[split] - self.prediction[split])/len(self.predction[split])
+        print("MAE = ", mae)
+
     def evaluate_performance(self):
         self.performance = {}
         for split in self.events.keys():
@@ -92,7 +111,7 @@ class MVAHelper():
 
             if self.debug > 0:
                 print("[MVA_HELPER] Performance (%s set): AUC = %.3f +/- %.3f" % (split, self.performance[split]["auc"], self.performance[split]["auc_unc"]))
-        
+
         self.make_plots()
         self.save_performance()
 
@@ -135,12 +154,12 @@ class MVAHelper():
                 self.npz_results[metric + "_" + split] = self.performance[split][metric]
             for info in ["weight", "y"]:
                 self.npz_results[info + "_" + split] = self.events[split][info]
-        numpy.savez(self.npz_file, **self.npz_results)        
+        numpy.savez(self.npz_file, **self.npz_results)
         return
 
     def save_weights(self):
         self.summary = self.train_helper.save_weights()
-        self.summary["plots"] = self.plots 
+        self.summary["plots"] = self.plots
         self.summary["npz_file"] = self.npz_file
 
         self.summary_file = "output/" + self.output_tag + ".json"
@@ -148,3 +167,6 @@ class MVAHelper():
             json.dump(self.summary, f_out, sort_keys = True, indent = 4)
 
         return
+
+    def save_model(self):
+        self.train_helper.save_model()
