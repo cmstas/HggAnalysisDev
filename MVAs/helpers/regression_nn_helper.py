@@ -15,9 +15,7 @@ class NNHelper():
         self.output_tag = kwargs.get("output_tag", "")
         self.debug = kwargs.get("debug")
         self.made_tensor = False
-        else:
-            # self.model = self.init_network()
-            self.model = regression_model.TauRegressionModel(self.config["mva"])
+        self.model = regression_model.TauRegressionModel(self.config["mva"])
 
     def init_network(self):
         n_hidden = self.config["mva"]["param"]["n_hidden"]
@@ -52,7 +50,7 @@ class NNHelper():
             self.make_tensor()
         if self.debug > 0:
             print("[DNNHelper] Training the following DNN")
-            self.model.summary()
+#            self.model.summary()
         n_max_epochs = self.config["mva"]["n_max_epochs"]
         if self.config["mva"]["early_stopping"]:
             n_early_stopping = self.config["mva"]["early_stopping_rounds"]
@@ -61,7 +59,7 @@ class NNHelper():
             print("[DNNHelper] Training for {} (no early stopping)".format(n_max_epochs))
             n_early_stopping = -1
 
-        loss_function = keras.losses.MeanSquaredError(n_early_stopping)
+        loss_function = keras.losses.MeanSquaredError()
         optimizer = keras.optimizers.Adam(learning_rate=1e-3)
         logging = logger.Logger(n_early_stopping)
         # training happens here!
@@ -91,36 +89,36 @@ class NNHelper():
             if early_stop:
                 print("Early stopping!")
                 break
-        logging.save_losses()
+        logging.save_losses(self.output_tag)
 
-    def make_tensor(self, batch_size=256):
+    def make_tensor(self, batch_size=1024):
         for split in self.events.keys():
             x = self.events[split]["X"]
-            y = self.events[split]["Y"]
+            y = self.events[split]["y"]
             if batch_size < 0:
                 self.events[split]["tensor"] = tensorflow.data.Dataset.from_tensor_slices((x, y))
             else:
                 self.events[split]["tensor"] = tensorflow.data.Dataset.from_tensor_slices((x, y)).batch(batch_size)
             self.made_tensor = True
 
-    def predict(self, test_data):
+    def predict(self):
         """ For inference. Assumes fully loaded or trained model at disposal"""
         if not self.made_tensor:
             self.make_tensor()
         prediction = {}
         for split in self.events.keys():
             for step, (features, targets) in enumerate(self.events[split]["tensor"]):
-                if split not in self.prediction.keys():
-                    self.prediction[split] = self.model(features).numpy().reshape(-1)
+                if split not in prediction.keys():
+                    prediction[split] = self.model(features).numpy().reshape(-1)
                 else:
-                    self.prediction[split] = numpy.append(self.prediction[split], self.model(features).numpy().reshape(-1))
+                    prediction[split] = numpy.append(prediction[split], self.model(features).numpy().reshape(-1))
 
         return prediction
 
     def save_model(self):
         """ Save weights"""
-        self.model_save("outputs/{}_model.h5")
+        self.model.save("output/{}_model".format(self.output_tag))
 
     def load_model(self, model_file):
-        self.model = keras.models.load_model("outputs/{}_model.h5")
+        self.model = keras.models.load_model("output/{}_model".format(self.output_tag))
 

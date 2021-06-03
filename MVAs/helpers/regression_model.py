@@ -1,18 +1,17 @@
-from tensorflow.keras import layers
+from tensorflow.keras import layers, Model
 import tensorflow
 import sys
 
 
-class TauRegressionModel(layers.Layer):
+class TauRegressionModel(Model):
     def __init__(self, config):
         super(TauRegressionModel, self).__init__()
 
         n_hidden = config["param"]["n_hidden"]
         n_output = config["param"]["n_output"]
         self.hidden_layers = []
-
         for i in range(1, n_hidden):
-            if "layer_{}" not in self.config["mva"]["param"].keys():
+            if "layer_{}".format(i) not in config.keys():
                 print("Layer {} not found!".format(i))
                 sys.exit(3)
             layer_info = config["layer_{}".format(i)]

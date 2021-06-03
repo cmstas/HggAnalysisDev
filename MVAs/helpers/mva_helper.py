@@ -5,7 +5,7 @@ import numpy
 import matplotlib.pyplot as plt
 
 from . import utils
-from . import bdt_helper
+from . import bdt_helper, regression_nn_helper
 
 class MVAHelper():
     """
@@ -78,7 +78,7 @@ class MVAHelper():
                 self.events[split][data] = pandas.read_hdf(self.input, "%s_%s" % (data, split))
 
             if self.debug > 0:
-                print("Loaded {} {} events".format(len(self.events[split]["X"], split)))
+                print("Loaded {} {} events".format(len(self.events[split]["X"]), split))
 
 
     def initialize_train_helper(self):
@@ -121,7 +121,7 @@ class MVAHelper():
         # Compute MAE
         mae = {}
         for split in self.events.keys():
-            mae[split] = abs(self.prediction[split] - self.prediction[split])/len(self.predction[split])
+            mae[split] = abs(self.prediction[split] - self.events[split]["y"])/len(self.prediction[split])
         print("MAE = ", mae)
 
     def evaluate_performance(self):
