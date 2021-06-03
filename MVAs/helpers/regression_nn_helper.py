@@ -68,6 +68,7 @@ class NNHelper():
                 with tensorflow.GradientTape() as tape:
                     outputs = self.model(features)
                     loss_value = loss_function(targets, outputs)
+                    loss_value += tensorflow.add_n(model.losses)  # L2 addition happens here
 
                 logging.update_train_loss(epoch, step, loss_value, (self.debug > 0))
 
