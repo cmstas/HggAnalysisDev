@@ -20,10 +20,9 @@ class Logger():
         if verbosity:
             print("Epoch = {} batch number = {} training loss = {}".format(epoch, batch_num, loss))
 
-    def update_val_loss(self, epoch, loss, verbosity=False):
+    def update_val_loss(self, epoch, loss):
         self.val_loss.append(loss)
-        if verbosity:
-            print("Epoch = {} validation loss = {}".format(epoch, loss))
+        print("Epoch = {} validation loss = {}".format(epoch, loss))
 
         # check for early stopping
         if self.check_early_stopping and len(self.val_loss) >= self.early_stopping_epochs:

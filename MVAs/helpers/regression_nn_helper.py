@@ -68,7 +68,7 @@ class NNHelper():
                 with tensorflow.GradientTape() as tape:
                     outputs = self.model(features)
                     loss_value = loss_function(targets, outputs)
-                    loss_value += tensorflow.add_n(model.losses)  # L2 addition happens here
+                    loss_value += tensorflow.add_n(self.model.losses)  # L2 addition happens here
 
                 logging.update_train_loss(epoch, step, loss_value, (self.debug > 0))
 
@@ -85,14 +85,15 @@ class NNHelper():
                 val_dataset_length += len(targets)
                 validation_loss += loss_function(targets, outputs) * len(targets)
             validation_loss /= val_dataset_length
+            
             # in addition to updating validation loss, this function will trigger the early stopping
-            early_stop = logging.update_val_loss(epoch, validation_loss, (self.debug > 0))
+            early_stop = logging.update_val_loss(epoch, validation_loss)
             if early_stop:
                 print("Early stopping!")
                 break
         logging.save_losses(self.output_tag)
 
-    def make_tensor(self, batch_size=1024):
+    def make_tensor(self, batch_size=2048):
         for split in self.events.keys():
             x = self.events[split]["X"]
             y = self.events[split]["y"]

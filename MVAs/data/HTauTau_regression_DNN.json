@@ -1,12 +1,12 @@
 {
-    "training_features":["decay_1_pt", "decay_1_eta", "decay_1_phi", "decay_1_energy", "decay_1_mass", "decay_2_pt", "decay_2_eta", "decay_2_phi", "decay_2_mass", "Category_onehot_1", "Category_onehot_2", "Category_onehot_3", "Category_onehot_4", "Category_onehot_5", "MET_pt", "MET_phi", "m_tautau_vis"],
+    "training_features":["decay_1_pt", "decay_1_eta", "decay_1_phi", "decay_1_energy", "decay_1_mass", "decay_2_pt", "decay_2_eta", "decay_2_phi", "decay_2_energy", "decay_2_mass", "Category_onehot_1", "Category_onehot_2", "Category_onehot_3", "Category_onehot_4", "Category_onehot_5", "MET_pt", "MET_phi", "m_tautau_vis", "MET_covXX", "MET_covXY", "MET_covYY"],
     "mva":
     {
         "type":"regression_neural_network",
         "param":{
             "n_hidden":4,
             "n_output":1,
-            "l2_lambda":0.1
+            "l2_lambda":1.0
         },
         "layer_1":{
             "n_neurons":200,
@@ -24,8 +24,9 @@
             "n_neurons":200,
             "activation":"relu"
         },
-        "n_max_epochs":50,
+        "n_max_epochs":200,
         "early_stopping":true,
-        "early_stopping_rounds":8
+        "early_stopping_rounds":8,
+        "save_best":true
     }
 }

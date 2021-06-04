@@ -121,7 +121,7 @@ class MVAHelper():
         # Compute MAE
         mae = {}
         for split in self.events.keys():
-            mae[split] = abs(self.prediction[split] - self.events[split]["y"])/len(self.prediction[split])
+            mae[split] = sum(abs(self.prediction[split] - self.events[split]["y"]))/len(self.prediction[split])
         print("MAE = ", mae)
 
     def evaluate_performance(self):
