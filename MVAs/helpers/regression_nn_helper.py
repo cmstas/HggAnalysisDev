@@ -91,6 +91,10 @@ class NNHelper():
             if early_stop:
                 print("Early stopping!")
                 break
+
+            # is this epoch the best one in terms of low validation loss1?
+            if epoch == 0 or logging.best_epoch():
+                self.save_model("best")
         logging.save_losses(self.output_tag)
 
     def make_tensor(self, batch_size=2048):
@@ -102,6 +106,10 @@ class NNHelper():
             else:
                 self.events[split]["tensor"] = tensorflow.data.Dataset.from_tensor_slices((x, y)).batch(batch_size)
             self.made_tensor = True
+
+    def predict_from_df(self, df):
+        self.events = df[self.config["training_features"]]
+        return self.predict()
 
     def predict(self):
         """ For inference. Assumes fully loaded or trained model at disposal"""
@@ -117,10 +125,10 @@ class NNHelper():
 
         return prediction
 
-    def save_model(self):
+    def save_model(self, model_tag=""):
         """ Save weights"""
-        self.model.save("output/{}_model".format(self.output_tag))
+        self.model.save("output/{}_model_{}".format(self.output_tag, model_tag))
 
-    def load_model(self, model_file):
-        self.model = keras.models.load_model("output/{}_model".format(self.output_tag))
+    def load_model(self, model_file, model_tag=""):
+        self.model = keras.models.load_model("output/{}_model_{}".format(self.output_tag, model_tag))
 

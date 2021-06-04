@@ -40,17 +40,17 @@ class MVAHelper():
             self.train()
             self.predict()
             self.evaluate_regression_performance()
-            self.save_model()
+#            self.save_model() best model automatically saved
 
     def evaluate(self, model_file):
         if self.config["mva"]["type"] == "binary_classification_bdt":
             self.load_events()
-            self.load_weights(weight_file)
+            self.load_weights(model_file)
             self.predict()
             self.evaluate_performance()
         elif self.config["mva"]["type"] == "regression_neural_network":
             self.load_regression_events()
-            self.load_model(model_file)
+            self.load_model(model_file, "best")
             self.predict()
             self.evaluate_regression_performance()
 
@@ -113,7 +113,12 @@ class MVAHelper():
         return
 
     def predict(self):
+        if self.config["mva"]["type"] == "regression_neural_network":
+            print("Predicting using the best model")
+            self.load_model("best")
         self.prediction = self.train_helper.predict()
+
+
 
         return
 
