@@ -34,6 +34,9 @@ class Logger():
         else:
             return False
 
+    def best_epoch(self):
+        return self.val_loss[-1] == min(self.val_loss)
+
     def save_losses(self, output_tag):
         numpy.savetxt("output/{}_val_loss.txt".format(output_tag), self.val_loss)
         numpy.savetxt("output/{}_train_loss.txt".format(output_tag), self.train_loss)

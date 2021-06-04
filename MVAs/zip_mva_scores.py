@@ -1,6 +1,6 @@
 import argparse
 
-from helpers import zip_helper 
+from helpers import zip_helper, regression_zip_helper
 
 """
 This script takes in an ntuple and one or more mvas and
@@ -40,7 +40,18 @@ parser.add_argument(
     default = 0
 )
 
+parser.add_argument(
+        "--type",
+        help = "type of network (0 for BDT, 1 for regression DNN)",
+        type = int,
+        default = 0
+        )
+
 args = parser.parse_args()
-zipper = zip_helper.ZipHelper(**vars(args))
+
+if args.type == 1:
+    zipper = regression_zip_helper.ZipHelper(**vars(args))
+else:
+    zipper = zip_helper.ZipHelper(**vars(args))
 zipper.run()
 

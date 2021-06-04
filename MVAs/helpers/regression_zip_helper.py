@@ -3,7 +3,7 @@ import pandas
 import numpy
 import json
 
-from helpers import mva_helper, bdt_helper, utils
+from helpers import mva_helper, regression_nn_helper, utils
 
 class ZipHelper():
     """
@@ -12,7 +12,6 @@ class ZipHelper():
     an output ntuple with the MVA scores and a subset of
     branches from the original ntuple
     """
-
     def __init__(self, **kwargs):
         self.input = kwargs.get("input")
         self.mva_files = kwargs.get("mvas")
@@ -21,7 +20,7 @@ class ZipHelper():
         self.output = kwargs.get("output")
 
         if self.debug > 0:
-            print("[ZipHelper] Creating ZipHelper instance with options:")
+            print("[ZipHelper] Creating Regression ZipHelper instance with options:")
             print("\n".join(["{0}={1!r}".format(a, b) for a, b in kwargs.items()]))
 
         self.df = pandas.read_pickle(self.input)
@@ -30,10 +29,9 @@ class ZipHelper():
 
     def run(self):
         self.load_mvas()
-        self.label_events()
         self.calculate_scores()
-        self.save_df()
-        return
+        self.save_df
+
 
     def load_mvas(self):
         self.mvas = {}
@@ -45,30 +43,20 @@ class ZipHelper():
                 self.mva_configs[name] = json.load(f_in)
 
         for name, config in self.mva_configs.items():
-            if config["config"]["mva"]["type"] == "binary_classification_bdt":
-
-                bdt = bdt_helper.BDTHelper(
-                    events = "",
-                    config = config["config"],
+            if config["config"]["mva"]["type"] == "regression_neural_network":
+                nn = regression_nn_helper.NNHelper(
+                    events = None,
+                    config = self.config,
+                    output_tag = self.output_tag,
                     debug = self.debug
-                )
-                bdt.load_weights(config["weights"])
-                self.mvas[name] = bdt
-
-        return
-
-    def label_events(self):
-        self.df, idx_train, idx_test, idx_validation = utils.make_train_test_validation_split(self.df)
-        return
+                    )
+                self.mvas[name] = nn
 
     def calculate_scores(self):
         for name, mva in self.mvas.items():
             scores = mva.predict_from_df(self.df)
             self.df[name] = scores
 
-        return
-
     def save_df(self):
         self.df.to_pickle(self.output)
-        return
 

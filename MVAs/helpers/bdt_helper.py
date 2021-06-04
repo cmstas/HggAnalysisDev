@@ -35,7 +35,7 @@ class BDTHelper():
             else:
                 print("[BDTHelper] using %d trees (no early stopping)" % (self.config["mva"]["n_trees"]))
                 n_early_stopping = None
-            
+
             self.bdt = xgboost.train(
                 self.config["mva"]["param"],
                 self.events["train"]["dmatrix"],
