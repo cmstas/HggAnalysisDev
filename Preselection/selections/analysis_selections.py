@@ -32,7 +32,6 @@ def HTauTau_inclusive_preselection(events, electrons, muons, taus, jets, genPart
     lep_tau_cut = n_leptons_and_taus >= options["n_leptons_and_taus"]
 
     # only events with hadronic taus (no leptonic taus!!!!!!!!!!)
-    #atleast_one_had_tau_cut = (n_taus >= 1)
 
     # Require OS leptons/taus for events with 2 leptons/taus
     sum_charge = awkward.sum(selected_electrons.charge, axis=1) + awkward.sum(selected_muons.charge, axis=1) + awkward.sum(selected_taus.charge, axis=1)
@@ -69,6 +68,7 @@ def HTauTau_inclusive_preselection(events, electrons, muons, taus, jets, genPart
     # setting the visible branches for easy access
     selected_events = compound_selections.set_visible_columns(selected_events)
     selected_events = compound_selections.set_collinear_mass(selected_events)
+    selected_events = compound_selections.category_onehot(selected_events)
 
     genPart = genPart[all_cuts]
     selected_events = gen_selections.gen_higgs_mass(selected_events, genPart, options, debug)
@@ -100,7 +100,7 @@ def ggTauTau_inclusive_preselection(events, photons, electrons, muons, taus, jet
     n_leptons_and_taus = n_electrons + n_muons + n_taus
 
     # only events with hadronic taus (no leptonic taus!!!!!!!!!!)
-    # atleast_one_had_tau_cut = (n_taus >= 1)
+    atleast_one_had_tau_cut = (n_taus >= 1)
     # Require OS leptons/taus for events with 2 leptons/taus
     sum_charge = awkward.sum(selected_electrons.charge, axis=1) + awkward.sum(selected_muons.charge, axis=1) + awkward.sum(selected_taus.charge, axis=1)
     charge_cut = sum_charge == 0
@@ -128,7 +128,11 @@ def ggTauTau_inclusive_preselection(events, photons, electrons, muons, taus, jet
     selected_events = lepton_selections.set_muons(selected_events, selected_muons, debug)
     selected_events = tau_selections.set_taus(selected_events, selected_taus, debug)
     selected_events = jet_selections.set_jets(selected_events, selected_jets, options, debug)
-    selected_events = compound_selections.set_category(selected_events)
+    if Category_pairsLoose is None:
+        selected_events["Category_pairsLoose"] = compound_selections.set_category(selected_events)
+    else:
+        selected_events["Category_pairsLoose_custom"] = compound_selections.set_category(selected_events)
+
     if genPart is not None:
         genPart = genPart[all_cuts]
         selected_events = gen_selections.set_genZ(selected_events, genPart, options, debug)
@@ -140,6 +144,9 @@ def ggTauTau_inclusive_preselection(events, photons, electrons, muons, taus, jet
 
     selected_events = compound_selections.compound_selections(selected_events, options, debug)
     selected_events = compound_selections.set_helicity_angles(selected_events, selected_taus, selected_photons)
+    selected_events = compound_selections.set_visible_columns(selected_events)
+    selected_events = compound_selections.set_collinear_mass(selected_events)
+    selected_events = compound_selections.category_onehot(selected_events)
     return selected_events
 
 def tth_leptonic_preselection(events, photons, electrons, muons, jets, options, debug):

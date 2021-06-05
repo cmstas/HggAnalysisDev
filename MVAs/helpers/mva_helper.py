@@ -40,7 +40,7 @@ class MVAHelper():
             self.train()
             self.predict()
             self.evaluate_regression_performance()
-#            self.save_model() best model automatically saved
+            self.save_model_metadata()  # best model automatically saved
 
     def evaluate(self, model_file):
         if self.config["mva"]["type"] == "binary_classification_bdt":
@@ -103,9 +103,9 @@ class MVAHelper():
         self.mva = self.train_helper.load_weights(weight_file)
         return
 
-    def load_model(self, model_file):
+    def load_model(self, model_file, model_tag=""):
         self.initialize_train_helper()
-        self.mva = self.train_helper.load_model(model_file)
+        self.mva = self.train_helper.load_model(model_file, model_tag)
 
     def train(self):
         self.initialize_train_helper()
@@ -115,7 +115,8 @@ class MVAHelper():
     def predict(self):
         if self.config["mva"]["type"] == "regression_neural_network":
             print("Predicting using the best model")
-            self.load_model("best")
+            model_file = self.output_tag
+            self.load_model(model_file, "best")
         self.prediction = self.train_helper.predict()
 
 
@@ -200,3 +201,13 @@ class MVAHelper():
 
     def save_model(self):
         self.train_helper.save_model()
+
+    def save_model_metadata(self):
+        metadata = {}
+        metadata["config"] = {}
+        metadata["config"]["mva"] = {}
+        metadata["config"]["mva"]["type"] = "regression_neural_network"
+        metadata["config"]["mva"]["model_file"] = self.output_tag
+        
+        with open("output/{}_metadata.json".format(self.output_tag),"w") as f:
+            json.dump(f, metadata)

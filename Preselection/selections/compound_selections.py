@@ -296,6 +296,16 @@ def set_collinear_mass(events):
     return events
 
 
+def category_onehot(events):
+    categories = {}
+    for i in range (1,6):
+        categories[i] = numpy.zeros(len(events))
+    for i in range(2,7):
+        categories[i-1][events.Category_pairsLoose == i] = 1
+    for i in range(1,6):
+        events["Category_onehot_{}".format(i)] = categories[i]
+    return events
+
 @numba.njit
 def mapMotherToDaughter(goodMotherIndices, allMotherIndices):
     """Finds the indices of the daughters such that the mothers are a part of the goodMotherIndices array

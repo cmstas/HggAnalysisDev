@@ -108,7 +108,11 @@ class NNHelper():
             self.made_tensor = True
 
     def predict_from_df(self, df):
-        self.events = df[self.config["training_features"]]
+        self.events = {}
+        self.events["inference"] = {}
+        self.events["inference"]["tensor"] = tensorflow.data.Dataset.from_tensors((df[self.config["training_features"]]
+))
+        self.made_tensor = True
         return self.predict()
 
     def predict(self):
@@ -117,7 +121,9 @@ class NNHelper():
             self.make_tensor()
         prediction = {}
         for split in self.events.keys():
-            for step, (features, targets) in enumerate(self.events[split]["tensor"]):
+            for step, features in enumerate(self.events[split]["tensor"]):
+                if type(features) is tuple:
+                    features, targets = features
                 if split not in prediction.keys():
                     prediction[split] = self.model(features).numpy().reshape(-1)
                 else:
@@ -129,6 +135,6 @@ class NNHelper():
         """ Save weights"""
         self.model.save("output/{}_model_{}".format(self.output_tag, model_tag))
 
-    def load_model(self, model_file, model_tag=""):
+    def load_model(self, model_tag=""):
         self.model = keras.models.load_model("output/{}_model_{}".format(self.output_tag, model_tag))
 
