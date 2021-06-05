@@ -208,6 +208,7 @@ class MVAHelper():
         metadata["config"]["mva"] = {}
         metadata["config"]["mva"]["type"] = "regression_neural_network"
         metadata["config"]["mva"]["model_file"] = self.output_tag
+        metadata["config"]["mva"]["training_features"] = self.config["training_features"] 
         
         with open("output/{}_metadata.json".format(self.output_tag),"w") as f:
             json.dump(f, metadata)

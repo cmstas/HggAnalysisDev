@@ -15,42 +15,17 @@ class NNHelper():
         self.output_tag = kwargs.get("output_tag", "")
         self.debug = kwargs.get("debug")
         self.made_tensor = False
-        self.model = regression_model.TauRegressionModel(self.config["mva"])
-
-    def init_network(self):
-        n_hidden = self.config["mva"]["param"]["n_hidden"]
-        n_input = self.config["mva"]["param"]["n_input"]
-        n_output = self.config["mva"]["param"]["n_output"]
-
-        """ Every hidden layer provides the following
-        1. Number of output dimension neurons
-        2. Activation function (relu default)"""
-
-        model = keras.Sequential()
-        model.add(layers.InputLayer(input_shape=(n_input,)))
-        for i in range(1, n_hidden):
-            if "layer_{}" not in self.config["mva"]["param"].keys():
-                print("Not enough layers!!!")
-                sys.exit(3)
-            layer_info = self.config["mva"]["param"]["layer_{}".format(i)]
-            n_neurons = layer_info["n_neurons"]
-            if "activation" not in layer_info.keys():
-                activation = "relu"
-            else:
-                activation = layer_info["activation"]
-            model.add(layers.Dense(n_neurons, activation=activation, name="layer_{}".format(i)))
-
-        # output layer
-        model.add(layers.Dense(n_output, name="output"))
-
-        return model
+        if self.config is not None:
+            self.model = regression_model.TauRegressionModel(self.config["mva"])
+        else:
+            self.model = None
 
     def train(self):
         if not self.made_tensor:
             self.make_tensor()
         if self.debug > 0:
             print("[DNNHelper] Training the following DNN")
-#            self.model.summary()
+            self.model.summary()
         n_max_epochs = self.config["mva"]["n_max_epochs"]
         if self.config["mva"]["early_stopping"]:
             n_early_stopping = self.config["mva"]["early_stopping_rounds"]
@@ -107,11 +82,12 @@ class NNHelper():
                 self.events[split]["tensor"] = tensorflow.data.Dataset.from_tensor_slices((x, y)).batch(batch_size)
             self.made_tensor = True
 
-    def predict_from_df(self, df):
+    def predict_from_df(self, df, training_features=None):
         self.events = {}
         self.events["inference"] = {}
-        self.events["inference"]["tensor"] = tensorflow.data.Dataset.from_tensors((df[self.config["training_features"]]
-))
+        if self.config is not None:
+            training_features = self.config["training_features"]
+        self.events["inference"]["tensor"] = tensorflow.data.Dataset.from_tensors(df[training_features])
         self.made_tensor = True
         return self.predict()
 

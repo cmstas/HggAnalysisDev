@@ -43,12 +43,10 @@ class ZipHelper():
                 self.mva_configs[name] = json.load(f_in)
 
         for name, config in self.mva_configs.items():
-            with open("data/HTauTau_regression_DNN.json") as f:
-                dnn_config = json.load(f)
             if config["config"]["mva"]["type"] == "regression_neural_network":
                 nn = regression_nn_helper.NNHelper(
                     events = None,
-                    config = dnn_config,
+                    config = None,
                     output_tag = config["config"]["mva"]["model_file"],
                     debug = self.debug
                     )
@@ -57,7 +55,8 @@ class ZipHelper():
 
     def calculate_scores(self):
         for name, mva in self.mvas.items():
-            scores = mva.predict_from_df(self.df)
+            config = self.mva_configs[name]
+            scores = mva.predict_from_df(self.df, config["config"]["mva"]["training_features"])
             self.df[name] = scores["inference"]
 
     def save_df(self):
