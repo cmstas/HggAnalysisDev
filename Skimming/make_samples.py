@@ -14,6 +14,7 @@ data18={}
 allsamples=[]
 
 for subdir in os.listdir(maindir):
+  if "nanoaodv8" not in subdir: continue
   myfiles=os.listdir(maindir+subdir)
   print myfiles[0:1], len(myfiles), maindir+subdir
   if "EGamma_Run2018" in subdir:
@@ -28,11 +29,11 @@ for subdir in os.listdir(maindir):
     data16[subdir]=maindir+subdir
     allsamples.append(subdir)
     print "data16"
-  elif "Autumn18" in subdir or "Era2018" in subdir:
+  elif "Autumn18" in subdir or "Era2018" in subdir or "UL18" in subdir:
     mc18[subdir]=maindir+subdir
     allsamples.append(subdir)
     print "mc18"
-  elif "Fall17" in subdir or "Era2017" in subdir:
+  elif "Fall17" in subdir or "Era2017" in subdir or "UL17" in subdir:
     mc17[subdir]=maindir+subdir
     allsamples.append(subdir)
     print "mc17"
