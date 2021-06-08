@@ -37,7 +37,8 @@ class MVAHelper():
             self.save_weights()
         elif self.config["mva"]["type"] == "regression_neural_network":
             self.load_regression_events()
-            self.train()
+            self.compile_and_fit()
+#            self.train()
             self.predict()
             self.evaluate_regression_performance()
             self.save_model_metadata()  # best model automatically saved
@@ -50,8 +51,8 @@ class MVAHelper():
             self.evaluate_performance()
         elif self.config["mva"]["type"] == "regression_neural_network":
             self.load_regression_events()
-            self.load_model(model_file, "best")
-            self.predict()
+            self.load_model("best")
+            eelf.predict()
             self.evaluate_regression_performance()
 
     def load_events(self):
@@ -103,20 +104,24 @@ class MVAHelper():
         self.mva = self.train_helper.load_weights(weight_file)
         return
 
-    def load_model(self, model_file, model_tag=""):
+    def load_model(self, model_tag=""):
         self.initialize_train_helper()
-        self.mva = self.train_helper.load_model(model_file, model_tag)
+        self.mva = self.train_helper.load_model(model_tag)
 
     def train(self):
         self.initialize_train_helper()
         self.mva = self.train_helper.train()
         return
 
+    def compile_and_fit(self):
+        self.initialize_train_helper()
+        self.mva = self.train_helper.compile_and_fit()
+
     def predict(self):
         if self.config["mva"]["type"] == "regression_neural_network":
             print("Predicting using the best model")
             model_file = self.output_tag
-            self.load_model(model_file, "best")
+            self.load_model("best")
         self.prediction = self.train_helper.predict()
 
 
@@ -211,4 +216,4 @@ class MVAHelper():
         metadata["config"]["mva"]["training_features"] = self.config["training_features"] 
         
         with open("output/{}_metadata.json".format(self.output_tag),"w") as f:
-            json.dump(f, metadata)
+            json.dump(metadata, f, sort_keys=True, indent=4)

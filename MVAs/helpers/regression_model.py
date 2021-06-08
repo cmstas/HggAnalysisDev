@@ -9,12 +9,13 @@ class TauRegressionModel(Model):
 
         n_hidden = config["param"]["n_hidden"]
         n_output = config["param"]["n_output"]
+        n_input = config["param"]["n_input"]
         if "l2_lambda" in config["param"].keys():
             l2_lambda = config["param"]["l2_lambda"]
         else:
             l2_lambda = 0
         self.hidden_layers = []
-        for i in range(1, n_hidden):
+        for i in range(1, n_hidden + 1):
             if "layer_{}".format(i) not in config.keys():
                 print("Layer {} not found!".format(i))
                 sys.exit(3)

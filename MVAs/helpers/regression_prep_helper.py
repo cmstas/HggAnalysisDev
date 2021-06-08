@@ -60,12 +60,12 @@ class PrepHelper():
             tempDF = self.df.loc[self.df["gen_higgs_mass"] == mass]
             tempIndices = tempDF.index
             if idx_train is None:
-                idx_train = tempIndices[:int(0.75 * len(tempDF))]
-                idx_test = tempIndices[int(0.75 * len(tempDF)):int(0.9 * len(tempDF))]
+                idx_train = tempIndices[:int(0.65 * len(tempDF))]
+                idx_test = tempIndices[int(0.65 * len(tempDF)):int(0.9 * len(tempDF))]
                 idx_validation = tempIndices[int(0.9 * len(tempDF)):]
             else:
-                idx_train = idx_train.append(tempIndices[:int(0.75 * len(tempDF))])
-                idx_test = idx_test.append(tempIndices[int(0.75 * len(tempDF)):int(0.9 * len(tempDF))])
+                idx_train = idx_train.append(tempIndices[:int(0.65 * len(tempDF))])
+                idx_test = idx_test.append(tempIndices[int(0.65 * len(tempDF)):int(0.9 * len(tempDF))])
                 idx_validation = idx_validation.append(tempIndices[int(0.9 * len(tempDF)):])
 
         self.df["train_label"] = np.zeros(len(self.df))

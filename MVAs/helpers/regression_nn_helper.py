@@ -3,7 +3,7 @@ from tensorflow.keras import layers
 import tensorflow
 import numpy
 import sys
-
+from keras.callbacks import ModelCheckpoint, EarlyStopping, ReduceLROnPlateau
 from . import logger
 from . import regression_model
 
@@ -15,16 +15,20 @@ class NNHelper():
         self.output_tag = kwargs.get("output_tag", "")
         self.debug = kwargs.get("debug")
         self.made_tensor = False
+
         if self.config is not None:
+            self.config["mva"]["param"]["n_input"] = len(self.config["training_features"]) 
             self.model = regression_model.TauRegressionModel(self.config["mva"])
         else:
             self.model = None
 
     def train(self):
+        # Old style - elaborate custom training loop
         if not self.made_tensor:
             self.make_tensor()
         if self.debug > 0:
             print("[DNNHelper] Training the following DNN")
+            self.model.build(input_shape=(1,self.config["mva"]["param"]["n_input"])) 
             self.model.summary()
         n_max_epochs = self.config["mva"]["n_max_epochs"]
         if self.config["mva"]["early_stopping"]:
@@ -33,7 +37,6 @@ class NNHelper():
         else:
             print("[DNNHelper] Training for {} (no early stopping)".format(n_max_epochs))
             n_early_stopping = -1
-
         loss_function = keras.losses.MeanSquaredError()
         optimizer = keras.optimizers.Adam(learning_rate=1e-3)
         logging = logger.Logger(n_early_stopping)
@@ -72,7 +75,48 @@ class NNHelper():
                 self.save_model("best")
         logging.save_losses(self.output_tag)
 
-    def make_tensor(self, batch_size=2048):
+    def compile_and_fit(self):
+        # new style - keras does everything for me!
+        callbacks = []
+        if self.debug > 0:
+            print("[DNNHelper] Training the following DNN")
+            self.model.build(input_shape=(1,self.config["mva"]["param"]["n_input"])) 
+            self.model.summary()
+        n_max_epochs = self.config["mva"]["n_max_epochs"]
+        if self.config["mva"]["early_stopping"]:
+            n_early_stopping = self.config["mva"]["early_stopping_rounds"]
+            print("[DNNHelper] Early stopping with {} rounds ({} maximum)".format(n_early_stopping, n_max_epochs))
+            early_stopper = EarlyStopping(monitor="val_loss", patience=10, verbose=1)
+            callbacks.append(early_stopper)
+        else:
+            print("[DNNHelper] Training for {} (no early stopping)".format(n_max_epochs))
+            n_early_stopping = -1
+              
+        learning_rate = 5e-4
+        if "learning_rate" in self.config["mva"].keys():
+            learning_rate= self.config["mva"]["learning_rate"]
+
+        loss_function = keras.losses.MeanSquaredError()
+        optimizer = keras.optimizers.Adam(learning_rate=learning_rate)
+        
+        reduce_learning_rate = False
+        if "lr_reduction_factor" in self.config["mva"].keys():
+            reduce_learning_rate = True
+            lr_reducer = ReduceLROnPlateau(monitor="val_loss", factor=self.config["mva"]["lr_reduction_factor"], patience=5, verbose=1)
+#            callbacks.append(lr_reducer)
+              
+        # best model saving
+        best_checkpoint = ModelCheckpoint(filepath="output/{}_model_best".format(self.output_tag), save_weights_only=False, monitor="val_mean_squared_error", mode="auto", save_best_only=True)
+        # last model saving
+        last_checkpoint = ModelCheckpoint(filepath="output/"+self.output_tag+"-weights-{epoch:02d}.hdf5", save_weights_only=True, monitor="val_mean_squared_error", mode="auto", save_best_only=False)
+        
+        callbacks.extend([best_checkpoint, last_checkpoint])
+
+        self.model.compile(optimizer=optimizer, loss=loss_function, metrics=[keras.metrics.MeanSquaredError()])
+        history = self.model.fit(self.events["train"]["X"], self.events["train"]["y"], batch_size=128, epochs=n_max_epochs, validation_data=(self.events["test"]["X"], self.events["test"]["y"]), callbacks=callbacks)
+        numpy.savetxt("output/{}_val_loss.txt".format(self.output_tag), history.history["val_mean_squared_error"])
+
+    def make_tensor(self, batch_size=128):
         for split in self.events.keys():
             x = self.events[split]["X"]
             y = self.events[split]["y"]
