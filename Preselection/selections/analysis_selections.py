@@ -5,7 +5,7 @@ import numba
 import selections.selection_utils as utils
 import selections.object_selections as object_selections
 import selections.lepton_selections as lepton_selections
-import selections.tau_selections as tau_selections
+# import selections.tau_selections as tau_selections
 import selections.photon_selections as photon_selections
 import selections.jet_selections as jet_selections
 import selections.gen_selections as gen_selections
@@ -231,7 +231,7 @@ def ggbb_preselection(events, photons, electrons, muons, jets, fatjets, options,
         jet_cut = n_bjets < 2
         fatjet_cut = n_fatjets == 1
         all_cuts = lep_cut & jet_cut & fatjet_cut
-        cut_diagnostics.add_cuts([lep_cut, jet_cut, fatjet_cut, all_cuts], ["N_leptons == 0", "N_b-jets < 2", "N_fatjets == 1", "all"])
+        cut_diagnostics.add_cuts([lep_cut, jet_cut, fatjet_cut, all_cuts], ["N_leptons == 0", "N_b-jets < 2", "N_fatjets >= 1", "all"])
     else:
         jet_cut = n_bjets == 2
         all_cuts = lep_cut & jet_cut

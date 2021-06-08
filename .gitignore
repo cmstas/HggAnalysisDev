@@ -170,6 +170,9 @@ logs/
 # CMSSW
 *CMSSW*
 
+#Crab_stuff
+Skimming/crab*
+
 HggUnitTest.json
 plot_temp_options.json
 *.pkl
