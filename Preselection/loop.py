@@ -35,6 +35,11 @@ parser.add_argument(
     type = str,
     default = "all"
 )
+parser.add_argument(
+    "--full_diphoton_preselection",
+    help = "perform full diphoton preselection from scratch",
+    action = "store_true"
+)
 
 # --options points to a json file containing options for looping
 # this could include things like additional scaling of bkg samples,
@@ -93,6 +98,11 @@ parser.add_argument(
     "--dry_run",
     help = "don't submit jobs",
     action = "store_true"
+)
+parser.add_argument(
+   "--use_xrd",
+   help = "use UCSD T2 xrootd accessor to open nanoAOD files",
+   action = "store_true"
 )
 
 args = parser.parse_args()

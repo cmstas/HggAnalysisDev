@@ -28,6 +28,7 @@ class LoopHelper():
         self.select_samples = kwargs.get("select_samples")
         if self.select_samples != "all":
             self.select_samples = self.select_samples.split(",")
+        self.full_diphoton_preselection = kwargs.get("full_diphoton_preselection")
 
         self.output_tag = kwargs.get("output_tag")
         self.output_dir = kwargs.get("output_dir")
@@ -38,6 +39,7 @@ class LoopHelper():
         self.debug = kwargs.get("debug")
         self.fast = kwargs.get("fast")
         self.dry_run = kwargs.get("dry_run")
+        self.use_xrd = kwargs.get("use_xrd")
 
         self.lumi_map = { "2016" : 35.9, "2017" : 41.5, "2018" : 59.8 }
 
@@ -113,9 +115,15 @@ class LoopHelper():
                 if year not in self.years:
                     continue
                 for path in year_info["paths"]:
-                    files += glob.glob(path + "/*.root")
-                    files += glob.glob(path + "/*/*.root")
-                    files += glob.glob(path + "/*/*/*/*.root") # to be compatible with CRAB
+                    if self.use_xrd:
+                        #TODO: implement xrd accessing
+                        files = []
+                        #directories = os.popen("xrdfs root://redirector.t2.ucsd.edu// ls %s" % path.replace("/hadoop/cms", "")).read().split("\n")
+                        
+                    else:
+                        files += glob.glob(path + "/*.root")
+                        files += glob.glob(path + "/*/*.root")
+                        files += glob.glob(path + "/*/*/*/*.root") # to be compatible with CRAB
 
                 if len(files) == 0:
                     continue
@@ -229,9 +237,14 @@ class LoopHelper():
 
         # Diphoton preselection: NOTE we assume diphoton preselection is common to every analysis
 
-        diphoton_events = events # most of dipho preselection already applied, still need to enforce pt/mgg and mgg cuts
-        selected_photons = photon_selections.create_selected_photons(photons, self.branches, self.debug) # create record manually since it doesn't seem to work for selectedPhoton
-        diphoton_events, selected_photons = diphoton_selections.diphoton_preselection(diphoton_events, selected_photons, options, self.debug)
+        if self.full_diphoton_preselection:
+            selected_photons = events.Photon[photon_selections.select_photons_full(events, events.Photon, options["photons"], self.debug)]
+            diphoton_events, selected_photons = diphoton_selections.diphoton_preselection_full(events, selected_photons, options, self.debug) 
+
+        else:
+            diphoton_events = events # most of dipho preselection already applied, still need to enforce pt/mgg and mgg cuts
+            selected_photons = photon_selections.create_selected_photons(photons, self.branches, self.debug) # create record manually since it doesn't seem to work for selectedPhoton
+            diphoton_events, selected_photons = diphoton_selections.diphoton_preselection(diphoton_events, selected_photons, options, self.debug)
 
         events_and_objects = {}
 
@@ -295,25 +308,37 @@ class LoopHelper():
         sel_evts = []
         process_id = info["process_id"]
 
+        if self.debug > 0:
+            print("[LoopHelper] Loading files: %s" % str(files))
+
+        events = []
+        photons = []
+
         for file in files:
-            if self.debug > 0:
-                print("[LoopHelper] Loading file %s" % file)
+            events_file, photons_file = self.load_file(file, selection_metadata)
+            events.append(events_file)
+            if photons_file:
+                photons.append(photons_file)
 
-            events, photons = self.load_file(file, selection_metadata)
-            if events is None:
-                self.outputs.pop(output)
-                return
-            events = self.select_events(events, photons, selection_metadata)
-            events["process_id"] = numpy.ones(len(events)) * process_id
-            if data:
-                events["weight"] = numpy.ones(len(events))
-            else:
-                events["weight"] = events.genWeight * info["scale1fb"] * info["lumi"]
+        events = awkward.concatenate(events)
+        if photons:
+            photons = awkward.concatenate(photons)
 
-            events["year"] = numpy.ones(len(events)) * int(info["year"])
+        if events is None:
+            self.outputs.pop(output)
+            return
+        events = self.select_events(events, photons, selection_metadata)
 
-            trimmed_events = self.trim_events(events, data) # drop unneeded branches
-            sel_evts.append(trimmed_events)
+        events["process_id"] = numpy.ones(len(events)) * process_id
+        if data:
+            events["weight"] = numpy.ones(len(events))
+        else:
+            events["weight"] = events.genWeight * info["scale1fb"] * info["lumi"]
+
+        events["year"] = numpy.ones(len(events)) * int(info["year"])
+
+        trimmed_events = self.trim_events(events, data) # drop unneeded branches
+        sel_evts.append(trimmed_events)
 
         events_full = awkward.concatenate(sel_evts)
         self.write_to_df(events_full, output)

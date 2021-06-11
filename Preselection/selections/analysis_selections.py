@@ -156,7 +156,7 @@ def tth_hadronic_preselection(events, photons, electrons, muons, jets, options, 
     return selected_events
 
 def tth_inclusive_preselection(events, photons, electrons, muons, jets, options, debug):
-    cut_diagnostics = utils.CutDiagnostics(events = events, debug = debug, cut_set = "[analysis_selections.py : tth_leptonic_preselection]")
+    cut_diagnostics = utils.CutDiagnostics(events = events, debug = debug, cut_set = "[analysis_selections.py : tth_inclusive_preselection]")
 
     # Get number of electrons, muons
 
