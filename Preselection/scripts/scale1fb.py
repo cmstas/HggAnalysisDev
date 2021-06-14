@@ -54,6 +54,10 @@ def calculate_metadata(files, xs, debug):
         f = uproot.open(file)
         runs = f["Runs"]
 
+        if not (len(runs["run"].array()) >= 1):
+            if debug > 0:
+                print("[scale1fb.py: calculate_metadata] From file %s, did not find 1 or more events, skipping." % (file))
+            continue
         nEvents_file = int(numpy.sum(runs["genEventCount"].array()))
         sumWeights_file = int(numpy.sum(runs["genEventSumw"].array()))
 

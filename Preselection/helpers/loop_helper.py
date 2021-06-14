@@ -110,6 +110,22 @@ class LoopHelper():
                 print("[LoopHelper] Running over sample: %s" % sample)
                 print("[LoopHelper] details: ", info)
 
+            # Check if same files are used for multiple years
+            year_paths = None
+            year_dup = None
+            for year, year_info in info.items():
+                if year not in self.years:
+                    continue
+                if year_paths is None:
+                    year_paths = year_info["paths"]
+                    year_dup = year
+                elif year_info["paths"] == year_paths: # duplicate
+                    year_info["duplicate"] = True
+                    if "duplicates" not in info[year_dup].keys():
+                        info[year_dup]["duplicates"] = [year]
+                    else:
+                        info[year_dup]["duplicates"] += [year]
+
             for year, year_info in info.items():
                 files = []
                 if year not in self.years:
@@ -128,12 +144,25 @@ class LoopHelper():
                 if len(files) == 0:
                     continue
 
+                if "duplicate" in year_info.keys(): # this is a duplicate, skip
+                    if year_info["duplicate"]:
+                        continue
+                elif "duplicates" in year_info.keys(): # this contains duplicates
+                    year_job = "multi"
+                    lumi_job = self.lumi_map[year]
+                    for dup in year_info["duplicates"]:
+                        lumi_job += self.lumi_map[dup]
+                else: # regular sample
+                    year_job = year
+                    lumi_job = self.lumi_map[year]
+
+
                 job_info = {
                     "sample" : sample,
                     "process_id" : info["process_id"],
-                    "year" : year,
+                    "year" : year_job,
                     "scale1fb" : 1 if sample == "Data" else year_info["metadata"]["scale1fb"],
-                    "lumi" : self.lumi_map[year],
+                    "lumi" : lumi_job, 
                     "resonant" : info["resonant"]
                 }
 
@@ -162,12 +191,15 @@ class LoopHelper():
 
             manager = multiprocessing.Manager()
             running_procs = []
-            for job in self.jobs_manager:
+            for idx, job in enumerate(self.jobs_manager):
+                if self.debug > 0:
+                    print("[LoopHelper : submit_jobs] Running job %d/%d" % (idx, len(self.jobs_manager)))
+                    print(job)
                 if self.dry_run:
                     continue
-                print(job)
                 running_procs.append(multiprocessing.Process(target = self.loop_sample, args = (job,)))
                 running_procs[-1].start()
+            
 
                 while True:
                     do_break = False
@@ -271,6 +303,9 @@ class LoopHelper():
         elif self.selections == "HHggbb_boosted_Presel":
             options["boosted"] = True
             selected_events = analysis_selections.ggbb_preselection(diphoton_events, selected_photons, diphoton_events.Electron, diphoton_events.Muon, diphoton_events.Jet, diphoton_events.FatJet, options, self.debug)
+
+        elif self.selections == "ttHH_VHH_Presel":
+            selected_events = analysis_selections.tthh_vhh_preselection(diphoton_events, selected_photons, diphoton_events.Electron, diphoton_events.Muon, diphoton_events.Tau, diphoton_events.Jet, options, self.debug)
 
         else:
             print("[LoopHelper] Selection: %s is not currently implemented, please check." % self.selections)

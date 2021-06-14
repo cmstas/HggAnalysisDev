@@ -201,6 +201,58 @@ def tth_inclusive_preselection(events, photons, electrons, muons, jets, options,
 
     return selected_events
 
+def tthh_vhh_preselection(events, photons, electrons, muons, taus, jets, options, debug):
+    cut_diagnostics = utils.CutDiagnostics(events = events, debug = debug, cut_set = "[analysis_selections.py : tthh_vhh_preselection]")
+
+    ### Get objects ###
+    # Get leptons
+    selected_electrons = electrons[lepton_selections.select_electrons(events, photons, electrons, options, debug)]
+    selected_muons = muons[lepton_selections.select_muons(events, photons, muons, options, debug)]
+
+    n_electrons = awkward.num(selected_electrons)
+    n_muons = awkward.num(selected_muons)
+    n_leptons = n_electrons + n_muons
+
+    # Get taus
+    selected_taus = taus[tau_selections.select_taus(events, photons, selected_muons, selected_electrons, taus, options, debug)]
+    n_taus = awkward.num(selected_taus)
+
+    selected_jets = jets[jet_selections.select_jets(events, photons, selected_electrons, selected_muons, selected_taus, jets, options, debug)]
+
+    # Get jets and b-jets
+    selected_jets = jets[jet_selections.select_jets(events, photons, selected_electrons, selected_muons, None, jets, options, debug)]
+    n_jets = awkward.num(selected_jets)
+
+    selected_bjets = selected_jets[jet_selections.select_bjets(selected_jets, options, debug)]
+    n_bjets = awkward.num(selected_bjets)
+
+    ### Define cuts ###
+    # A very loose preslection entails requiring diphoton preselection + ( N_lep >= 1 || N_Tau_h >= 1 || N_jets >= 2 )
+    n_leptons_cut = n_leptons >= 1
+    n_taus_cut = n_taus >= 1
+    n_jets_cut = n_jets >= 2
+
+    all_cuts = n_leptons_cut | n_taus_cut | n_jets_cut
+
+    cut_diagnostics.add_cuts([n_leptons_cut, n_taus_cut, n_jets_cut, all_cuts], ["N_lep >= 1", "N_Tau_h >= 1", "N_jets >= 2", "all"])
+
+    # Keep only selected events
+    selected_events = events[all_cuts]
+    selected_photons = photons[all_cuts]
+    selected_electrons = selected_electrons[all_cuts]
+    selected_muons = selected_muons[all_cuts]
+    selected_taus = selected_taus[all_cuts]
+    selected_jets = selected_jets[all_cuts]
+
+    # Calculate event-level variables
+    selected_events = lepton_selections.set_electrons(selected_events, selected_electrons, debug)
+    selected_events = lepton_selections.set_muons(selected_events, selected_muons, debug)
+    selected_events = tau_selections.set_taus(selected_events, selected_taus, debug)
+    selected_events = jet_selections.set_jets(selected_events, selected_jets, options, debug)
+
+    return selected_events
+
+
 
 def ggbb_preselection(events, photons, electrons, muons, jets, fatjets, options, debug):
     cut_diagnostics = utils.CutDiagnostics(events = events, debug = debug, cut_set = "[analysis_selections.py : ggbb_preselection]")
