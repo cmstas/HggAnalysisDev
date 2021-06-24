@@ -88,7 +88,7 @@ def jet_id(jets, options):
 def set_fatjets(events, fatjets, options, debug):
     events["n_fatjets"] = awkward.num(fatjets)
 
-    n_save = 1
+    n_save = 1 #with n_save==1 I guess padding is useless
 
     fatjet_pt_padded = utils.pad_awkward_array(fatjets.pt, n_save, -9)
     fatjet_eta_padded = utils.pad_awkward_array(fatjets.eta, n_save, -9)
@@ -96,6 +96,11 @@ def set_fatjets(events, fatjets, options, debug):
     fatjet_msoftdrop_padded = utils.pad_awkward_array(fatjets.msoftdrop, n_save, -9)
     fatjet_btag_padded = utils.pad_awkward_array(fatjets.btagDDBvL_noMD, n_save, -9)
     fatjet_deepbtag_md_padded = utils.pad_awkward_array(fatjets.deepTagMD_HbbvsQCD, n_save, -9)
+    
+    if hasattr(fatjets,"particleNetMD_Xqq"):
+        fatjet_PNet_Xqq_padded = utils.pad_awkward_array(fatjets.particleNetMD_Xqq, n_save, -9)
+        fatjet_PNet_Xcc_padded = utils.pad_awkward_array(fatjets.particleNetMD_Xcc, n_save, -9)
+        fatjet_PNet_Xbb_padded = utils.pad_awkward_array(fatjets.particleNetMD_Xbb, n_save, -9)
 
     for i in range(n_save):
         events["fatjet%s_pt" % str(i+1)] = fatjet_pt_padded[:,i]
@@ -104,7 +109,15 @@ def set_fatjets(events, fatjets, options, debug):
         events["fatjet%s_mass" % str(i+1)] = fatjet_mass_padded[:,i]
         events["fatjet%s_btag" % str(i+1)] = fatjet_btag_padded[:,i]
         events["fatjet%s_deepbtag_md" % str(i+1)] = fatjet_deepbtag_md_padded[:,i]
-
+        
+        if hasattr(fatjets, "particleNetMD_Xqq"):
+            events["fatjet%s_particleNet_Tbb" % str(i+1)] = fatjet_PNet_Xbb_padded[:,i] / (  #taken from Hbb meeting 02/24/2021
+                                                            1 - fatjet_PNet_Xcc_padded[:,i] 
+                                                            - fatjet_PNet_Xqq_padded[:,i] )
+            events["fatjet%s_particleNet_Xqq" % str(i+1)] = fatjet_PNet_Xqq_padded[:,i]
+            events["fatjet%s_particleNet_Xcc" % str(i+1)] = fatjet_PNet_Xcc_padded[:,i]
+            events["fatjet%s_particleNet_Xbb" % str(i+1)] = fatjet_PNet_Xbb_padded[:,i]
+                   
     return events
 
 def set_jets(events, jets, options, debug):

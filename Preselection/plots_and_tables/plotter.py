@@ -126,7 +126,7 @@ class Plotter:
             )
         for var, plot_info in self.plot_options.items():
             if not "signal" in plot_info.keys():
-                plot_info["signal"] = ["HH_ggTauTau"]
+                plot_info["signal"] = ["HH_ggbb"]
         if self.debug:
             print("[plotter.py] Loaded dataframe and options")
 
@@ -180,9 +180,18 @@ class Plotter:
         for idx, branch in enumerate(self.branches):
             self.histograms[branch] = {}  # one histogram per process
             for process in self.plot_options[branch]["processes"]:
+                if process not in self.master_dataframe.keys():
+                    print(
+                        "[plotter.py] process {} not found in the dataframe, you can choose from {} \\ Crashing..\
+                                .".format(
+                            process,
+                            self.master_dataframe.keys()
+                        )
+                    )
+                    break
                 if branch not in self.master_dataframe[process].columns:
                     print(
-                        "[plotter.py] {} not found in the dataframe, you can choose from {} \\ Skipping..\
+                        "[plotter.py] branch {} not found in the dataframe, you can choose from {} \\ Skipping..\
                                 .".format(
                             branch,
                             self.master_dataframe[process].columns
@@ -410,9 +419,10 @@ class Plotter:
                 plt.savefig(self.save_filenames[idx])
             elif "output_name" in self.plot_options[branch].keys():
                 for outname in self.plot_options[branch]["output_name"]:
-                    plt.savefig(outname)
+                    plt.savefig(self.plot_options[branch]["output_dir"]+"/"+outname)
                     if self.debug:
-                        print("[plotter.py] Saved plot at {}".format(
+                        print("[plotter.py] Saved plot at {}/{}".format(
+                            self.plot_options[branch]["output_dir"],
                             outname)
                         )
             else:

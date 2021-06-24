@@ -146,7 +146,7 @@ class Guided_Optimizer():
             "sample_mean" : [], # mean value of limit for sampled points vs. epoch
             "sample_std" : [], # std ""
             "sample_best" : [], # best limit for sampled points vs. epoch
-            "accuracy" : [], # dnn accuracy vs. epcoh
+            "accuracy" : [], # dnn accuracy vs. epoch
         }
         
         self.n_bad_epochs = 0

@@ -32,7 +32,11 @@
             "idmva_cut" : -0.7,
             "lead_pt_mgg_cut" : 0.33,
             "sublead_pt_mgg_cut" : 0.25,
-            "eveto_cut" : 0.5
+            "eveto_cut" : 0.5,
+            "r9" : 0.8,
+            "ch_iso" : 20,
+            "ch_reliso" : 0.3,
+            "hoe" : 0.08
         },
         "electrons" : {
             "pt" : 10.0,

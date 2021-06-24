@@ -1,13 +1,123 @@
-{
-  "mva_score": {
+{ "year": {
+  "bin_type": "linspace",
+  "bins": [
+    2000,
+    3000,
+    2
+  ],
+  "processes": [
+    "WGamma",
+    "ZGamma",
+    "TTbar",
+    "TTGamma",
+    "TTGG",
+    "ttH",
+    "VH",
+    "HH_ggbb",
+    "Data",
+    "DiPhoton",
+    "GJets"
+  ],
+  "title": "total",
+  "cms_label": 1,
+  "ratio_ylim": [
+    0,
+    2
+  ],
+  "output_dir": "./output",
+  "output_name": [
+    "total.pdf",
+    "total.png"
+  ]
+
+  },
+  "lead_pixelSeed": {
     "bin_type": "linspace",
     "bins": [
       0,
+      10,
+      10
+    ],
+    "processes": [
+      "WGamma",
+      "ZGamma",
+      "TTbar",
+      "TTGamma",
+      "TTGG",
+      "ttH",
+      "VH",
+      "HH_ggbb",
+      "Data",
+      "DiPhoton",
+      "GJets"
+    ],
+    "signal_scaling": 1000,
+    "yaxis": "log",
+    "title": "lead_pixelSeed",
+    "cms_label": 1,
+    "ratio_ylim": [
+      0,
+      2
+    ],
+    "output_dir": "./output",
+    "output_name": [
+      "lead_pixelSeed.pdf",
+      "lead_pixelSeed.png"
+    ]
+  },
+"sublead_pixelSeed":{
+  "bin_type": "linspace",
+  "bins": [
+    0,
+    10,
+    10
+  ],
+  "processes": [
+    "WGamma",
+    "ZGamma",
+    "TTbar",
+    "TTGamma",
+    "TTGG",
+    "ttH",
+    "VH",
+    "HH_ggbb",
+    "Data",
+    "DiPhoton",
+    "GJets"
+  ],
+  "signal_scaling": 1000,
+  "yaxis": "log",
+  "title": "sublead_pixelSeed",
+  "cms_label": 1,
+  "ratio_ylim": [
+    0,
+    2
+  ],
+  "output_dir": "./output",
+  "output_name": [
+    "sublead_pixelSeed.pdf",
+    "sublead_pixelSeed.png"
+  ]
+},
+  "mva_score": {
+    "bin_type": "linspace",
+    "bins": [
+      0.85,
       1,
       30
     ],
     "processes": [
-      "HH_ggbb"
+      "WGamma",
+      "ZGamma",
+      "TTbar",
+      "TTGamma",
+      "TTGG",
+      "ttH",
+      "VH",
+      "HH_ggbb",
+      "Data",
+      "DiPhoton",
+      "GJets"
     ],
     "signal_scaling": 1000,
     "yaxis": "log",
@@ -25,7 +135,7 @@
       50
     ],
     "processes": [
-     "WGamma",
+      "WGamma",
       "ZGamma",
       "TTbar",
       "TTGamma",
@@ -54,7 +164,7 @@
       180
     ],
     "processes": [
-     "WGamma",
+      "WGamma",
       "ZGamma",
       "TTbar",
       "TTGamma",
@@ -82,7 +192,7 @@
       25
     ],
     "processes": [
-     "WGamma",
+      "WGamma",
       "ZGamma",
       "TTbar",
       "TTGamma",
@@ -106,7 +216,7 @@
     "bin_type":"linspace",
     "bins":[0,1000,40],
     "processes": [
-     "WGamma",
+      "WGamma",
       "ZGamma",
       "TTbar",
       "TTGamma",
@@ -129,7 +239,7 @@
     "bin_type":"linspace",
     "bins":[0,25,25],
     "processes": [
-     "WGamma",
+      "WGamma",
       "ZGamma",
       "TTbar",
       "TTGamma",
@@ -152,7 +262,7 @@
     "bin_type":"linspace",
     "bins":[-5,5,40],
     "processes": [
-     "WGamma",
+      "WGamma",
       "ZGamma",
       "TTbar",
       "TTGamma",
@@ -175,7 +285,7 @@
     "bin_type":"linspace",
     "bins":[0,25,25],
     "processes": [
-     "WGamma",
+      "WGamma",
       "ZGamma",
       "TTbar",
       "TTGamma",
@@ -198,7 +308,7 @@
     "bin_type":"linspace",
     "bins": [-5,5,40],
     "processes": [
-     "WGamma",
+      "WGamma",
       "ZGamma",
       "TTbar",
       "TTGamma",
@@ -221,7 +331,7 @@
     "bin_type":"linspace",
     "bins": [-5,5,40],
     "processes": [
-     "WGamma",
+      "WGamma",
       "ZGamma",
       "TTbar",
       "TTGamma",
@@ -244,7 +354,7 @@
     "bin_type":"linspace",
     "bins": [0,1,40],
     "processes": [
-     "WGamma",
+      "WGamma",
       "ZGamma",
       "TTbar",
       "TTGamma",
@@ -267,7 +377,7 @@
     "bin_type":"linspace",
     "bins": [0,1,40],
     "processes": [
-     "WGamma",
+      "WGamma",
       "ZGamma",
       "TTbar",
       "TTGamma",
@@ -290,7 +400,7 @@
     "bin_type":"linspace",
     "bins": [0,1000,40],
     "processes": [
-     "WGamma",
+      "WGamma",
       "ZGamma",
       "TTbar",
       "TTGamma",
@@ -313,7 +423,7 @@
     "bin_type":"linspace",
     "bins": [-2.5,2.5,40],
     "processes": [
-     "WGamma",
+      "WGamma",
       "ZGamma",
       "TTbar",
       "TTGamma",
@@ -336,7 +446,7 @@
     "bin_type":"linspace",
     "bins": [0,300,40],
     "processes": [
-     "WGamma",
+      "WGamma",
       "ZGamma",
       "TTbar",
       "TTGamma",
@@ -359,7 +469,7 @@
     "bin_type":"linspace",
     "bins": [0,300,40],
     "processes": [
-     "WGamma",
+      "WGamma",
       "ZGamma",
       "TTbar",
       "TTGamma",
@@ -380,9 +490,9 @@
   },
   "fatjet1_btag":{
     "bin_type":"linspace",
-    "bins": [0,1,40],
+    "bins": [0,1,100],
     "processes": [
-     "WGamma",
+      "WGamma",
       "ZGamma",
       "TTbar",
       "TTGamma",
@@ -403,9 +513,9 @@
   },
   "fatjet1_deepbtag_md":{
     "bin_type":"linspace",
-    "bins": [0,1,40],
+    "bins": [0,1,100],
     "processes": [
-     "WGamma",
+      "WGamma",
       "ZGamma",
       "TTbar",
       "TTGamma",
@@ -424,11 +534,45 @@
     "output_dir": "./output",
     "output_name": ["fatjet1_deepbtag_md.pdf","fatjet1_deepbtag_md.png"]
   },
+  "fatjet1_particleNet_Tbb": {
+    "bin_type": "linspace",
+    "bins": [
+      0,
+      1,
+      100
+    ],
+    "processes": [
+       "WGamma",
+      "ZGamma",
+      "TTbar",
+      "TTGamma",
+      "TTGG",
+      "ttH",
+      "VH",
+      "HH_ggbb",
+      "Data",
+      "DiPhoton",
+      "GJets"
+    ],
+    "signal_scaling": 1000,
+    "yaxis": "log",
+    "title": "fatjet1_particleNet_Tbb",
+    "cms_label": 1,
+    "ratio_ylim": [
+      0,
+      2
+    ],
+    "output_dir": "./output",
+    "output_name": [
+      "fatjet1_particleNet_Tbb.pdf",
+      "fatjet1_particleNet_Tbb.png"
+    ]
+  },
   "jet1_pt":{
     "bin_type":"linspace",
     "bins": [0,1000,40],
     "processes": [
-     "WGamma",
+      "WGamma",
       "ZGamma",
       "TTbar",
       "TTGamma",
@@ -451,7 +595,7 @@
     "bin_type":"linspace",
     "bins": [-2.5,2.5,40],
     "processes": [
-     "WGamma",
+      "WGamma",
       "ZGamma",
       "TTbar",
       "TTGamma",
@@ -474,7 +618,7 @@
     "bin_type":"linspace",
     "bins": [0,6,6],
     "processes": [
-     "WGamma",
+      "WGamma",
       "ZGamma",
       "TTbar",
       "TTGamma",
@@ -497,7 +641,7 @@
     "bin_type":"linspace",
     "bins": [0,1,40],
     "processes": [
-     "WGamma",
+      "WGamma",
       "ZGamma",
       "TTbar",
       "TTGamma",
@@ -520,7 +664,7 @@
     "bin_type":"linspace",
     "bins": [0,1000,40],
     "processes": [
-     "WGamma",
+      "WGamma",
       "ZGamma",
       "TTbar",
       "TTGamma",
@@ -543,7 +687,7 @@
     "bin_type":"linspace",
     "bins": [-2.5,2.5,40],
     "processes": [
-     "WGamma",
+      "WGamma",
       "ZGamma",
       "TTbar",
       "TTGamma",
@@ -566,7 +710,7 @@
     "bin_type":"linspace",
     "bins": [0,6,6],
     "processes": [
-     "WGamma",
+      "WGamma",
       "ZGamma",
       "TTbar",
       "TTGamma",
@@ -589,7 +733,7 @@
     "bin_type":"linspace",
     "bins": [0,1,40],
     "processes": [
-     "WGamma",
+      "WGamma",
       "ZGamma",
       "TTbar",
       "TTGamma",
@@ -612,7 +756,7 @@
     "bin_type":"linspace",
     "bins": [0,1000,40],
     "processes": [
-     "WGamma",
+      "WGamma",
       "ZGamma",
       "TTbar",
       "TTGamma",
@@ -649,7 +793,7 @@
     "bin_type":"linspace",
     "bins": [0,6,6],
     "processes": [
-     "WGamma",
+      "WGamma",
       "ZGamma",
       "TTbar",
       "TTGamma",
@@ -672,7 +816,7 @@
     "bin_type":"linspace",
     "bins": [0,1,40],
     "processes": [
-     "WGamma",
+      "WGamma",
       "ZGamma",
       "TTbar",
       "TTGamma",
@@ -695,7 +839,7 @@
     "bin_type":"linspace",
     "bins": [0,10,10],
     "processes": [
-     "WGamma",
+      "WGamma",
       "ZGamma",
       "TTbar",
       "TTGamma",
@@ -718,7 +862,7 @@
     "bin_type":"linspace",
     "bins": [0,10,10],
     "processes": [
-     "WGamma",
+      "WGamma",
       "ZGamma",
       "TTbar",
       "TTGamma",
@@ -746,6 +890,7 @@
     ],
     "processes": [
     "WGamma",
+
     "ZGamma",
     "TTbar",
     "TTGamma",
