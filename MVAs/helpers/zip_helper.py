@@ -54,6 +54,14 @@ class ZipHelper():
                 )
                 bdt.load_weights(config["weights"])
                 self.mvas[name] = bdt
+            elif config["config"]["mva"]["type"] == "regression_bdt":
+                bdt = bdt_helper.BDTHelper(
+                    events = "",
+                    config = config["config"],
+                    debug = self.debug
+                )
+                bdt.load_weights(config["weights"])
+                self.mvas[name] = bdt
 
         return
 

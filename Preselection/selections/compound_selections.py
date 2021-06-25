@@ -129,13 +129,13 @@ def set_visible_columns(events):
     decay_1_pt[selection] = events[selection].tau1_pt
     decay_1_eta[selection] = events[selection].tau1_eta
     decay_1_phi[selection] = events[selection].tau1_phi
-    decay_1_mass[selection] = numpy.ones(len(events[selection])) * (1.77686)
+    decay_1_mass[selection] = events[selection].tau1_mass
     decay_1_pdgId[selection] = 15 * events.tau1_charge[selection]
 
     decay_2_pt[selection] = events[selection].tau2_pt
     decay_2_eta[selection] = events[selection].tau2_eta
     decay_2_phi[selection] = events[selection].tau2_phi
-    decay_2_mass[selection] = numpy.ones(len(events[selection])) * (1.77686)
+    decay_2_mass[selection] = events[selection].tau2_mass
     decay_2_pdgId[selection] = 15 * events.tau2_charge[selection]
 
     selection = (events.Category_pairsLoose == 1) & (events.muon1_charge * events.tau1_charge < 0)
@@ -143,13 +143,13 @@ def set_visible_columns(events):
     decay_1_pt[selection] = events[selection].muon1_pt
     decay_1_eta[selection] = events[selection].muon1_eta
     decay_1_phi[selection] = events[selection].muon1_phi
-    decay_1_mass[selection] = numpy.ones(len(events[selection])) * (0.105658)
+    decay_1_mass[selection] = events[selection].muon1_mass
     decay_1_pdgId[selection] = 13 * events.muon1_charge[selection]
 
     decay_2_pt[selection] = events[selection].tau1_pt
     decay_2_eta[selection] = events[selection].tau1_eta
     decay_2_phi[selection] = events[selection].tau1_phi
-    decay_2_mass[selection] = numpy.ones(len(events[selection])) * (1.77686)
+    decay_2_mass[selection] = events[selection].tau1_mass
     decay_2_pdgId[selection] = 15 * events.tau1_charge[selection]
 
     selection = (events.Category_pairsLoose == 1) & (events.muon1_charge * events.tau2_charge < 0) & (events.muon1_charge * events.tau1_charge >= 0)
@@ -157,26 +157,26 @@ def set_visible_columns(events):
     decay_1_pt[selection] = events[selection].muon1_pt
     decay_1_eta[selection] = events[selection].muon1_eta
     decay_1_phi[selection] = events[selection].muon1_phi
-    decay_1_mass[selection] = numpy.ones(len(events[selection])) * (0.105658)
+    decay_1_mass[selection] = events[selection].muon1_mass
     decay_1_pdgId[selection] = 13 * events.muon1_charge[selection]
 
     decay_2_pt[selection] = events[selection].tau2_pt
     decay_2_eta[selection] = events[selection].tau2_eta
     decay_2_phi[selection] = events[selection].tau2_phi
-    decay_2_mass[selection] = numpy.ones(len(events[selection])) * (1.77686)
+    decay_2_mass[selection] = events[selection].tau2_mass
     decay_2_pdgId[selection] = 15 * events.tau2_charge[selection]
 
     selection = (events.Category_pairsLoose == 2) & (events.ele1_charge * events.tau1_charge < 0)
     decay_1_pt[selection] = events[selection].ele1_pt
     decay_1_eta[selection] = events[selection].ele1_eta
     decay_1_phi[selection] = events[selection].ele1_phi
-    decay_1_mass[selection] = numpy.ones(len(events[selection])) * (0.000511)
+    decay_1_mass[selection] = events[selection].ele1_mass
     decay_1_pdgId[selection] = 11 * events.ele1_charge[selection]
 
     decay_2_pt[selection] = events[selection].tau1_pt
     decay_2_eta[selection] = events[selection].tau1_eta
     decay_2_phi[selection] = events[selection].tau1_phi
-    decay_2_mass[selection] = numpy.ones(len(events[selection])) * (1.77686)
+    decay_2_mass[selection] = events[selection].tau1_mass 
     decay_2_pdgId[selection] = 15 * events.tau1_charge[selection]
 
     selection = (events.Category_pairsLoose == 2) & (events.ele1_charge * events.tau2_charge < 0) & (events.ele1_charge * events.tau1_charge >= 0)
@@ -184,13 +184,13 @@ def set_visible_columns(events):
     decay_1_pt[selection] = events[selection].ele1_pt
     decay_1_eta[selection] = events[selection].ele1_eta
     decay_1_phi[selection] = events[selection].ele1_phi
-    decay_1_mass[selection] = numpy.ones(len(events[selection])) * (0.000511)
+    decay_1_mass[selection] = events[selection].ele1_mass 
     decay_1_pdgId[selection] = 11 * events.ele1_charge[selection]
 
     decay_2_pt[selection] = events[selection].tau2_pt
     decay_2_eta[selection] = events[selection].tau2_eta
     decay_2_phi[selection] = events[selection].tau2_phi
-    decay_2_mass[selection] = numpy.ones(len(events[selection])) * (1.77686)
+    decay_2_mass[selection] = events[selection].tau2_mass 
     decay_2_pdgId[selection] = 15 * events.tau2_charge[selection]
 
     selection = events.Category_pairsLoose == 5
@@ -198,13 +198,13 @@ def set_visible_columns(events):
     decay_1_pt[selection] = events[selection].ele1_pt
     decay_1_eta[selection] = events[selection].ele1_eta
     decay_1_phi[selection] = events[selection].ele1_phi
-    decay_1_mass[selection] = numpy.ones(len(events[selection])) * (0.000511)
+    decay_1_mass[selection] = events[selection].ele1_mass 
     decay_1_pdgId[selection] = 11 * events.ele1_charge[selection]
 
     decay_2_pt[selection] = events[selection].ele2_pt
     decay_2_eta[selection] = events[selection].ele2_eta
     decay_2_phi[selection] = events[selection].ele2_phi
-    decay_2_mass[selection] = numpy.ones(len(events[selection])) * (0.000511)
+    decay_2_mass[selection] = events[selection].ele2_mass 
     decay_2_pdgId[selection] = 11 * events.ele2_charge[selection]
 
     selection = events.Category_pairsLoose == 4
@@ -212,26 +212,26 @@ def set_visible_columns(events):
     decay_1_pt[selection] = events[selection].muon1_pt
     decay_1_eta[selection] = events[selection].muon1_eta
     decay_1_phi[selection] = events[selection].muon1_phi
-    decay_1_mass[selection] = numpy.ones(len(events[selection])) * (0.105658)
+    decay_1_mass[selection] = events[selection].muon1_mass 
     decay_1_pdgId[selection] = 13 * events.muon1_charge[selection]
 
     decay_2_pt[selection] = events[selection].muon2_pt
     decay_2_eta[selection] = events[selection].muon2_eta
     decay_2_phi[selection] = events[selection].muon2_phi
-    decay_2_mass[selection] = numpy.ones(len(events[selection])) * (0.105658)
+    decay_2_mass[selection] = events[selection].muon2_mass 
     decay_2_pdgId[selection] = 13 * events.muon2_charge[selection]
 
     selection = (events.Category_pairsLoose == 6) & (events.muon1_charge * events.ele1_charge < 0)
     decay_1_pt[selection] = events[selection].muon1_pt
     decay_1_eta[selection] = events[selection].muon1_eta
     decay_1_phi[selection] = events[selection].muon1_phi
-    decay_1_mass[selection] = numpy.ones(len(events[selection])) * (0.105658)
+    decay_1_mass[selection] = events[selection].muon1_mass 
     decay_1_pdgId[selection] = 13 * events.muon1_charge[selection]
 
     decay_2_pt[selection] = events[selection].ele1_pt
     decay_2_eta[selection] = events[selection].ele1_eta
     decay_2_phi[selection] = events[selection].ele1_phi
-    decay_2_mass[selection] = numpy.ones(len(events[selection])) * (0.000511)
+    decay_2_mass[selection] = events[selection].ele1_mass 
     decay_2_pdgId[selection] = 11 * events.ele1_charge[selection]
 
 
@@ -240,13 +240,13 @@ def set_visible_columns(events):
     decay_1_pt[selection] = events[selection].muon1_pt
     decay_1_eta[selection] = events[selection].muon1_eta
     decay_1_phi[selection] = events[selection].muon1_phi
-    decay_1_mass[selection] = numpy.ones(len(events[selection])) * (0.105658)
+    decay_1_mass[selection] = events[selection].muon1_mass 
     decay_1_pdgId[selection] = 13 * events.muon1_charge[selection]
 
     decay_2_pt[selection] = events[selection].ele2_pt
     decay_2_eta[selection] = events[selection].ele2_eta
     decay_2_phi[selection] = events[selection].ele2_phi
-    decay_2_mass[selection] = numpy.ones(len(events[selection])) * (0.000511)
+    decay_2_mass[selection] = events[selection].ele2_mass 
     decay_2_pdgId[selection] = 11 * events.ele2_charge[selection]
 
    # using fancy vector package for this

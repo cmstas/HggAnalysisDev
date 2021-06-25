@@ -114,9 +114,10 @@ class LoopHelper():
                 if year not in self.years:
                     continue
                 for path in year_info["paths"]:
-                    files += glob.glob(path + "/*.root")
+                    files += glob.glob(path + "/*.root")[:40]
                     files += glob.glob(path + "/*/*.root")
                     files += glob.glob(path + "/*/*/*/*.root") # to be compatible with CRAB
+                   
 
                 if len(files) == 0:
                     continue
@@ -314,7 +315,12 @@ class LoopHelper():
             if events is None:
                 self.outputs.pop(output)
                 return
-            events = self.select_events(events, photons, selection_metadata)
+            try:
+                events = self.select_events(events, photons, selection_metadata)
+            except:
+                self.outputs.pop(output)
+                return
+
             events["process_id"] = numpy.ones(len(events)) * process_id
             if data:
                 events["weight"] = numpy.ones(len(events))
@@ -359,8 +365,10 @@ class LoopHelper():
                     triggers = ["HLT_Diphoton30_22_R9Id_OR_IsoCaloId_AND_HE_R9Id_Mass90"]
                 branches_no_pho += triggers
 
-
-            events = tree.arrays(branches_no_pho, library = "ak", how = "zip")
+            try:
+                events = tree.arrays(branches_no_pho, library = "ak", how = "zip")
+            except:
+                return None
 
             branches_pho = [branch for branch in branches if "selectedPhoton" in branch]
             photons = tree.arrays(branches_pho, library = "ak", how = "zip")

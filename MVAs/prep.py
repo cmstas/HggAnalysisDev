@@ -38,6 +38,13 @@ parser.add_argument(
         default = 0
         )
 
+parser.add_argument(
+        "--scaler_file",
+        help="scaler file",
+        type=str,
+        default=None
+        )
+
 args = parser.parse_args()
 
 if args.type == 1:

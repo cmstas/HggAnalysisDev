@@ -94,6 +94,9 @@ def calc_roc_and_unc(y, pred, sample_weight, n_bootstrap = 10, interp = 10000):
     return results
 
 def make_train_test_validation_split(df):
+    if "train_label" in df.columns:
+        return df, None, None, None
+
     mgg = df["gg_mass"].tolist()
     digits = numpy.array([int(str(m).split(".")[1]) for m in mgg])
 

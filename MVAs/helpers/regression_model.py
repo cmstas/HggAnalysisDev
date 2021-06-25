@@ -1,4 +1,4 @@
-from tensorflow.keras import layers, Model, regularizers
+from tensorflow.keras import layers, Model, regularizers, initializers
 import tensorflow
 import sys
 
@@ -31,9 +31,9 @@ class TauRegressionModel(Model):
             if "l2_lambda" in layer_info.keys():
                 l2_lambda = layer_info["l2_lambda"]
 
-            self.hidden_layers.append(layers.Dense(n_neurons, activation=activation, name="layer_{}".format(i), kernel_regularizer=regularizers.l2(l2_lambda)))
+            self.hidden_layers.append(layers.Dense(n_neurons, activation=activation, name="layer_{}".format(i), kernel_regularizer=regularizers.l2(l2_lambda), kernel_initializer=initializers.GlorotNormal()))
 
-        self.output_layer = layers.Dense(n_output, name="output", activation=tensorflow.nn.relu)
+        self.output_layer = layers.Dense(n_output, name="output", activation=tensorflow.nn.relu, kernel_regularizer=regularizers.l2(l2_lambda))
 
     def call(self, inputs):
         current_output = inputs

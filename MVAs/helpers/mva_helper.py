@@ -5,7 +5,8 @@ import numpy
 import matplotlib.pyplot as plt
 
 from . import utils
-from . import bdt_helper, regression_nn_helper
+from . import bdt_helper, regression_nn_helper, regression_bdt_helper
+import os
 
 class MVAHelper():
     """
@@ -42,6 +43,12 @@ class MVAHelper():
             self.predict()
             self.evaluate_regression_performance()
             self.save_model_metadata()  # best model automatically saved
+        elif self.config["mva"]["type"] == "regression_bdt":
+            self.load_regression_events()
+            self.train()
+            self.predict()
+            self.evaluate_regression_performance()
+            self.save_weights()
 
     def evaluate(self, model_file):
         if self.config["mva"]["type"] == "binary_classification_bdt":
@@ -75,7 +82,7 @@ class MVAHelper():
         self.events = {}
         for split in ["train", "test"]:
             self.events[split] = {}
-            for data in ["X","y"]:
+            for data in ["X","y", "weight"]:
                 self.events[split][data] = pandas.read_hdf(self.input, "%s_%s" % (data, split))
 
             if self.debug > 0:
@@ -97,7 +104,13 @@ class MVAHelper():
                     output_tag = self.output_tag,
                     debug = self.debug
                     )
-        return
+        elif self.config["mva"]["type"] == "regression_bdt":
+            self.train_helper = regression_bdt_helper.BDTHelper(
+                events = self.events,
+                config = self.config,
+                output_tag = self.output_tag,
+                debug = self.debug
+            )
 
     def load_weights(self, weight_file):
         self.initialize_train_helper()
@@ -122,6 +135,7 @@ class MVAHelper():
             print("Predicting using the best model")
             model_file = self.output_tag
             self.load_model("best")
+
         self.prediction = self.train_helper.predict()
 
 
@@ -131,7 +145,7 @@ class MVAHelper():
     def evaluate_regression_performance(self):
         # Compute MAE
         mae = {}
-        for split in self.events.keys():
+        for split in ["test"]:
             mae[split] = sum(abs(self.prediction[split] - self.events[split]["y"]))/len(self.prediction[split])
         print("MAE = ", mae)
 
@@ -195,8 +209,9 @@ class MVAHelper():
 
     def save_weights(self):
         self.summary = self.train_helper.save_weights()
-        self.summary["plots"] = self.plots
-        self.summary["npz_file"] = self.npz_file
+        if self.config["mva"]["type"] == "binary_classification_bdt":
+            self.summary["plots"] = self.plots
+            self.summary["npz_file"] = self.npz_file
 
         self.summary_file = "output/" + self.output_tag + ".json"
         with open(self.summary_file, "w") as f_out:
@@ -215,5 +230,6 @@ class MVAHelper():
         metadata["config"]["mva"]["model_file"] = self.output_tag
         metadata["config"]["mva"]["training_features"] = self.config["training_features"] 
         
-        with open("output/{}_metadata.json".format(self.output_tag),"w") as f:
+        with open("output/{}/{}_metadata.json".format(self.output_tag, self.output_tag),"w") as f:
             json.dump(metadata, f, sort_keys=True, indent=4)
+        os.system("cp -r {} output/{}/".format(self.config_file, self.output_tag))

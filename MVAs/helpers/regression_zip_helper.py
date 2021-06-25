@@ -2,8 +2,10 @@ import h5py
 import pandas
 import numpy
 import json
-
+import os
 from helpers import mva_helper, regression_nn_helper, utils
+from sklearn.preprocessing import StandardScaler
+import pickle as pkl 
 
 class ZipHelper():
     """
@@ -18,7 +20,7 @@ class ZipHelper():
         self.names = kwargs.get("names")
         self.debug = kwargs.get("debug")
         self.output = kwargs.get("output")
-
+        self.scaler_file = kwargs.get("scaler_file")
         if self.debug > 0:
             print("[ZipHelper] Creating Regression ZipHelper instance with options:")
             print("\n".join(["{0}={1!r}".format(a, b) for a, b in kwargs.items()]))
@@ -28,12 +30,12 @@ class ZipHelper():
              print("[ZipHelper] Loaded file %s, containing %d events" % (self.input, len(self.df)))
 
     def run(self):
-        self.load_mvas()
-        self.calculate_scores()
+        self.load_and_calculate_mvas()
+#        self.calculate_scores()
         self.save_df()
 
 
-    def load_mvas(self):
+    def load_and_calculate_mvas(self):
         self.mvas = {}
         self.mva_configs = {}
         self.mva_files = self.mva_files.split(",")
@@ -52,12 +54,28 @@ class ZipHelper():
                     )
                 nn.load_model("best")
                 self.mvas[name] = nn
+                # Load standard scaler
+                numeric_columns = [i for i in config["config"]["mva"]["training_features"] if "onehot" not in i]
 
+                if self.scaler_file and "standard_scaling" in config["config"]["mva"].keys() and config["config"]["mva"]["standard_scaling"]:
+                    self.scaler = pkl.load(open(self.scaler_file, "rb"))
+                    self.df[numeric_columns] = self.scaler.transform(self.df[numeric_columns])
+
+                scores = nn.predict_from_df(self.df, config["config"]["mva"]["training_features"])
+                self.df[name] = scores["inference"]
+                if self.scaler_file and "standard_scaling" in config["config"]["mva"].keys() and config["config"]["mva"]["standard_scaling"]:
+                    self.df[numeric_columns] = self.scaler.inverse_transform(self.df[numeric_columns])
+                   
+
+                
     def calculate_scores(self):
         for name, mva in self.mvas.items():
             config = self.mva_configs[name]
             scores = mva.predict_from_df(self.df, config["config"]["mva"]["training_features"])
             self.df[name] = scores["inference"]
+            # unscale
+            numeric_columns = [i for i in config["config"]["mva"]["training_features"] if "onehot" not in i]
+            self.df[numeric_columns] = self.scaler.inverse_transform(self.df[numeric_columns])
 
     def save_df(self):
         self.df.to_pickle(self.output)

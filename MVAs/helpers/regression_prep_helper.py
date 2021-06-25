@@ -3,8 +3,9 @@ import pandas
 import json
 import numpy as np
 import random
-
+from sklearn.preprocessing import StandardScaler
 from helpers import utils
+import pickle as pkl
 
 class PrepHelper():
     """
@@ -41,12 +42,22 @@ class PrepHelper():
     def preprocess(self):
         # eliminate -1 category
         self.df = self.df.loc[self.df["Category_pairsLoose"] != -1].reset_index(drop=True)
-        # one hot encoding of category : category 1 is all zeros, and then we proceed
-        for i in range(1,6):
-            self.df["Category_onehot_{}".format(i)] = np.zeros(len(self.df))
+        self.df["gen_higgs_mass"] = round(self.df["gen_higgs_mass"])
+#        self.df = self.df.loc[self.df["gen_higgs_mass"] % 5 == 0].reset_index(drop=True)
+#        self.df = self.df.loc[self.df["gen_higgs_mass"] == self.df["gen_higgs_mass"].astype(np.int32)].reset_index(drop=True)
+        # restrict mass
+        if "restrict_mass" in self.config.keys() and self.config["restrict_mass"]:
+            if self.debug > 0:
+                print("[PrepHelper] restricting mass to 110 GeV")
+            self.df = self.df.loc[self.df["gen_higgs_mass"] <= 110].reset_index(drop=True)
 
-        for i in range(2,7):
-            self.df.loc[self.df["Category_pairsLoose"] == i,"Category_onehot_{}".format(i-1)] = 1
+        if "Category_onehot_1" not in self.df.columns:
+            for i in range(1,6):
+                self.df["Category_onehot_{}".format(i)] = np.zeros(len(self.df))
+
+            for i in range(2,7):
+                self.df.loc[self.df["Category_pairsLoose"] == i,"Category_onehot_{}".format(i-1)] = 1
+     
 
     def make_train_test_validation_split(self):
         # mark events as train/val/test - 75% train, 15% val, 10% test
@@ -82,14 +93,43 @@ class PrepHelper():
         self.df_val = self.df_val.sample(frac=1).reset_index(drop=True)
         self.df_test = self.df_test.sample(frac=1).reset_index(drop=True)
 
+        # add event weights
+        for higgsMass in self.df_train["gen_higgs_mass"].unique():
+            self.df_train.loc[self.df_train["gen_higgs_mass"] == higgsMass, "weight"] = 1000.0/len(self.df_train.loc[self.df_train["gen_higgs_mass"] == higgsMass])
+        
+
+        for higgsMass in self.df_val["gen_higgs_mass"].unique():
+            self.df_val.loc[self.df_val["gen_higgs_mass"] == higgsMass, "weight"] = 1000.0/len(self.df_val.loc[self.df_val["gen_higgs_mass"] == higgsMass])
+        
+        for higgsMass in self.df_test["gen_higgs_mass"].unique():
+            self.df_test.loc[self.df_test["gen_higgs_mass"] == higgsMass, "weight"] = 1000.0/len(self.df_test.loc[self.df_test["gen_higgs_mass"] == higgsMass])
+
+
+        
+        # standard scaling
+        if "standard_scaling" in self.config.keys() and self.config["standard_scaling"]:
+            scaler = StandardScaler()
+            numeric_columns = [i for i in self.config["training_features"] if "onehot" not in i]
+            if self.debug > 0:
+                print("[PrepHelper] Standard Scaling the following numeric input features")
+                print(numeric_columns)
+
+            self.df_train[numeric_columns]  = scaler.fit_transform(self.df_train[numeric_columns])
+            self.df_test[numeric_columns] = scaler.transform(self.df_test[numeric_columns])
+            pkl.dump(scaler, open(self.output[:-5]+"_scaler_weights.pkl", "wb"))
+
         self.X_train = self.df_train[self.config["training_features"]]
         self.y_train = self.df_train["gen_higgs_mass"]
-
-        self.X_val = self.df_val[self.config["training_features"]]
-        self.y_val = self.df_val["gen_higgs_mass"]
+        self.weight_train = self.df_train["weight"]
 
         self.X_test = self.df_test[self.config["training_features"]]
         self.y_test = self.df_test["gen_higgs_mass"]
+        self.weight_test = self.df_test["weight"]
+
+
+        self.X_val = self.df_val[self.config["training_features"]]
+        self.y_val = self.df_val["gen_higgs_mass"]
+        self.weight_val = self.df_val["weight"]
 
         self.n_train = len(self.df[self.df["train_label"] == 0])
         self.n_test = len(self.df[self.df["train_label"] == 1])
@@ -98,8 +138,10 @@ class PrepHelper():
     def write_hdf5(self):
         self.X_train.to_hdf(self.output, "X_train")
         self.y_train.to_hdf(self.output, "y_train")
+        self.weight_train.to_hdf(self.output, "weight_train")
         self.X_test.to_hdf(self.output, "X_test")
         self.y_test.to_hdf(self.output, "y_test")
+        self.weight_test.to_hdf(self.output, "weight_test")
 
         df_output_name = self.input[:-4] + "_with_labels.pkl"
         self.df.to_pickle(df_output_name)

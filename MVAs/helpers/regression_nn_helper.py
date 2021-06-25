@@ -6,7 +6,7 @@ import sys
 from keras.callbacks import ModelCheckpoint, EarlyStopping, ReduceLROnPlateau
 from . import logger
 from . import regression_model
-
+import os
 
 class NNHelper():
     def __init__(self, **kwargs):
@@ -86,7 +86,7 @@ class NNHelper():
         if self.config["mva"]["early_stopping"]:
             n_early_stopping = self.config["mva"]["early_stopping_rounds"]
             print("[DNNHelper] Early stopping with {} rounds ({} maximum)".format(n_early_stopping, n_max_epochs))
-            early_stopper = EarlyStopping(monitor="val_loss", patience=10, verbose=1)
+            early_stopper = EarlyStopping(monitor="val_loss", patience=n_early_stopping, verbose=1)
             callbacks.append(early_stopper)
         else:
             print("[DNNHelper] Training for {} (no early stopping)".format(n_max_epochs))
@@ -106,15 +106,18 @@ class NNHelper():
 #            callbacks.append(lr_reducer)
               
         # best model saving
-        best_checkpoint = ModelCheckpoint(filepath="output/{}_model_best".format(self.output_tag), save_weights_only=False, monitor="val_mean_squared_error", mode="auto", save_best_only=True)
+        os.system("mkdir -p output/"+self.output_tag)
+
+        best_checkpoint = ModelCheckpoint(filepath="output/{}/{}_model_best".format(self.output_tag, self.output_tag), save_weights_only=False, monitor="val_loss", mode="auto", save_best_only=True)
         # last model saving
-        last_checkpoint = ModelCheckpoint(filepath="output/"+self.output_tag+"-weights-{epoch:02d}.hdf5", save_weights_only=True, monitor="val_mean_squared_error", mode="auto", save_best_only=False)
+        last_checkpoint = ModelCheckpoint(filepath="output/{}/".format(self.output_tag)+self.output_tag+"-weights-{epoch:02d}.hdf5", save_weights_only=True, monitor="val_loss", mode="auto", save_best_only=False)
         
         callbacks.extend([best_checkpoint, last_checkpoint])
 
         self.model.compile(optimizer=optimizer, loss=loss_function, metrics=[keras.metrics.MeanSquaredError()])
-        history = self.model.fit(self.events["train"]["X"], self.events["train"]["y"], batch_size=128, epochs=n_max_epochs, validation_data=(self.events["test"]["X"], self.events["test"]["y"]), callbacks=callbacks)
-        numpy.savetxt("output/{}_val_loss.txt".format(self.output_tag), history.history["val_mean_squared_error"])
+        history = self.model.fit(self.events["train"]["X"], self.events["train"]["y"], batch_size=1024, epochs=n_max_epochs, validation_data=(self.events["test"]["X"], self.events["test"]["y"], self.events["test"]["weight"]), sample_weight=self.events["train"]["weight"], callbacks=callbacks, shuffle=False)
+        numpy.savetxt("output/{}/{}_val_loss.txt".format(self.output_tag, self.output_tag), history.history["val_loss"])
+        numpy.savetxt("output/{}/{}_train_loss.txt".format(self.output_tag, self.output_tag), history.history["loss"])
 
     def make_tensor(self, batch_size=128):
         for split in self.events.keys():
@@ -140,8 +143,13 @@ class NNHelper():
         if not self.made_tensor:
             self.make_tensor()
         prediction = {}
-        for split in self.events.keys():
+        if "inference" in self.events.keys():
+            splits = ["inference"]
+        else:
+            splits = ["test"]
+        for split in splits:
             for step, features in enumerate(self.events[split]["tensor"]):
+                print("step = ", step)
                 if type(features) is tuple:
                     features, targets = features
                 if split not in prediction.keys():
@@ -153,8 +161,8 @@ class NNHelper():
 
     def save_model(self, model_tag=""):
         """ Save weights"""
-        self.model.save("output/{}_model_{}".format(self.output_tag, model_tag))
+        self.model.save("output/{}/{}_model_{}".format(self.output_tag, self.output_tag, model_tag))
 
     def load_model(self, model_tag=""):
-        self.model = keras.models.load_model("output/{}_model_{}".format(self.output_tag, model_tag))
+        self.model = keras.models.load_model("output/{}/{}_model_{}".format(self.output_tag, self.output_tag, model_tag))
 

@@ -1,6 +1,7 @@
 {
-    "training_features":["decay_1_pt", "decay_1_eta", "decay_1_phi", "decay_1_energy", "decay_1_mass", "decay_2_pt", "decay_2_eta", "decay_2_phi", "decay_2_energy", "decay_2_mass", "Category_onehot_1", "Category_onehot_2", "Category_onehot_3", "Category_onehot_4", "Category_onehot_5", "MET_pt", "MET_phi", "m_tautau_vis"],
-    "standard_scaling":true,
+    "training_features":["decay_1_pt", "decay_1_eta", "decay_1_phi", "decay_1_mass", "decay_2_pt", "decay_2_eta", "decay_2_phi", "decay_2_mass", "Category_onehot_1", "Category_onehot_2", "Category_onehot_3", "Category_onehot_4", "Category_onehot_5", "MET_pt", "MET_phi", "m_tautau_vis"],
+    "standard_scaling":false,
+    "normalize_with_visible_tau_mass":true,
     "mva":
     {
         "type":"regression_neural_network",

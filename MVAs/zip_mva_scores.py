@@ -41,6 +41,13 @@ parser.add_argument(
 )
 
 parser.add_argument(
+        "--scaler_file",
+        help="scaler file",
+        type=str,
+        default=None
+        )
+
+parser.add_argument(
         "--type",
         help = "type of network (0 for BDT, 1 for regression DNN)",
         type = int,
