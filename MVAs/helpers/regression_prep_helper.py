@@ -57,7 +57,15 @@ class PrepHelper():
 
             for i in range(2,7):
                 self.df.loc[self.df["Category_pairsLoose"] == i,"Category_onehot_{}".format(i-1)] = 1
-     
+
+        # Normalize the pt features and the mass features
+        if "normalize_with_visible_tau_mass" in self.config.keys() and self.config["normalize_with_visible_tau_mass"]:
+            normalizable_features = [i for i in self.config["training_features"] if "pt" in i or "mass"]
+            self.df[normalizable_features] /= self.df["m_tautau_vis"]
+            self.df["gen_higgs_mass_normalized"] /= self.df["m_tautau_vis"]
+            self.target = "gen_higgs_mass_normalized"
+        else:
+            self.target = "gen_higgs_mass"
 
     def make_train_test_validation_split(self):
         # mark events as train/val/test - 75% train, 15% val, 10% test
@@ -96,16 +104,16 @@ class PrepHelper():
         # add event weights
         for higgsMass in self.df_train["gen_higgs_mass"].unique():
             self.df_train.loc[self.df_train["gen_higgs_mass"] == higgsMass, "weight"] = 1000.0/len(self.df_train.loc[self.df_train["gen_higgs_mass"] == higgsMass])
-        
+
 
         for higgsMass in self.df_val["gen_higgs_mass"].unique():
             self.df_val.loc[self.df_val["gen_higgs_mass"] == higgsMass, "weight"] = 1000.0/len(self.df_val.loc[self.df_val["gen_higgs_mass"] == higgsMass])
-        
+
         for higgsMass in self.df_test["gen_higgs_mass"].unique():
             self.df_test.loc[self.df_test["gen_higgs_mass"] == higgsMass, "weight"] = 1000.0/len(self.df_test.loc[self.df_test["gen_higgs_mass"] == higgsMass])
 
 
-        
+
         # standard scaling
         if "standard_scaling" in self.config.keys() and self.config["standard_scaling"]:
             scaler = StandardScaler()
@@ -119,16 +127,16 @@ class PrepHelper():
             pkl.dump(scaler, open(self.output[:-5]+"_scaler_weights.pkl", "wb"))
 
         self.X_train = self.df_train[self.config["training_features"]]
-        self.y_train = self.df_train["gen_higgs_mass"]
+        self.y_train = self.df_train[self.target]
         self.weight_train = self.df_train["weight"]
 
         self.X_test = self.df_test[self.config["training_features"]]
-        self.y_test = self.df_test["gen_higgs_mass"]
+        self.y_test = self.df_test[self.target]
         self.weight_test = self.df_test["weight"]
 
 
         self.X_val = self.df_val[self.config["training_features"]]
-        self.y_val = self.df_val["gen_higgs_mass"]
+        self.y_val = self.df_val[self.target]
         self.weight_val = self.df_val["weight"]
 
         self.n_train = len(self.df[self.df["train_label"] == 0])
