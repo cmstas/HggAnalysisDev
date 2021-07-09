@@ -114,16 +114,18 @@ def set_fatjets(events, fatjets, options, debug):
 
 def set_jets(events, jets, options, debug):
     events["n_jets"] = awkward.num(jets)
-
+    events["n_good_jets"] = awkward.num(jets)
     n_save = options["jets"]["n_jets_save"]
     jet_pt_padded = utils.pad_awkward_array(jets.pt, n_save, -9)
     jet_eta_padded = utils.pad_awkward_array(jets.eta, n_save, -9)
+    jet_phi_padded = utils.pad_awkward_array(jets.phi, n_save, -9)
     jet_id_padded = utils.pad_awkward_array(jets.jetId, n_save, -9)
     jet_btagDeepFlavB_padded = utils.pad_awkward_array(jets.btagDeepFlavB, n_save, -9)
 
     for i in range(n_save):
         events["jet%s_pt" % str(i+1)] = jet_pt_padded[:,i]
         events["jet%s_eta" % str(i+1)] = jet_eta_padded[:,i]
+        events["jet%s_phi" % str(i+1)] = jet_phi_padded[:,i]
         events["jet%s_id" % str(i+1)] = jet_id_padded[:,i]
         events["jet%s_bTagDeepFlavB" % str(i+1)] = jet_btagDeepFlavB_padded[:,i]
 

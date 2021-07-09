@@ -37,7 +37,6 @@ class NNHelper():
         else:
             print("[DNNHelper] Training for {} (no early stopping)".format(n_max_epochs))
             n_early_stopping = -1
-        loss_function = keras.losses.MeanSquaredError()
         optimizer = keras.optimizers.Adam(learning_rate=1e-3)
         logging = logger.Logger(n_early_stopping)
         # training happens here!
@@ -95,15 +94,24 @@ class NNHelper():
         learning_rate = 5e-4
         if "learning_rate" in self.config["mva"].keys():
             learning_rate= self.config["mva"]["learning_rate"]
+        if "loss" in self.config["mva"].keys() and self.config["mva"]["loss"] == "MSE":
+            loss_function = keras.losses.MeanSquaredError()
+            metric = keras.metrics.MeanSquaredError()
+        elif "loss" in self.config["mva"].keys() and self.config["mva"]["loss"] == "MAE":
+            loss_function = keras.losses.MeanAbsoluteError()
+            metric = keras.metrics.MeanAbsoluteError()
+        else:
+            print("[DNNHelper] Cannot understand loss parameter {}. Defaulting to MSE".format(self.config["mva"]["error"]))
+            loss_function = keras.losses.MeanSquaredError()
+            metric = keras.metrics.MeanSquaredError()
 
-        loss_function = keras.losses.MeanSquaredError()
         optimizer = keras.optimizers.Adam(learning_rate=learning_rate)
         
         reduce_learning_rate = False
         if "lr_reduction_factor" in self.config["mva"].keys():
             reduce_learning_rate = True
             lr_reducer = ReduceLROnPlateau(monitor="val_loss", factor=self.config["mva"]["lr_reduction_factor"], patience=5, verbose=1)
-#            callbacks.append(lr_reducer)
+            callbacks.append(lr_reducer)
               
         # best model saving
         os.system("mkdir -p output/"+self.output_tag)
@@ -114,8 +122,11 @@ class NNHelper():
         
         callbacks.extend([best_checkpoint, last_checkpoint])
 
-        self.model.compile(optimizer=optimizer, loss=loss_function, metrics=[keras.metrics.MeanSquaredError()])
-        history = self.model.fit(self.events["train"]["X"], self.events["train"]["y"], batch_size=1024, epochs=n_max_epochs, validation_data=(self.events["test"]["X"], self.events["test"]["y"], self.events["test"]["weight"]), sample_weight=self.events["train"]["weight"], callbacks=callbacks, shuffle=False)
+        self.model.compile(optimizer=optimizer, loss=loss_function, metrics=[metric])
+        if "normalize_with_visible_tau_mass" in self.config.keys() and self.config["normalize_with_visible_tau_mass"]:
+            history = self.model.fit(self.events["train"]["X"], self.events["train"]["y"], batch_size=1024, epochs=n_max_epochs, validation_data=(self.events["test"]["X"], self.events["test"]["y"]), callbacks=callbacks, shuffle=False)
+        else:
+            history = self.model.fit(self.events["train"]["X"], self.events["train"]["y"], batch_size=1024, epochs=n_max_epochs, validation_data=(self.events["test"]["X"], self.events["test"]["y"], self.events["test"]["weight"]), sample_weight=self.events["train"]["weight"], callbacks=callbacks, shuffle=False)
         numpy.savetxt("output/{}/{}_val_loss.txt".format(self.output_tag, self.output_tag), history.history["val_loss"])
         numpy.savetxt("output/{}/{}_train_loss.txt".format(self.output_tag, self.output_tag), history.history["loss"])
 
@@ -149,7 +160,6 @@ class NNHelper():
             splits = ["test"]
         for split in splits:
             for step, features in enumerate(self.events[split]["tensor"]):
-                print("step = ", step)
                 if type(features) is tuple:
                     features, targets = features
                 if split not in prediction.keys():

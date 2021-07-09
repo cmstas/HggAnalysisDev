@@ -1,12 +1,12 @@
 {
-    "training_features":["decay_1_pt", "decay_1_eta", "decay_1_phi", "decay_1_mass", "decay_2_pt", "decay_2_eta", "decay_2_phi", "decay_2_mass", "Category_onehot_1", "Category_onehot_2", "Category_onehot_3", "Category_onehot_4", "Category_onehot_5", "MET_pt", "MET_phi"],
+    "training_features":["decay_1_pt", "decay_1_eta", "decay_1_phi", "decay_1_mass", "decay_2_pt", "decay_2_eta", "decay_2_phi", "decay_2_mass", "Category_onehot_1", "Category_onehot_2", "Category_onehot_3", "Category_onehot_4", "Category_onehot_5", "MET_pt", "MET_phi", "MET_covXX", "MET_covXY", "MET_covYY", "jet1_pt", "jet1_eta", "jet1_phi", "jet2_pt", "jet2_eta", "jet2_phi", "n_good_jets"],
     "standard_scaling":true,
     "normalize_with_visible_tau_mass":true,
     "mva":
     {
         "type":"regression_neural_network",
         "param":{
-            "n_hidden":10,
+            "n_hidden":5,
             "n_output":1,
             "l2_lambda":0.0
         },
@@ -33,7 +33,7 @@
         "layer_6":{
             "n_neurons":500,
             "activation":"relu"
-        },
+},
         "layer_7":{
             "n_neurons":500,
             "activation":"relu"
@@ -73,9 +73,12 @@
             "activation":"relu"
         },
 
-       "n_max_epochs":1000,
+       "loss":"MAE",
+       "n_max_epochs":3000,
         "early_stopping":true,
         "early_stopping_rounds":20,
-        "learning_rate":1e-7
+        "learning_rate":1e-8,
+        "lr_reduction_factor":0.1
+     
     }
 }

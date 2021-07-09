@@ -42,7 +42,7 @@ class PrepHelper():
     def preprocess(self):
         # eliminate -1 category
         self.df = self.df.loc[self.df["Category_pairsLoose"] != -1].reset_index(drop=True)
-        self.df["gen_higgs_mass"] = round(self.df["gen_higgs_mass"])
+#        self.df["gen_higgs_mass"] = round(self.df["gen_higgs_mass"])
 #        self.df = self.df.loc[self.df["gen_higgs_mass"] % 5 == 0].reset_index(drop=True)
 #        self.df = self.df.loc[self.df["gen_higgs_mass"] == self.df["gen_higgs_mass"].astype(np.int32)].reset_index(drop=True)
         # restrict mass
@@ -60,9 +60,15 @@ class PrepHelper():
 
         # Normalize the pt features and the mass features
         if "normalize_with_visible_tau_mass" in self.config.keys() and self.config["normalize_with_visible_tau_mass"]:
-            normalizable_features = [i for i in self.config["training_features"] if "pt" in i or "mass"]
-            self.df[normalizable_features] /= self.df["m_tautau_vis"]
-            self.df["gen_higgs_mass_normalized"] /= self.df["m_tautau_vis"]
+            normalizable_features = [i for i in self.config["training_features"] if "pt" in i or "mass" in i or "MET_cov" in i]
+            if self.debug > 0:
+                print("[PrepHelper] Normalizable features = ", normalizable_features)
+            for column in normalizable_features:
+                if "MET_cov" in column:
+                    self.df[column] /= (self.df["m_tautau_vis"] ** 2)
+                else:
+                    self.df[column] /= self.df["m_tautau_vis"]
+            self.df["gen_higgs_mass_normalized"] = self.df["gen_higgs_mass"] / self.df["m_tautau_vis"]
             self.target = "gen_higgs_mass_normalized"
         else:
             self.target = "gen_higgs_mass"
@@ -112,19 +118,35 @@ class PrepHelper():
         for higgsMass in self.df_test["gen_higgs_mass"].unique():
             self.df_test.loc[self.df_test["gen_higgs_mass"] == higgsMass, "weight"] = 1000.0/len(self.df_test.loc[self.df_test["gen_higgs_mass"] == higgsMass])
 
-
-
         # standard scaling
         if "standard_scaling" in self.config.keys() and self.config["standard_scaling"]:
             scaler = StandardScaler()
-            numeric_columns = [i for i in self.config["training_features"] if "onehot" not in i]
+            numeric_columns = [i for i in self.config["training_features"] if "onehot" not in i and "jet" not in i] # Jets get their own scaler!
             if self.debug > 0:
                 print("[PrepHelper] Standard Scaling the following numeric input features")
                 print(numeric_columns)
 
             self.df_train[numeric_columns]  = scaler.fit_transform(self.df_train[numeric_columns])
             self.df_test[numeric_columns] = scaler.transform(self.df_test[numeric_columns])
-            pkl.dump(scaler, open(self.output[:-5]+"_scaler_weights.pkl", "wb"))
+            # jets
+            if any(["jet" in training_feature for training_feature in self.config["training_features"]]):
+                jet1Scaler = StandardScaler()
+                jet1Columns = [i for i in self.config["training_features"] if "jet1" in i]
+                jet2Scaler = StandardScaler()
+                jet2Columns = [i for i in self.config["training_features"] if "jet2" in i]
+                if self.debug > 0:
+                    print("[PrepHelper] Adding separate scalers for jet variables!")
+                    print(jet1Columns, jet2Columns)
+
+                for columns, jetScaler in zip([jet1Columns, jet2Columns], [jet1Scaler, jet2Scaler]):
+                    pt_variable = [string for string in columns if "pt" in string][0]
+               
+                    self.df_train.loc[self.df_train[pt_variable] > 0, columns] = jetScaler.fit_transform(self.df_train.loc[self.df_train[pt_variable] > 0, columns])
+                    self.df_test.loc[self.df_test[pt_variable] > 0, columns] = jetScaler.transform(self.df_test.loc[self.df_test[pt_variable] > 0, columns])
+                pkl.dump({"main":scaler, "jet1":jet1Scaler, "jet2":jet2Scaler},  open(self.output[:-5]+"_scaler_weights.pkl", "wb"))
+              
+            else: #legacy 
+                pkl.dump(scaler, open(self.output[:-5]+"_scaler_weights.pkl", "wb"))
 
         self.X_train = self.df_train[self.config["training_features"]]
         self.y_train = self.df_train[self.target]
