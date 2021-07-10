@@ -6,7 +6,7 @@
     {
         "type":"regression_neural_network",
         "param":{
-            "n_hidden":5,
+            "n_hidden":10,
             "n_output":1,
             "l2_lambda":0.0
         },
@@ -73,7 +73,8 @@
             "activation":"relu"
         },
 
-       "loss":"MAE",
+       "loss":"Huber",
+       "delta":1.5,
        "n_max_epochs":3000,
         "early_stopping":true,
         "early_stopping_rounds":20,

@@ -100,6 +100,12 @@ class NNHelper():
         elif "loss" in self.config["mva"].keys() and self.config["mva"]["loss"] == "MAE":
             loss_function = keras.losses.MeanAbsoluteError()
             metric = keras.metrics.MeanAbsoluteError()
+        elif "loss" in self.config["mva"].keys() and self.config["mva"]["loss"] == "Huber":
+            if "delta" in self.config["mva"].keys():            
+                loss_function = keras.losses.Huber(delta=self.config["mva"]["delta"])
+            else:
+                loss_function = keras.losses.Huber()
+            metric = keras.metrics.MeanAbsoluteError()
         else:
             print("[DNNHelper] Cannot understand loss parameter {}. Defaulting to MSE".format(self.config["mva"]["error"]))
             loss_function = keras.losses.MeanSquaredError()
