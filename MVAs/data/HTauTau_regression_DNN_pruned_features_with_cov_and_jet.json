@@ -6,75 +6,75 @@
     {
         "type":"regression_neural_network",
         "param":{
-            "n_hidden":10,
+            "n_hidden":6,
             "n_output":1,
             "l2_lambda":0.0
         },
         "layer_1":{
-            "n_neurons":500,
+            "n_neurons":1000,
             "activation":"relu"
         },
         "layer_2":{
-            "n_neurons":500,
+            "n_neurons":1000,
             "activation":"relu"
         },
         "layer_3":{
-            "n_neurons":500,
+            "n_neurons":1000,
             "activation":"relu"
         },
         "layer_4":{
-            "n_neurons":500,
+            "n_neurons":1000,
             "activation":"relu"
         },
         "layer_5":{
-            "n_neurons":500,
+            "n_neurons":1000,
             "activation":"relu"
         },
         "layer_6":{
-            "n_neurons":500,
+            "n_neurons":1000,
             "activation":"relu"
 },
         "layer_7":{
-            "n_neurons":500,
+            "n_neurons":1000,
             "activation":"relu"
         },
         "layer_8":{
-            "n_neurons":500,
+            "n_neurons":1000,
             "activation":"relu"
         },
         "layer_9":{
-            "n_neurons":500,
+            "n_neurons":1000,
             "activation":"relu"
         },
         "layer_10":{
-            "n_neurons":500,
+            "n_neurons":1000,
             "activation":"relu"
         },
         "layer_11":{
-            "n_neurons":500,
+            "n_neurons":1000,
             "activation":"relu"
         },
         "layer_12":{
-            "n_neurons":500,
+            "n_neurons":1000,
             "activation":"relu"
         },
 
         "layer_13":{
-            "n_neurons":500,
+            "n_neurons":1000,
             "activation":"relu"
         },
 
          "layer_14":{
-            "n_neurons":500,
+            "n_neurons":1000,
             "activation":"relu"
         },
         "layer_15":{
-            "n_neurons":500,
+            "n_neurons":1000,
             "activation":"relu"
         },
 
        "loss":"Huber",
-       "delta":1.5,
+       "delta":0.5,
        "n_max_epochs":3000,
         "early_stopping":true,
         "early_stopping_rounds":20,

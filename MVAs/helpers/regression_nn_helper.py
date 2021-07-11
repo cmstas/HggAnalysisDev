@@ -96,20 +96,16 @@ class NNHelper():
             learning_rate= self.config["mva"]["learning_rate"]
         if "loss" in self.config["mva"].keys() and self.config["mva"]["loss"] == "MSE":
             loss_function = keras.losses.MeanSquaredError()
-            metric = keras.metrics.MeanSquaredError()
         elif "loss" in self.config["mva"].keys() and self.config["mva"]["loss"] == "MAE":
             loss_function = keras.losses.MeanAbsoluteError()
-            metric = keras.metrics.MeanAbsoluteError()
         elif "loss" in self.config["mva"].keys() and self.config["mva"]["loss"] == "Huber":
             if "delta" in self.config["mva"].keys():            
                 loss_function = keras.losses.Huber(delta=self.config["mva"]["delta"])
             else:
                 loss_function = keras.losses.Huber()
-            metric = keras.metrics.MeanAbsoluteError()
         else:
             print("[DNNHelper] Cannot understand loss parameter {}. Defaulting to MSE".format(self.config["mva"]["error"]))
             loss_function = keras.losses.MeanSquaredError()
-            metric = keras.metrics.MeanSquaredError()
 
         optimizer = keras.optimizers.Adam(learning_rate=learning_rate)
         
@@ -128,7 +124,7 @@ class NNHelper():
         
         callbacks.extend([best_checkpoint, last_checkpoint])
 
-        self.model.compile(optimizer=optimizer, loss=loss_function, metrics=[metric])
+        self.model.compile(optimizer=optimizer, loss=loss_function, metrics=[keras.metrics.MeanSquaredError(), keras.metrics.MeanAbsoluteError()])
         if "normalize_with_visible_tau_mass" in self.config.keys() and self.config["normalize_with_visible_tau_mass"]:
             history = self.model.fit(self.events["train"]["X"], self.events["train"]["y"], batch_size=1024, epochs=n_max_epochs, validation_data=(self.events["test"]["X"], self.events["test"]["y"]), callbacks=callbacks, shuffle=False)
         else:
@@ -151,7 +147,7 @@ class NNHelper():
         self.events["inference"] = {}
         if self.config is not None:
             training_features = self.config["training_features"]
-        self.events["inference"]["tensor"] = tensorflow.data.Dataset.from_tensors(df[training_features])
+        self.events["inference"]["tensor"] = tensorflow.data.Dataset.from_tensor_slices(df[training_features]).batch(1024)
         self.made_tensor = True
         return self.predict()
 
@@ -166,6 +162,7 @@ class NNHelper():
             splits = ["test"]
         for split in splits:
             for step, features in enumerate(self.events[split]["tensor"]):
+                print("step=",step)
                 if type(features) is tuple:
                     features, targets = features
                 if split not in prediction.keys():
