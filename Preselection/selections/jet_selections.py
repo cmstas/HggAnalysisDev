@@ -101,6 +101,7 @@ def set_fatjets(events, fatjets, options, debug):
         fatjet_PNet_Xqq_padded = utils.pad_awkward_array(fatjets.particleNetMD_Xqq, n_save, -9)
         fatjet_PNet_Xcc_padded = utils.pad_awkward_array(fatjets.particleNetMD_Xcc, n_save, -9)
         fatjet_PNet_Xbb_padded = utils.pad_awkward_array(fatjets.particleNetMD_Xbb, n_save, -9)
+        fatjet_PNet_XQCD_padded = utils.pad_awkward_array(fatjets.particleNetMD_QCD, n_save, -9)
 
     for i in range(n_save):
         events["fatjet%s_pt" % str(i+1)] = fatjet_pt_padded[:,i]

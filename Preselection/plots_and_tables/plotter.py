@@ -159,7 +159,6 @@ class Plotter:
                     self.master_dataframe["GJets"] = self.input[
                         self.input["process_id"] == info["process_id"]
                     ]
-
             else:
                 self.process_id_map[sample] = info["process_id"]
                 self.master_dataframe[sample] = self.input[
