@@ -36,6 +36,7 @@ class PrepHelper():
     def run(self):
         self.preprocess()
         self.make_train_test_validation_split() # shuffling happens here
+        self.scale_variables()
         self.write_hdf5()
         return
 
@@ -74,8 +75,24 @@ class PrepHelper():
             self.target = "gen_higgs_mass_normalized"
         else:
             self.target = "gen_higgs_mass"
+        # taking log of variables
+        if "log_features" in self.config.keys():
+            log_variables = self.config["log_features"]
+            for column in log_variables:
+                self.df[column] = np.log(self.df[column])
 
     def make_train_test_validation_split(self):
+        indices = np.random.permutation(self.df.index)
+        train_idx = indices[:int(0.65 * len(indices))]
+        val_idx = indices[int(0.65 * len(indices)):int(0.9 * len(indices))]
+        test_idx = indices[int(0.9 * len(indices)):]
+
+        self.df["train_label"] = np.zeros(self.df)
+        self.df.iloc[train_idx, self.df.columns.get_loc("train_label")] = 0
+        self.df.iloc[val_idx, self.df.columns.get_loc("train_label")] = 1
+        self.df.iloc[test_idx, self.df.columns.get_loc("train_label")] = 2
+
+    def make_train_test_validation_split_gen_higgs(self):
         # mark events as train/val/test - 75% train, 15% val, 10% test
         # Then shuffle the events to mix the masses
 
@@ -120,6 +137,7 @@ class PrepHelper():
         for higgsMass in self.df_test["gen_higgs_mass"].unique():
             self.df_test.loc[self.df_test["gen_higgs_mass"] == higgsMass, "weight"] = 1000.0/len(self.df_test.loc[self.df_test["gen_higgs_mass"] == higgsMass])
 
+    def scale_variables(self):
         # standard scaling
         if "standard_scaling" in self.config.keys() and self.config["standard_scaling"]:
             scaler = StandardScaler()
@@ -142,12 +160,12 @@ class PrepHelper():
 
                 for columns, jetScaler in zip([jet1Columns, jet2Columns], [jet1Scaler, jet2Scaler]):
                     pt_variable = [string for string in columns if "pt" in string][0]
-               
+
                     self.df_train.loc[self.df_train[pt_variable] > 0, columns] = jetScaler.fit_transform(self.df_train.loc[self.df_train[pt_variable] > 0, columns])
                     self.df_test.loc[self.df_test[pt_variable] > 0, columns] = jetScaler.transform(self.df_test.loc[self.df_test[pt_variable] > 0, columns])
                 pkl.dump({"main":scaler, "jet1":jet1Scaler, "jet2":jet2Scaler},  open(self.output[:-5]+"_scaler_weights.pkl", "wb"))
-              
-            else: #legacy 
+
+            else: #legacy
                 pkl.dump(scaler, open(self.output[:-5]+"_scaler_weights.pkl", "wb"))
 
         self.X_train = self.df_train[self.config["training_features"]]

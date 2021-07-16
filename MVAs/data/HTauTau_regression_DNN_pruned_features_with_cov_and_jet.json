@@ -1,5 +1,6 @@
 {
     "training_features":["decay_1_pt", "decay_1_eta", "decay_1_phi", "decay_1_mass", "decay_2_pt", "decay_2_eta", "decay_2_phi", "decay_2_mass", "Category_onehot_1", "Category_onehot_2", "Category_onehot_3", "Category_onehot_4", "Category_onehot_5", "MET_pt", "MET_phi", "MET_covXX", "MET_covXY", "MET_covYY", "jet1_pt", "jet1_eta", "jet1_phi", "jet2_pt", "jet2_eta", "jet2_phi", "n_good_jets"],
+    "log_features":["MET_covXX", "MET_covYY", "decay_1_pt", "decay_2_pt", "MET_pt"],
     "standard_scaling":true,
     "normalize_with_visible_tau_mass":true,
     "mva":
