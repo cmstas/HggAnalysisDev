@@ -8,79 +8,77 @@
         "param":{
             "n_hidden":6,
             "n_output":1,
-            "l2_lambda":0.0,
-            "dropout":0.2
+            "l2_lambda":0.0
         },
         "layer_1":{
-            "n_neurons":1000,
-            "activation":"relu"
+            "n_neurons":500,
+            "activation":"elu"
         },
         "layer_2":{
-            "n_neurons":1000,
-            "activation":"relu"
+            "n_neurons":500,
+            "activation":"elu"
         },
         "layer_3":{
-            "n_neurons":1000,
-            "activation":"relu"
+            "n_neurons":500,
+            "activation":"elu"
         },
         "layer_4":{
-            "n_neurons":1000,
-            "activation":"relu"
+            "n_neurons":500,
+            "activation":"elu"
         },
         "layer_5":{
-            "n_neurons":1000,
-            "activation":"relu"
+            "n_neurons":500,
+            "activation":"elu"
         },
         "layer_6":{
-            "n_neurons":1000,
-            "activation":"relu"
+            "n_neurons":500,
+            "activation":"elu"
 },
         "layer_7":{
-            "n_neurons":1000,
-            "activation":"relu"
+            "n_neurons":500,
+            "activation":"elu"
         },
         "layer_8":{
-            "n_neurons":1000,
-            "activation":"relu"
+            "n_neurons":500,
+            "activation":"elu"
         },
         "layer_9":{
-            "n_neurons":1000,
-            "activation":"relu"
+            "n_neurons":500,
+            "activation":"elu"
         },
         "layer_10":{
-            "n_neurons":1000,
-            "activation":"relu"
+            "n_neurons":500,
+            "activation":"elu"
         },
         "layer_11":{
-            "n_neurons":1000,
-            "activation":"relu"
+            "n_neurons":500,
+            "activation":"elu"
         },
         "layer_12":{
-            "n_neurons":1000,
-            "activation":"relu"
+            "n_neurons":500,
+            "activation":"elu"
         },
 
         "layer_13":{
-            "n_neurons":1000,
-            "activation":"relu"
+            "n_neurons":500,
+            "activation":"elu"
         },
 
          "layer_14":{
-            "n_neurons":1000,
-            "activation":"relu"
+            "n_neurons":500,
+            "activation":"elu"
         },
         "layer_15":{
-            "n_neurons":1000,
-            "activation":"relu"
+            "n_neurons":500,
+            "activation":"elu"
         },
 
        "loss":"Huber",
-       "delta":0.5,
-       "n_max_epochs":3000,
+       "delta":1.5,
+       "n_max_epochs":500,
         "early_stopping":true,
         "early_stopping_rounds":20,
-        "learning_rate":1e-8,
-        "lr_reduction_factor":0.1
-     
+        "lr_reduction_factor":0.1,
+        "learning_rate":1e-5     
     }
 }

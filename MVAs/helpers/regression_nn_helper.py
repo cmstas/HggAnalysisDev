@@ -6,7 +6,7 @@ import sys
 from keras.callbacks import ModelCheckpoint, EarlyStopping, ReduceLROnPlateau
 import os
 import json
-
+from tqdm import tqdm
 
 class NNHelper():
     def __init__(self, **kwargs):
@@ -51,6 +51,8 @@ class NNHelper():
                 activation = "relu"
             elif layer_info["activation"] == "sigmoid":
                 activation = "sigmoid"
+            elif layer_info["activation"] == "elu":
+                activation = "elu"
 
             if "l2_lambda" in layer_info.keys():
                 l2_lambda = layer_info["l2_lambda"]
@@ -67,7 +69,7 @@ class NNHelper():
                     dropout_factor,
                     name="dropout_{}".format(i)))
 
-        self.model.add(layers.Dense(n_output, name="output"))
+        self.model.add(layers.Dense(n_output, name="output", activation="relu"))
 
     def compile_and_fit(self):
         # new style - keras does everything for me!
@@ -121,9 +123,9 @@ class NNHelper():
 
         self.model.compile(optimizer=optimizer, loss=loss_function, metrics=[keras.metrics.MeanSquaredError(), keras.metrics.MeanAbsoluteError()])
         if "normalize_with_visible_tau_mass" in self.config.keys() and self.config["normalize_with_visible_tau_mass"]:
-            history = self.model.fit(self.events["train"]["X"], self.events["train"]["y"], batch_size=1024, epochs=n_max_epochs, validation_data=(self.events["test"]["X"], self.events["test"]["y"]), callbacks=callbacks, shuffle=False)
+            history = self.model.fit(self.events["train"]["X"], self.events["train"]["y"], batch_size=16384, epochs=n_max_epochs, validation_data=(self.events["test"]["X"], self.events["test"]["y"]), callbacks=callbacks, shuffle=False)
         else:
-            history = self.model.fit(self.events["train"]["X"], self.events["train"]["y"], batch_size=1024, epochs=n_max_epochs, validation_data=(self.events["test"]["X"], self.events["test"]["y"], self.events["test"]["weight"]), sample_weight=self.events["train"]["weight"], callbacks=callbacks, shuffle=False)
+            history = self.model.fit(self.events["train"]["X"], self.events["train"]["y"], batch_size=16384, epochs=n_max_epochs, validation_data=(self.events["test"]["X"], self.events["test"]["y"], self.events["test"]["weight"]), sample_weight=self.events["train"]["weight"], callbacks=callbacks, shuffle=False)
 
         numpy.savetxt("output/{}/{}_val_loss.txt".format(self.output_tag, self.output_tag), history.history["val_loss"])
         numpy.savetxt("output/{}/{}_train_loss.txt".format(self.output_tag, self.output_tag), history.history["loss"])
@@ -157,8 +159,7 @@ class NNHelper():
         else:
             splits = ["test"]
         for split in splits:
-            for step, features in enumerate(self.events[split]["tensor"]):
-                print("step=",step)
+            for features in tqdm(self.events[split]["tensor"]):
                 if type(features) is tuple:
                     features, targets = features
                 if split not in prediction.keys():

@@ -69,6 +69,8 @@ class PrepHelper():
                 else:
                     self.df[column] /= self.df["m_tautau_vis"]
             self.df["gen_higgs_mass_normalized"] = self.df["gen_higgs_mass"] / self.df["m_tautau_vis"]
+            # MEGA SCALING
+            self.df = self.df.loc[self.df["gen_higgs_mass_normalized"] < 5].reset_index(drop=True)
             self.target = "gen_higgs_mass_normalized"
         else:
             self.target = "gen_higgs_mass"
