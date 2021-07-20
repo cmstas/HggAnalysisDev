@@ -78,6 +78,9 @@ class PrepHelper():
         # taking log of variables
         if "log_features" in self.config.keys():
             log_variables = self.config["log_features"]
+            if self.debug > 0:
+                print("[PrepHelper] log transform the following features")
+                print(log_variables)
             for column in log_variables:
                 self.df[column] = np.log(self.df[column])
 
@@ -87,10 +90,15 @@ class PrepHelper():
         val_idx = indices[int(0.65 * len(indices)):int(0.9 * len(indices))]
         test_idx = indices[int(0.9 * len(indices)):]
 
-        self.df["train_label"] = np.zeros(self.df)
+        self.df["train_label"] = np.zeros(len(self.df))
         self.df.iloc[train_idx, self.df.columns.get_loc("train_label")] = 0
         self.df.iloc[val_idx, self.df.columns.get_loc("train_label")] = 1
         self.df.iloc[test_idx, self.df.columns.get_loc("train_label")] = 2
+
+        # shuffle here
+        self.df_train = self.df.iloc[train_idx].copy()
+        self.df_val = self.df.iloc[val_idx].copy()
+        self.df_test = self.df.iloc[test_idx].copy()
 
     def make_train_test_validation_split_gen_higgs(self):
         # mark events as train/val/test - 75% train, 15% val, 10% test

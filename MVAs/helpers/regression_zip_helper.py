@@ -45,6 +45,8 @@ class ZipHelper():
                 self.mva_configs[name] = json.load(f_in)
 
         for name, config in self.mva_configs.items():
+            if self.debug > 0:
+                print("[ZipHelper] Processing MVA name ", name)
             if config["config"]["mva"]["type"] == "regression_neural_network":
                 nn = regression_nn_helper.NNHelper(
                     events = None,
@@ -57,7 +59,7 @@ class ZipHelper():
                 # Load standard scaler
                 numeric_columns = [i for i in config["config"]["mva"]["training_features"] if "onehot" not in i and "jet" not in i]
 
-                if self.scaler_file and "standard_scaling" in config["config"]["mva"].keys() and config["config"]["mva"]["standard_scaling"]:
+                if self.scaler_file:# and "standard_scaling" in config["config"]["mva"].keys() and config["config"]["mva"]["standard_scaling"]:
                     self.scaler = pkl.load(open(self.scaler_file, "rb"))
                     if type(self.scaler) is not dict:
                         self.df[numeric_columns] = self.scaler.transform(self.df[numeric_columns])
@@ -68,34 +70,28 @@ class ZipHelper():
                                 pt_variable = [i for i in jet_features if "pt" in i][0]
                                 self.df.loc[self.df[pt_variable] > 0, jet_features] = scaler.transform(self.df.loc[self.df[pt_variable] > 0, jet_features])
                             else:
-                                self.df[numeric_columns] = self.scaler.transform(self.df[numeric_columns]) 
+                                self.df[numeric_columns] = scaler.transform(self.df[numeric_columns]) 
 
                 scores = nn.predict_from_df(self.df, config["config"]["mva"]["training_features"])
                 self.df[name] = scores["inference"]
-                if self.scaler_file and "standard_scaling" in config["config"]["mva"].keys() and config["config"]["mva"]["standard_scaling"]:
-                    self.df[numeric_columns] = self.scaler.inverse_transform(self.df[numeric_columns])
+
+                # unscaling before next round
+                if self.scaler_file: # and "standard_scaling" in config["config"]["mva"].keys() and config["config"]["mva"]["standard_scaling"]:
+                    if self.debug > 0:
+                        print("[ZipHelper] Unscaling before next MVA")
+                    if type(self.scaler) is dict:
+                        for name, scaler in self.scaler.items():
+                            if "jet" in name:
+                                jet_features = [i for i in config["config"]["mva"]["training_features"] if name in i]
+                                pt_variable = [i for i in jet_features if "pt" in i][0]
+                                self.df.loc[self.df[pt_variable] > 0, jet_features] = scaler.inverse_transform(self.df.loc[self.df[pt_variable] > 0, jet_features])
+                            else:
+                                self.df[numeric_columns] = scaler.inverse_transform(self.df[numeric_columns]) 
+                    else:
+                        self.df[numeric_columns] = self.scaler.inverse_transform(self.df[numeric_columns])
                    
 
                 
-    def calculate_scores(self):
-        for name, mva in self.mvas.items():
-            config = self.mva_configs[name]
-            scores = mva.predict_from_df(self.df, config["config"]["mva"]["training_features"])
-            self.df[name] = scores["inference"]
-            # unscale
-            numeric_columns = [i for i in config["config"]["mva"]["training_features"] if "onehot" not in i and "jet" not in i]
-            if type(self.scaler) is not dict:
-                self.df[numeric_columns] = self.scaler.inverse_transform(self.df[numeric_columns])
-            else:
-                for name, scaler in self.scaler.items():
-                    if "jet" in name:
-                        jet_features = [i for i in config["config"]["mva"]["training_features"] if name in i]
-                        pt_variable = [i for i in jet_features if "pt" in i][0]
-                        self.df.loc[self.df[pt_variable] > 0, jet_features] = scaler.inverse_transform(self.df.loc[self.df[pt_variable] > 0, jet_features])
-                    else:
-                            self.df[numeric_columns] = self.scaler.inverse_transform(self.df[numeric_columns]) 
-
-
     def save_df(self):
         self.df.to_pickle(self.output)
 

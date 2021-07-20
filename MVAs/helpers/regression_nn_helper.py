@@ -145,7 +145,7 @@ class NNHelper():
         self.events["inference"] = {}
         if self.config is not None:
             training_features = self.config["training_features"]
-        self.events["inference"]["tensor"] = tensorflow.data.Dataset.from_tensor_slices(df[training_features]).batch(1024)
+        self.events["inference"]["tensor"] = tensorflow.data.Dataset.from_tensor_slices(df[training_features]).batch(16384)
         self.made_tensor = True
         return self.predict()
 
