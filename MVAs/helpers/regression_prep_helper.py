@@ -82,7 +82,7 @@ class PrepHelper():
                 print("[PrepHelper] log transform the following features")
                 print(log_variables)
             for column in log_variables:
-                self.df[column] = np.log(self.df[column])
+                self.df.loc[self.df[column] > 0, column] = np.log(self.df.loc[self.df[column] > 0, column])
 
     def make_train_test_validation_split(self):
         indices = np.random.permutation(self.df.index)
