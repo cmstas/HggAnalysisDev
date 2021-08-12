@@ -1,85 +1,85 @@
 {
-    "training_features":["decay_1_pt", "decay_1_eta", "decay_1_phi", "decay_1_mass", "decay_2_pt", "decay_2_eta", "decay_2_phi", "decay_2_mass", "Category_onehot_1", "Category_onehot_2", "Category_onehot_3", "Category_onehot_4", "Category_onehot_5", "MET_pt", "MET_phi", "MET_covXX", "MET_covXY", "MET_covYY", "jet1_pt", "jet1_eta", "jet1_phi", "jet2_pt", "jet2_eta", "jet2_phi", "n_good_jets"],
-    "log_features":["MET_covXX", "MET_covYY", "decay_1_pt", "decay_2_pt", "MET_pt"],
+    "training_features":["decay_1_pt", "decay_1_eta", "decay_1_phi", "decay_1_mass", "decay_2_pt", "decay_2_eta", "decay_2_phi", "decay_2_mass", "Category_onehot_1", "Category_onehot_2", "Category_onehot_3", "Category_onehot_4", "Category_onehot_5", "MET_pt", "MET_phi", "MET_covXX", "MET_covXY", "MET_covYY", "jet1_pt", "jet1_eta", "jet1_phi", "jet2_pt", "jet2_eta", "jet2_phi", "n_good_jets"],    
+    "log_features":["MET_covXX", "MET_covYY", "decay_1_pt", "decay_2_pt", "MET_pt", "jet1_pt", "jet2_pt"],
     "standard_scaling":true,
     "normalize_with_visible_tau_mass":true,
     "mva":
     {
         "type":"regression_neural_network",
         "param":{
-            "n_hidden":6,
+            "n_hidden":10,
             "n_output":1,
             "l2_lambda":0.0
         },
         "layer_1":{
-            "n_neurons":500,
+            "n_neurons":1000,
             "activation":"elu"
         },
         "layer_2":{
-            "n_neurons":500,
+            "n_neurons":1000,
             "activation":"elu"
         },
         "layer_3":{
-            "n_neurons":500,
+            "n_neurons":1000,
             "activation":"elu"
         },
         "layer_4":{
-            "n_neurons":500,
+            "n_neurons":1000,
             "activation":"elu"
         },
         "layer_5":{
-            "n_neurons":500,
+            "n_neurons":1000,
             "activation":"elu"
         },
         "layer_6":{
-            "n_neurons":500,
+            "n_neurons":1000,
             "activation":"elu"
 },
         "layer_7":{
-            "n_neurons":500,
+            "n_neurons":1000,
             "activation":"elu"
         },
         "layer_8":{
-            "n_neurons":500,
+            "n_neurons":1000,
             "activation":"elu"
         },
         "layer_9":{
-            "n_neurons":500,
+            "n_neurons":1000,
             "activation":"elu"
         },
         "layer_10":{
-            "n_neurons":500,
+            "n_neurons":1000,
             "activation":"elu"
         },
         "layer_11":{
-            "n_neurons":500,
+            "n_neurons":1000,
             "activation":"elu"
         },
         "layer_12":{
-            "n_neurons":500,
+            "n_neurons":1000,
             "activation":"elu"
         },
 
         "layer_13":{
-            "n_neurons":500,
+            "n_neurons":1000,
             "activation":"elu"
         },
 
          "layer_14":{
-            "n_neurons":500,
+            "n_neurons":1000,
             "activation":"elu"
         },
         "layer_15":{
-            "n_neurons":500,
+            "n_neurons":1000,
             "activation":"elu"
         },
 
        "loss":"Huber",
-       "delta":1.5,
+       "delta":1.0,
        "n_max_epochs":500,
         "early_stopping":true,
         "early_stopping_rounds":20,
-        "lr_reduction_factor":0.1,
-        "learning_rate":1e-5     
+        "learning_rate":1e-5,
+        "lr_reduction_factor":0.5     
     }
 }

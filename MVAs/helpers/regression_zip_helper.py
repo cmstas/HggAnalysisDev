@@ -64,9 +64,9 @@ class ZipHelper():
                     if type(self.scaler) is not dict:
                         self.df[numeric_columns] = self.scaler.transform(self.df[numeric_columns])
                     else: # elaborate gymnastics to accommodate jet1 and jet2
-                        for name, scaler in self.scaler.items():
-                            if "jet" in name:
-                                jet_features = [i for i in config["config"]["mva"]["training_features"] if name in i]
+                        for scaler_name, scaler in self.scaler.items():
+                            if "jet" in scaler_name:
+                                jet_features = [i for i in config["config"]["mva"]["training_features"] if scaler_name in i]
                                 pt_variable = [i for i in jet_features if "pt" in i][0]
                                 self.df.loc[self.df[pt_variable] > 0, jet_features] = scaler.transform(self.df.loc[self.df[pt_variable] > 0, jet_features])
                             else:

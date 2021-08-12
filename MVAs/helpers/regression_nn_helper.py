@@ -122,10 +122,10 @@ class NNHelper():
         callbacks.extend([best_checkpoint, last_checkpoint])
 
         self.model.compile(optimizer=optimizer, loss=loss_function, metrics=[keras.metrics.MeanSquaredError(), keras.metrics.MeanAbsoluteError()])
-        if "normalize_with_visible_tau_mass" in self.config.keys() and self.config["normalize_with_visible_tau_mass"]:
-            history = self.model.fit(self.events["train"]["X"], self.events["train"]["y"], batch_size=16384, epochs=n_max_epochs, validation_data=(self.events["test"]["X"], self.events["test"]["y"]), callbacks=callbacks, shuffle=False)
-        else:
-            history = self.model.fit(self.events["train"]["X"], self.events["train"]["y"], batch_size=16384, epochs=n_max_epochs, validation_data=(self.events["test"]["X"], self.events["test"]["y"], self.events["test"]["weight"]), sample_weight=self.events["train"]["weight"], callbacks=callbacks, shuffle=False)
+ #       if "normalize_with_visible_tau_mass" in self.config.keys() and self.config["normalize_with_visible_tau_mass"]:
+        history = self.model.fit(self.events["train"]["X"], self.events["train"]["y"], batch_size=65536, epochs=n_max_epochs, validation_data=(self.events["test"]["X"], self.events["test"]["y"]), callbacks=callbacks, shuffle=False)
+#        else:
+#            history = self.model.fit(self.events["train"]["X"], self.events["train"]["y"], batch_size=16384, epochs=n_max_epochs, validation_data=(self.events["test"]["X"], self.events["test"]["y"], self.events["test"]["weight"]), sample_weight=self.events["train"]["weight"], callbacks=callbacks, shuffle=False)
 
         numpy.savetxt("output/{}/{}_val_loss.txt".format(self.output_tag, self.output_tag), history.history["val_loss"])
         numpy.savetxt("output/{}/{}_train_loss.txt".format(self.output_tag, self.output_tag), history.history["loss"])

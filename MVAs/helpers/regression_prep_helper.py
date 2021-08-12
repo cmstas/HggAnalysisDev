@@ -43,9 +43,11 @@ class PrepHelper():
     def preprocess(self):
         # eliminate -1 category
         self.df = self.df.loc[self.df["Category_pairsLoose"] != -1].reset_index(drop=True)
-#        self.df["gen_higgs_mass"] = round(self.df["gen_higgs_mass"])
-#        self.df = self.df.loc[self.df["gen_higgs_mass"] % 5 == 0].reset_index(drop=True)
-#        self.df = self.df.loc[self.df["gen_higgs_mass"] == self.df["gen_higgs_mass"].astype(np.int32)].reset_index(drop=True)
+        self.df = self.df.loc[(self.df["mT_decay_1_MET"] > 0) & (self.df["mT_decay_2_MET"] > 0)].reset_index(drop=True)
+        if "remove_ll_final" in self.config.keys() and self.config["remove_ll_final"]:
+            if self.debug > 0:
+                print("[PrepHelper] removing di-lepton final states")
+            self.df = self.df.loc[self.df["Category_pairsLoose"] <= 3].reset_index(drop=True)
         # restrict mass
         if "restrict_mass" in self.config.keys() and self.config["restrict_mass"]:
             if self.debug > 0:
@@ -61,20 +63,26 @@ class PrepHelper():
 
         # Normalize the pt features and the mass features
         if "normalize_with_visible_tau_mass" in self.config.keys() and self.config["normalize_with_visible_tau_mass"]:
-            normalizable_features = [i for i in self.config["training_features"] if "pt" in i or "mass" in i or "MET_cov" in i]
+            normalizable_features = [i for i in self.config["training_features"] if "pt" in i or "mass" in i or "MET_cov" in i or "mT" in i]
             if self.debug > 0:
                 print("[PrepHelper] Normalizable features = ", normalizable_features)
             for column in normalizable_features:
                 if "MET_cov" in column:
                     self.df[column] /= (self.df["m_tautau_vis"] ** 2)
                 else:
-                    self.df[column] /= self.df["m_tautau_vis"]
-            self.df["gen_higgs_mass_normalized"] = self.df["gen_higgs_mass"] / self.df["m_tautau_vis"]
-            # MEGA SCALING
-            self.df = self.df.loc[self.df["gen_higgs_mass_normalized"] < 5].reset_index(drop=True)
+                    if "jet" in column:
+                        self.df.loc[self.df[column] > 0, column] /= self.df.loc[self.df[column] > 0, "m_tautau_vis"]
+                    else:
+                        self.df[column] /= self.df["m_tautau_vis"]
             self.target = "gen_higgs_mass_normalized"
         else:
             self.target = "gen_higgs_mass"
+
+        # Target will always be scaled!
+        self.df["gen_higgs_mass_normalized"] = self.df["gen_higgs_mass"] / self.df["m_tautau_vis"]
+            # MEGA SCALING
+        self.df = self.df.loc[self.df["gen_higgs_mass_normalized"] < 5].reset_index(drop=True)
+
         # taking log of variables
         if "log_features" in self.config.keys():
             log_variables = self.config["log_features"]
@@ -82,7 +90,13 @@ class PrepHelper():
                 print("[PrepHelper] log transform the following features")
                 print(log_variables)
             for column in log_variables:
-                self.df.loc[self.df[column] > 0, column] = np.log(self.df.loc[self.df[column] > 0, column])
+                if "jet" in column[:4] and "pt" in column:
+                    self.df["{}_valid".format(column)] = np.zeros(len(self.df))
+                    self.df.loc[self.df[column] > 0, "{}_valid".format(column)] = 1
+                    self.df.loc[self.df["{}_valid".format(column)] == 1, column] = np.log(self.df.loc[self.df["{}_valid".format(column)] == 1, column])
+                else:
+                    self.df[column] = np.log(self.df[column])
+
 
     def make_train_test_validation_split(self):
         indices = np.random.permutation(self.df.index)
@@ -157,7 +171,7 @@ class PrepHelper():
             self.df_train[numeric_columns]  = scaler.fit_transform(self.df_train[numeric_columns])
             self.df_test[numeric_columns] = scaler.transform(self.df_test[numeric_columns])
             # jets
-            if any(["jet" in training_feature for training_feature in self.config["training_features"]]):
+            if any(["jet" in training_feature[:4] for training_feature in self.config["training_features"]]):
                 jet1Scaler = StandardScaler()
                 jet1Columns = [i for i in self.config["training_features"] if "jet1" in i]
                 jet2Scaler = StandardScaler()
@@ -168,9 +182,10 @@ class PrepHelper():
 
                 for columns, jetScaler in zip([jet1Columns, jet2Columns], [jet1Scaler, jet2Scaler]):
                     pt_variable = [string for string in columns if "pt" in string][0]
-
-                    self.df_train.loc[self.df_train[pt_variable] > 0, columns] = jetScaler.fit_transform(self.df_train.loc[self.df_train[pt_variable] > 0, columns])
-                    self.df_test.loc[self.df_test[pt_variable] > 0, columns] = jetScaler.transform(self.df_test.loc[self.df_test[pt_variable] > 0, columns])
+                    if self.debug > 0:
+                        print("[PrepHelper] pt variable = ",pt_variable)
+                    self.df_train.loc[self.df_train["{}_valid".format(pt_variable)] == 1, columns] = jetScaler.fit_transform(self.df_train.loc[self.df_train["{}_valid".format(pt_variable)] == 1, columns])
+                    self.df_test.loc[self.df_test["{}_valid".format(pt_variable)] == 1, columns] = jetScaler.transform(self.df_test.loc[self.df_test["{}_valid".format(pt_variable)] == 1, columns])
                 pkl.dump({"main":scaler, "jet1":jet1Scaler, "jet2":jet2Scaler},  open(self.output[:-5]+"_scaler_weights.pkl", "wb"))
 
             else: #legacy
