@@ -202,7 +202,7 @@ def tth_inclusive_preselection(events, photons, electrons, muons, jets, options,
     return selected_events
 
 
-def ggbb_preselection(events, photons, electrons, muons, jets, fatjets, options, debug):
+def ggbb_preselection(events, photons, electrons, muons, jets, fatjets, genparts, options, debug):
     cut_diagnostics = utils.CutDiagnostics(events = events, debug = debug, cut_set = "[analysis_selections.py : ggbb_preselection]")
 
     # Get number of electrons, muons
@@ -246,5 +246,8 @@ def ggbb_preselection(events, photons, electrons, muons, jets, fatjets, options,
     # Calculate event-level variables
     selected_events = jet_selections.set_jets(selected_events, selected_jets, options, debug)
     selected_events = jet_selections.set_fatjets(selected_events, selected_fatjets, options, debug)
+    if genparts is not None:
+        selected_genparts = genparts[all_cuts]
+        selected_events = gen_selections.set_genInfo(selected_events,selected_genparts,options,debug)
 
     return selected_events

@@ -255,9 +255,13 @@ class LoopHelper():
             options["boosted"] = False
             selected_events = analysis_selections.ggbb_preselection(diphoton_events, selected_photons, diphoton_events.Electron, diphoton_events.Muon, diphoton_events.Jet, diphoton_events.FatJet, options, self.debug)
 
-        elif self.selections == "HHggbb_boosted_Presel":
-            options["boosted"] = True
-            selected_events = analysis_selections.ggbb_preselection(diphoton_events, selected_photons, diphoton_events.Electron, diphoton_events.Muon, diphoton_events.Jet, diphoton_events.FatJet, options, self.debug)
+        elif "HHggbb_boosted_Presel" in self.selections:
+            options["boosted"] = True  
+            if "GenInfo" in self.selections and not options["data"]:
+                gen_events = diphoton_events.GenPart
+            else:
+                gen_events = None       
+            selected_events = analysis_selections.ggbb_preselection(diphoton_events, selected_photons, diphoton_events.Electron, diphoton_events.Muon, diphoton_events.Jet, diphoton_events.FatJet, gen_events, options, self.debug)
 
         else:
             print("[LoopHelper] Selection: %s is not currently implemented, please check." % self.selections)
