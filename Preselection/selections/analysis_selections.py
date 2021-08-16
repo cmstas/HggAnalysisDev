@@ -8,6 +8,7 @@ import selections.lepton_selections as lepton_selections
 import selections.tau_selections as tau_selections
 import selections.photon_selections as photon_selections
 import selections.jet_selections as jet_selections
+import selections.helicity_selections as helicity_selections
 import selections.gen_selections as gen_selections
 import selections.compound_selections as compound_selections
 
@@ -246,6 +247,7 @@ def ggbb_preselection(events, photons, electrons, muons, jets, fatjets, genparts
     # Calculate event-level variables
     selected_events = jet_selections.set_jets(selected_events, selected_jets, options, debug)
     selected_events = jet_selections.set_fatjets(selected_events, selected_fatjets, options, debug)
+    selected_events = helicity_selections.set_helicity(selected_events, selected_photons, selected_fatjets, options, debug)
     if genparts is not None:
         selected_genparts = genparts[all_cuts]
         selected_events = gen_selections.set_genInfo(selected_events,selected_genparts,options,debug)
