@@ -2,7 +2,7 @@ import os
 
 maindir="/hadoop/cms/store/user/hmei/nanoaod_runII/HHggtautau/"
 
-#print os.listdir(maindir)
+#print (os.listdir(maindir))
 
 mc16={}
 mc17={}
@@ -16,39 +16,39 @@ allsamples=[]
 for subdir in os.listdir(maindir):
   if "nanoaodv8" not in subdir: continue
   myfiles=os.listdir(maindir+subdir)
-  print myfiles[0:1], len(myfiles), maindir+subdir
+  print (myfiles[0:1], len(myfiles), maindir+subdir)
   if "EGamma_Run2018" in subdir:
     data18[subdir]=maindir+subdir
     allsamples.append(subdir)
-    print "data18"
+    print ("data18")
   elif "DoubleEG_Run2017" in subdir:
     data17[subdir]=maindir+subdir
     allsamples.append(subdir)
-    print "data17"
+    print ("data17")
   elif "DoubleEG_Run2016" in subdir:
     data16[subdir]=maindir+subdir
     allsamples.append(subdir)
-    print "data16"
+    print ("data16")
   elif "Autumn18" in subdir or "Era2018" in subdir or "UL18" in subdir:
     mc18[subdir]=maindir+subdir
     allsamples.append(subdir)
-    print "mc18"
+    print ("mc18")
   elif "Fall17" in subdir or "Era2017" in subdir or "UL17" in subdir:
     mc17[subdir]=maindir+subdir
     allsamples.append(subdir)
-    print "mc17"
+    print ("mc17")
   elif "Summer16" in subdir or "Era2016" in subdir:
     if "20201021" in subdir:
       continue
     mc16[subdir]=maindir+subdir
     allsamples.append(subdir)
-    print "mc16"
+    print ("mc16")
   else:
-    print "BO"
+    print ("BO")
     quit()
 
-print len(mc16), len(mc17), len(mc18), len(data16), len(data17), len(data18)
-print len(allsamples)
+print (len(mc16), len(mc17), len(mc18), len(data16), len(data17), len(data18))
+print (len(allsamples))
 
 with open("sa.py", "w") as f:
   
