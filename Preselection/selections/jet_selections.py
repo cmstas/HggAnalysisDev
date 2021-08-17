@@ -92,6 +92,7 @@ def set_fatjets(events, fatjets, options, debug):
 
     fatjet_pt_padded = utils.pad_awkward_array(fatjets.pt, n_save, -9)
     fatjet_eta_padded = utils.pad_awkward_array(fatjets.eta, n_save, -9)
+    fatjet_phi_padded = utils.pad_awkward_array(fatjets.phi, n_save, -9)
     fatjet_mass_padded = utils.pad_awkward_array(fatjets.mass, n_save, -9)
     fatjet_msoftdrop_padded = utils.pad_awkward_array(fatjets.msoftdrop, n_save, -9)
     fatjet_btag_padded = utils.pad_awkward_array(fatjets.btagDDBvL_noMD, n_save, -9)
@@ -106,6 +107,7 @@ def set_fatjets(events, fatjets, options, debug):
     for i in range(n_save):
         events["fatjet%s_pt" % str(i+1)] = fatjet_pt_padded[:,i]
         events["fatjet%s_eta" % str(i+1)] = fatjet_eta_padded[:,i]
+        events["fatjet%s_phi" % str(i+1)] = fatjet_phi_padded[:,i]
         events["fatjet%s_msoftdrop" % str(i+1)] = fatjet_msoftdrop_padded[:,i]
         events["fatjet%s_mass" % str(i+1)] = fatjet_mass_padded[:,i]
         events["fatjet%s_btag" % str(i+1)] = fatjet_btag_padded[:,i]
@@ -118,6 +120,7 @@ def set_fatjets(events, fatjets, options, debug):
             events["fatjet%s_particleNet_Xqq" % str(i+1)] = fatjet_PNet_Xqq_padded[:,i]
             events["fatjet%s_particleNet_Xcc" % str(i+1)] = fatjet_PNet_Xcc_padded[:,i]
             events["fatjet%s_particleNet_Xbb" % str(i+1)] = fatjet_PNet_Xbb_padded[:,i]
+            events["fatjet%s_particleNet_XQCD" % str(i+1)] = fatjet_PNet_XQCD_padded[:,i]
                    
     return events
 

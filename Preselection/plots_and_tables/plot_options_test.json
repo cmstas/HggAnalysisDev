@@ -907,5 +907,95 @@
     "cms_label": 1,
     "output_dir": "./output",
     "output_name": ["pho_dR.pdf","pho_dR.png"]
+  },
+
+  "costhetastar_cs": {
+    "bin_type": "linspace",
+    "bins": [
+      0,
+      1,
+      20
+    ],
+    "processes": [
+      "WGamma",
+      "ZGamma",
+      "TTbar",
+      "TTGamma",
+      "TTGG",
+      "ttH",
+      "VH",
+      "HH_ggbb",
+      "Data",
+      "DiPhoton",
+      "GJets"
+    ],
+    "yaxis": "log",
+    "title": "costhetastar_cs",
+    "cms_label": 1,
+    "output_dir": "./output",
+    "output_name": [
+      "costhetastar_cs.pdf",
+      "costhetastar_cs.png"
+    ]
+  },
+
+    "costheta_bb": {
+      "bin_type": "linspace",
+      "bins": [
+        0,
+        1,
+        20
+      ],
+      "processes": [
+        "WGamma",
+        "ZGamma",
+        "TTbar",
+        "TTGamma",
+        "TTGG",
+        "ttH",
+        "VH",
+        "HH_ggbb",
+        "Data",
+        "DiPhoton",
+        "GJets"
+      ],
+      "yaxis": "log",
+      "title": "costheta_bb",
+      "cms_label": 1,
+      "output_dir": "./output",
+      "output_name": [
+        "costheta_bb.pdf",
+        "costheta_bb.png"
+      ]
+    },
+
+  "costheta_gg": {
+    "bin_type": "linspace",
+    "bins": [
+      0,
+      1,
+      20
+    ],
+    "processes": [
+      "WGamma",
+      "ZGamma",
+      "TTbar",
+      "TTGamma",
+      "TTGG",
+      "ttH",
+      "VH",
+      "HH_ggbb",
+      "Data",
+      "DiPhoton",
+      "GJets"
+    ],
+    "yaxis": "log",
+    "title": "costheta_gg",
+    "cms_label": 1,
+    "output_dir": "./output",
+    "output_name": [
+     "costheta_gg",
+     "costheta_gg"
+    ]
   }
 }

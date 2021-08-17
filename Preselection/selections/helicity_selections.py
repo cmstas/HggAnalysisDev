@@ -1,5 +1,5 @@
-import awkward
-import numpy
+import awkward as ak
+import numpy as np
 import vector
 
 import selections.selection_utils as utils
@@ -19,6 +19,8 @@ import selections.object_selections as object_selections
 
 # logger.addHandler(file_handler)
 
+
+
 def pvec(vec4):
   vec3 = vector.obj(
     x=vec4.x,
@@ -27,11 +29,11 @@ def pvec(vec4):
   )
   return vec3
 
-def getcosthetastar_cs(diphoton, fatjet):
+def getcosthetastar_cs(events,diphoton, fatjet):
 
     # https://github.com/cms-analysis/flashgg/blob/1453740b1e4adc7184d5d8aa8a981bdb6b2e5f8e/DataFormats/src/DoubleHTag.cc#L41
     beam_energy = 6500
-    nevts = len(diphoton)
+    nevts = len(events)
     costhetastar_cs = np.ones(nevts)*-999 # is it needed?
 
     # convert using vector
@@ -49,14 +51,14 @@ def getcosthetastar_cs(diphoton, fatjet):
           t=np.ones(nevts)*beam_energy,
         )
 
-    #  ___________________ 
-    # |        ___        |
-    # |  /^^^\{6,6}/^^^\  |
-    # |  \^^^/(""")\^^^/  |
-    # |  /^^/  \"/  \^^\  |
-    # | /'`    /|\    `'\ |
-    # |___________________|
-    #                  
+    #  ___________________  #
+    # |        _ _        | #
+    # |  /^^^\{6,6}/^^^\  | #
+    # |  \^^^/(""")\^^^/  | #
+    # |  /^^/  \"/  \^^\  | #
+    # | /'`    /|\    `'\ | #
+    # |___________________| #
+    #                       #
            
     ## check nan  
     hh = diphoton + fatjet
@@ -65,7 +67,6 @@ def getcosthetastar_cs(diphoton, fatjet):
     p1_boost = p1.boost(boostvec)
     p2_boost = p2.boost(boostvec)
  
-    # pvec.unit == to_beta3().unit()?
     CSaxis = (pvec(p1_boost).unit() - pvec(p2_boost).unit()).unit()
     diphoton_vec_unit = diphoton.to_beta3().unit()
 
@@ -86,13 +87,16 @@ def helicityCosTheta(booster, boosted):
     return np.cos(boosted.theta)
 
 
-def set_helicity(events, photons, fatjets, options, debug):
+def set_helicity(events,photons, fatjets, options, debug):
     # FIXME I need to build the diphoton 4vector and the fatjet one 
-    diphoton = photons[:,0] + photons[:,1]
+    photon1_p4 = utils.items2vector(photons[:,0])
+    photon2_p4 = utils.items2vector(photons[:,1])
+    fatjet_p4 = utils.items2vector(fatjets,softDrop=True)
+    diphoton = photon1_p4 + photon2_p4
     
-    events["costhetastar_cs"] = getcosthetastar_cs(diphoton, fatjet) 
-    events["costheta_gg"] = helicityCosTheta(diphoton, photons[:,0])
-    events["costheta_bb"] = helicityCosTheta(diphoton, fatjets[:,0])
+    events["costhetastar_cs"] = getcosthetastar_cs(events,diphoton, fatjet_p4) 
+    events["costheta_gg"] = helicityCosTheta(diphoton, photon1_p4)
+    events["costheta_bb"] = helicityCosTheta(diphoton, fatjet_p4)
                    
     return events
 

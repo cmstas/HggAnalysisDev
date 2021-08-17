@@ -1,5 +1,6 @@
 import numpy
 import awkward
+import vector
 
 class CutDiagnostics():
     def __init__(self, **kwargs):
@@ -35,3 +36,44 @@ class ObjectCutDiagnostics():
 
 def pad_awkward_array(array, pad_length, pad_value):
     return awkward.fill_none(awkward.pad_none(array, pad_length, clip=True), pad_value)
+
+def items2vectors(events,names):
+    vectors = []
+    if "selectedPhoton" in names:
+        vectors.append(
+            vector.obj(
+                pt = events['selectedPhoton_pt'],
+                eta = events['selectedPhoton_eta'],
+                phi = events['selectedPhoton_phi'],
+                M = events['selectedPhoton_mass']
+            )
+        )
+    if "FatJet" in names:
+        vectors.append(
+            vector.obj(
+                pt = events['FatJet_pt'],  
+                eta = events['FatJet_eta'],
+                phi = events['FatJet_phi'],
+                M = events['FatJet_msoftdrop']
+            )
+        )
+    return vectors
+
+
+def items2vector(item,softDrop=False):
+    
+    if softDrop: 
+        mass = item.msoftdrop
+    else: 
+        mass = item.mass
+    p4 = vector.arr(
+        {
+            "pt" : item.pt,
+            "eta" : item.eta,
+            "phi" : item.phi,
+            "M" : mass
+        }
+        )
+        
+    return p4
+    
