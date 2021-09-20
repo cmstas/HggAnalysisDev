@@ -319,7 +319,7 @@ class Plotter:
                 for hist in hist_stack:
                     if unit_normalize:
                         hist /= hist.integral
-                    hist.plot(ax=ax1, histtype="stepfilled")
+                    hist.plot(ax=ax1, histtype="step")
 
             if "yaxis" in self.plot_options[branch].keys():
                 if self.plot_options[branch]["yaxis"] == "log":

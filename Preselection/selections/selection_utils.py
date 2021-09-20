@@ -76,4 +76,36 @@ def items2vector(item,softDrop=False):
         )
         
     return p4
+
+
+def items2akvector(item, softDrop=False):
+
+    if softDrop:
+        mass = item.msoftdrop
+    else:
+        mass = item.mass
+    p4 = vector.awk(
+        {
+            "pt": item.pt,
+            "eta": item.eta,
+            "phi": item.phi,
+            "M": mass
+        }
+    )
+
+    return p4
+
+
+def components2vector(item_pt,item_eta,item_phi,item_mass):
+
+    p4 = vector.arr(
+        {
+            "pt": item_pt,
+            "eta": item_eta,
+            "phi": item_phi,
+            "M": item_mass
+        }
+    )
+
+    return p4
     

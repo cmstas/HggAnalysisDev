@@ -229,10 +229,10 @@ def ggbb_preselection(events, photons, electrons, muons, jets, fatjets, genparts
 
     lep_cut = n_leptons == 0
     if options["boosted"]:
-        jet_cut = n_bjets < 2
-        fatjet_cut = n_fatjets >= 1
-        all_cuts = lep_cut & jet_cut & fatjet_cut
-        cut_diagnostics.add_cuts([lep_cut, jet_cut, fatjet_cut, all_cuts], ["N_leptons == 0", "N_b-jets < 2", "N_fatjets >= 1", "all"])
+        # jet_cut = n_bjets < 2 # This is not wanted
+        fatjet_cut = n_fatjets >= 1 
+        all_cuts = lep_cut & fatjet_cut 
+        cut_diagnostics.add_cuts([lep_cut, fatjet_cut, all_cuts], ["N_leptons == 0", "N_fatjets >= 1", "all"])
     else:
         jet_cut = n_bjets == 2
         all_cuts = lep_cut & jet_cut
@@ -242,14 +242,29 @@ def ggbb_preselection(events, photons, electrons, muons, jets, fatjets, genparts
     selected_events = events[all_cuts]
     selected_photons = photons[all_cuts]
     selected_jets = selected_jets[all_cuts]
+    selected_bjets = selected_fatjets[all_cuts]
     selected_fatjets = selected_fatjets[all_cuts]
+  
+    # Lead FatJet pt cut
+    fatjet_pt_cut = selected_fatjets.pt[:, 0] >= 350
 
-    # Calculate event-level variables
-    selected_events = jet_selections.set_jets(selected_events, selected_jets, options, debug)
-    selected_events = jet_selections.set_fatjets(selected_events, selected_fatjets, options, debug)
-    selected_events = helicity_selections.set_helicity(selected_events,selected_photons,selected_fatjets, options, debug)
+    # Keep only selected events II
+    selected_events = events[fatjet_pt_cut]
+    selected_photons = photons[fatjet_pt_cut]
+    selected_jets = selected_jets[fatjet_pt_cut]
+    selected_bjets = selected_fatjets[fatjet_pt_cut]
+    selected_fatjets = selected_fatjets[fatjet_pt_cut]
+    cut_diagnostics.add_cuts([fatjet_pt_cut], ["Lead FatJet pt > 350 GeV"])
+
+    # Calculate event-level variables 
     if genparts is not None:
         selected_genparts = genparts[all_cuts]
+        selected_genparts = genparts[fatjet_pt_cut]
         selected_events = gen_selections.set_genInfo(selected_events,selected_genparts,options,debug)
+        selected_events = jet_selections.set_fatjets(selected_events, selected_fatjets, selected_genparts , options, debug)
+    else: 
+        selected_events = jet_selections.set_fatjets(selected_events, selected_fatjets, genparts , options, debug) #FIXME genparts is None here
+    selected_events = jet_selections.set_jets(selected_events, selected_jets, options, debug)
+    selected_events = helicity_selections.set_helicity(selected_events,selected_photons,selected_fatjets, selected_bjets, options, debug)
 
     return selected_events

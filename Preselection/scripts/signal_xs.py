@@ -1,5 +1,7 @@
 # Cross section
 xs_hh = 31.05 # https://arxiv.org/pdf/2011.12373.pdf
+xs_vbf_hh = 1.726  # https://twiki.cern.ch/twiki/bin/view/LHCPhysics/LHCHWGHH?redirectedfrom=LHCPhysics.LHCHXSWGHH#Current_recommendations_for_di_H
+
 
 # Branching fractions: from Table 11.3 of https://pdg.lbl.gov/2016/reviews/rpp2016-rev-higgs-boson.pdf
 bf_hgg = 0.00227
@@ -13,21 +15,34 @@ bf_wqq = 0.683
 
 # ggTauTau
 xs_hh_ggTauTau = xs_hh * bf_hgg * bf_htautau * 2
+xs_vbf_hh_ggTauTau = xs_vbf_hh * bf_hgg * bf_htautau * 2
 
 # ggbb
 xs_hh_ggbb = xs_hh * bf_hgg * bf_hbb * 2
+xs_vbf_hh_ggbb = xs_vbf_hh * bf_hgg * bf_hbb * 2
 
 # ggWW
 xs_hh_ggWW = xs_hh * bf_hgg * bf_hww * 2
+xs_vbf_hh_ggWW = xs_vbf_hh * bf_hgg * bf_hww * 2
 xs_hh_ggWW_dileptonic = xs_hh_ggWW * (bf_wlnu**2)
+xs_vbf_hh_ggWW_dileptonic = xs_vbf_hh_ggWW * (bf_wlnu**2)
 xs_hh_ggWW_semileptonic = xs_hh_ggWW * bf_wlnu * bf_wqq * 2
+xs_vbf_hh_ggWW_semileptonic = xs_vbf_hh_ggWW * bf_wlnu * bf_wqq * 2
 
 # ggZZ
 xs_hh_ggZZ = xs_hh * bf_hgg * bf_hzz * 2
+xs_vbf_hh_ggZZ = xs_vbf_hh * bf_hgg * bf_hzz * 2
 
-print("Cross section for HH->ggTauTau: %.6f" % (xs_hh_ggTauTau))
-print("Cross section for HH->ggbb: %.6f" % (xs_hh_ggbb))
-print("Cross section for HH->ggWW: (dileptonic): %.6f" % (xs_hh_ggWW_dileptonic))
-print("Cross section for HH->ggWW: (semileptonic): %.6f" % (xs_hh_ggWW_semileptonic))
-print("Cross section for HH->ggZZ: %.6f" % (xs_hh_ggZZ))
+print("Cross section for ggF HH->ggTauTau: %.6f" % (xs_hh_ggTauTau))
+print("Cross section for ggF HH->ggbb: %.6f" % (xs_hh_ggbb))
+print("Cross section for ggF HH->ggWW: (dileptonic): %.6f" % (xs_hh_ggWW_dileptonic))
+print("Cross section for ggF HH->ggWW: (semileptonic): %.6f" % (xs_hh_ggWW_semileptonic))
+print("Cross section for ggF HH->ggZZ: %.6f" % (xs_hh_ggZZ))
+
+print("Cross section for VBF HH->ggTauTau: %.6f" % (xs_vbf_hh_ggTauTau))
+print("Cross section for VBF HH->ggbb: %.6f" % (xs_vbf_hh_ggbb))
+print("Cross section for VBF HH->ggWW: (dileptonic): %.6f" % (xs_vbf_hh_ggWW_dileptonic))
+print("Cross section for VBF HH->ggWW: (semileptonic): %.6f" % (xs_vbf_hh_ggWW_semileptonic))
+print("Cross section for VBF HH->ggZZ: %.6f" % (xs_vbf_hh_ggZZ))
+
 

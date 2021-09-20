@@ -13,8 +13,8 @@
     "TTGG",
     "ttH",
     "VH",
-    "HH_ggbb",
-    "Data",
+    "signal",
+    
     "DiPhoton",
     "GJets"
   ],
@@ -46,8 +46,8 @@
       "TTGG",
       "ttH",
       "VH",
-      "HH_ggbb",
-      "Data",
+      "signal",
+      
       "DiPhoton",
       "GJets"
     ],
@@ -80,8 +80,8 @@
     "TTGG",
     "ttH",
     "VH",
-    "HH_ggbb",
-    "Data",
+    "signal",
+    
     "DiPhoton",
     "GJets"
   ],
@@ -114,8 +114,8 @@
       "TTGG",
       "ttH",
       "VH",
-      "HH_ggbb",
-      "Data",
+      "signal",
+      
       "DiPhoton",
       "GJets"
     ],
@@ -142,8 +142,8 @@
       "TTGG",
       "ttH",
       "VH",
-      "HH_ggbb",
-      "Data",
+      "signal",
+      
       "DiPhoton",
       "GJets"
     ],
@@ -171,8 +171,8 @@
       "TTGG",
       "ttH",
       "VH",
-      "HH_ggbb",
-      "Data",
+      "signal",
+      
       "DiPhoton",
       "GJets"
     ],
@@ -199,8 +199,8 @@
       "TTGG",
       "ttH",
       "VH",
-      "HH_ggbb",
-      "Data",
+      "signal",
+      
       "DiPhoton",
       "GJets"
     ],
@@ -223,8 +223,8 @@
       "TTGG",
       "ttH",
       "VH",
-      "HH_ggbb",
-      "Data",
+      "signal",
+      
       "DiPhoton",
       "GJets"],
     "signal_scaling":1000,
@@ -246,8 +246,8 @@
       "TTGG",
       "ttH",
       "VH",
-      "HH_ggbb",
-      "Data",
+      "signal",
+      
       "DiPhoton",
       "GJets"],
     "signal_scaling":1000,
@@ -269,8 +269,8 @@
       "TTGG",
       "ttH",
       "VH",
-      "HH_ggbb",
-      "Data",
+      "signal",
+      
       "DiPhoton",
       "GJets"],
     "signal_scaling":1000,
@@ -292,8 +292,8 @@
       "TTGG",
       "ttH",
       "VH",
-      "HH_ggbb",
-      "Data",
+      "signal",
+      
       "DiPhoton",
       "GJets"],
     "signal_scaling":1000,
@@ -315,8 +315,8 @@
       "TTGG",
       "ttH",
       "VH",
-      "HH_ggbb",
-      "Data",
+      "signal",
+      
       "DiPhoton",
       "GJets"],
     "signal_scaling":1000,
@@ -338,8 +338,8 @@
       "TTGG",
       "ttH",
       "VH",
-      "HH_ggbb",
-      "Data",
+      "signal",
+      
       "DiPhoton",
       "GJets"],
     "signal_scaling":1000,
@@ -361,8 +361,8 @@
       "TTGG",
       "ttH",
       "VH",
-      "HH_ggbb",
-      "Data",
+      "signal",
+      
       "DiPhoton",
       "GJets"],
     "signal_scaling":1000,
@@ -384,8 +384,8 @@
       "TTGG",
       "ttH",
       "VH",
-      "HH_ggbb",
-      "Data",
+      "signal",
+      
       "DiPhoton",
       "GJets"],
     "signal_scaling":1000,
@@ -407,8 +407,8 @@
       "TTGG",
       "ttH",
       "VH",
-      "HH_ggbb",
-      "Data",
+      "signal",
+      
       "DiPhoton",
       "GJets"],
     "signal_scaling":1000,
@@ -430,8 +430,8 @@
       "TTGG",
       "ttH",
       "VH",
-      "HH_ggbb",
-      "Data",
+      "signal",
+      
       "DiPhoton",
       "GJets"],
     "signal_scaling":1000,
@@ -453,8 +453,8 @@
       "TTGG",
       "ttH",
       "VH",
-      "HH_ggbb",
-      "Data",
+      "signal",
+      
       "DiPhoton",
       "GJets"],
     "signal_scaling":1000,
@@ -476,8 +476,8 @@
       "TTGG",
       "ttH",
       "VH",
-      "HH_ggbb",
-      "Data",
+      "signal",
+      
       "DiPhoton",
       "GJets"],
     "signal_scaling":1000,
@@ -499,8 +499,8 @@
       "TTGG",
       "ttH",
       "VH",
-      "HH_ggbb",
-      "Data",
+      "signal",
+      
       "DiPhoton",
       "GJets"],
     "signal_scaling":1000,
@@ -522,8 +522,8 @@
       "TTGG",
       "ttH",
       "VH",
-      "HH_ggbb",
-      "Data",
+      "signal",
+      
       "DiPhoton",
       "GJets"],
     "signal_scaling":1000,
@@ -549,8 +549,8 @@
       "TTGG",
       "ttH",
       "VH",
-      "HH_ggbb",
-      "Data",
+      "signal",
+      
       "DiPhoton",
       "GJets"
     ],
@@ -579,8 +579,8 @@
       "TTGG",
       "ttH",
       "VH",
-      "HH_ggbb",
-      "Data",
+      "signal",
+      
       "DiPhoton",
       "GJets"],
     "signal_scaling":1000,
@@ -602,8 +602,8 @@
       "TTGG",
       "ttH",
       "VH",
-      "HH_ggbb",
-      "Data",
+      "signal",
+      
       "DiPhoton",
       "GJets"],
     "signal_scaling":1000,
@@ -625,8 +625,8 @@
       "TTGG",
       "ttH",
       "VH",
-      "HH_ggbb",
-      "Data",
+      "signal",
+      
       "DiPhoton",
       "GJets"],
     "signal_scaling":1000,
@@ -648,8 +648,8 @@
       "TTGG",
       "ttH",
       "VH",
-      "HH_ggbb",
-      "Data",
+      "signal",
+      
       "DiPhoton",
       "GJets"],
     "signal_scaling":1000,
@@ -671,8 +671,8 @@
       "TTGG",
       "ttH",
       "VH",
-      "HH_ggbb",
-      "Data",
+      "signal",
+      
       "DiPhoton",
       "GJets"],
     "signal_scaling":1000,
@@ -694,8 +694,8 @@
       "TTGG",
       "ttH",
       "VH",
-      "HH_ggbb",
-      "Data",
+      "signal",
+      
       "DiPhoton",
       "GJets"],
     "signal_scaling":1000,
@@ -717,8 +717,8 @@
       "TTGG",
       "ttH",
       "VH",
-      "HH_ggbb",
-      "Data",
+      "signal",
+      
       "DiPhoton",
       "GJets"],
     "signal_scaling":1000,
@@ -740,8 +740,8 @@
       "TTGG",
       "ttH",
       "VH",
-      "HH_ggbb",
-      "Data",
+      "signal",
+      
       "DiPhoton",
       "GJets"],
     "signal_scaling":1000,
@@ -763,8 +763,8 @@
       "TTGG",
       "ttH",
       "VH",
-      "HH_ggbb",
-      "Data",
+      "signal",
+      
       "DiPhoton",
       "GJets"],
     "signal_scaling":1000,
@@ -779,7 +779,7 @@
     "bin_type":"linspace",
     "bins": [-5,5,40],
     "processes": [
-      "HH_ggbb"
+      "signal"
       ],
     "signal_scaling":1000,
     "yaxis": "log",
@@ -800,8 +800,8 @@
       "TTGG",
       "ttH",
       "VH",
-      "HH_ggbb",
-      "Data",
+      "signal",
+      
       "DiPhoton",
       "GJets"],
     "signal_scaling":1000,
@@ -823,8 +823,8 @@
       "TTGG",
       "ttH",
       "VH",
-      "HH_ggbb",
-      "Data",
+      "signal",
+      
       "DiPhoton",
       "GJets"],
     "signal_scaling":1000,
@@ -846,8 +846,8 @@
       "TTGG",
       "ttH",
       "VH",
-      "HH_ggbb",
-      "Data",
+      "signal",
+      
       "DiPhoton",
       "GJets"],
     "signal_scaling":1000,
@@ -869,8 +869,8 @@
       "TTGG",
       "ttH",
       "VH",
-      "HH_ggbb",
-      "Data",
+      "signal",
+      
       "DiPhoton",
       "GJets"],
     "signal_scaling":1000,
@@ -890,15 +890,14 @@
     ],
     "processes": [
     "WGamma",
-
     "ZGamma",
     "TTbar",
     "TTGamma",
     "TTGG",
     "ttH",
     "VH",
-    "HH_ggbb",
-    "Data",
+    "signal",
+    
     "DiPhoton",
     "GJets"
     ],
@@ -917,21 +916,14 @@
       20
     ],
     "processes": [
-      "WGamma",
-      "ZGamma",
-      "TTbar",
-      "TTGamma",
-      "TTGG",
-      "ttH",
       "VH",
-      "HH_ggbb",
-      "Data",
-      "DiPhoton",
+      "signal",
       "GJets"
     ],
-    "yaxis": "log",
     "title": "costhetastar_cs",
     "cms_label": 1,
+    "stack": 0,
+    "normalize": "unit_area",
     "output_dir": "./output",
     "output_name": [
       "costhetastar_cs.pdf",
@@ -947,21 +939,14 @@
         20
       ],
       "processes": [
-        "WGamma",
-        "ZGamma",
-        "TTbar",
-        "TTGamma",
-        "TTGG",
-        "ttH",
         "VH",
-        "HH_ggbb",
-        "Data",
-        "DiPhoton",
+        "signal",   
         "GJets"
       ],
-      "yaxis": "log",
       "title": "costheta_bb",
       "cms_label": 1,
+      "stack": 0,
+      "normalize": "unit_area",
       "output_dir": "./output",
       "output_name": [
         "costheta_bb.pdf",
@@ -977,25 +962,18 @@
       20
     ],
     "processes": [
-      "WGamma",
-      "ZGamma",
-      "TTbar",
-      "TTGamma",
-      "TTGG",
-      "ttH",
       "VH",
-      "HH_ggbb",
-      "Data",
-      "DiPhoton",
+      "signal",      
       "GJets"
     ],
-    "yaxis": "log",
     "title": "costheta_gg",
     "cms_label": 1,
+    "stack":0,
+    "normalize": "unit_area",
     "output_dir": "./output",
     "output_name": [
-     "costheta_gg",
-     "costheta_gg"
+     "costheta_gg.pdf",
+     "costheta_gg.png"
     ]
   }
 }

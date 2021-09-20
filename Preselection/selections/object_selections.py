@@ -20,7 +20,55 @@ def compute_deltaR(phi1, phi2, eta1, eta2):
     dR = ((d_eta)**2 + (d_phi)**2)**(0.5)
     return dR
 
+def d_phi(phi1,phi2):
+    return (phi1 - phi2 + PI) % (2*PI) - PI
+
+def mask_nearest(ref_eta,ref_phi,obj_eta,obj_phi,threshold=10):
+    """
+        This function returns the masking to the closest object in dR 
+        among the "obj" wrt the "ref", satisfying a minimum threshold
+    """
+    d_eta = ref_eta - obj_eta
+    d_phi = (ref_phi - obj_phi + PI)%(2*PI) - PI
+    drs = numpy.sqrt(d_eta**2 + d_phi**2)
+    min_drs = awkward.argmin(drs,axis=1,keepdims=True)
+    min_drs_mask = drs[min_drs] < threshold
+
+    return min_drs_mask
+
 #TODO: make compatible with vectors (quick, unoptimized implementation above)
+@numba.njit
+def getGenPartPtFromIdx(genPart, Idx):
+    genPt = numpy.zeros(len(genPart))
+    for i in range(len(genPt)):
+        hIndex = int(Idx[i])
+        genPt[i] = genPart.pt[i][hIndex]
+    return genPt
+
+@numba.njit
+def getGenPartEtaFromIdx(genPart, Idx):
+    genEta = numpy.zeros(len(genPart))
+    for i in range(len(genEta)):
+        hIndex = int(Idx[i])
+        genEta[i] = genPart.eta[i][hIndex]
+    return genEta
+
+@numba.njit
+def getGenPartPhiFromIdx(genPart, Idx):
+    genPhi = numpy.zeros(len(genPart))
+    for i in range(len(genPhi)):
+        hIndex = int(Idx[i])
+        genPhi[i] = genPart.phi[i][hIndex]
+    return genPhi
+
+@numba.njit
+def getGenPartVectorFromIdx(genPart, Idx):
+    genVec = numpy.zeros(len(genPart))
+    for i in range(len(genVec)):
+        hIndex = int(Idx[i])
+        genVec[i] = genPart.GenPart.pt[i][hIndex]
+    return genVec
+
 @numba.njit
 def deltaR(phi1, phi2, eta1, eta2):
     dR = float(0)

@@ -85,24 +85,61 @@ def jet_id(jets, options):
     id_cut = nemf_cut & nh_cut & chf_cut & chemf_cut & n_constituent_cut
     return id_cut
 
-def set_fatjets(events, fatjets, options, debug):
-    events["n_fatjets"] = awkward.num(fatjets)
+def set_fatjets(events, fatjets, genparts, options, debug):
+    n_fatjets = awkward.num(fatjets)
+    events["n_fatjets"] = n_fatjets
+    n_save = 3  # with n_save==1 I guess padding is useless
+    if options["signal"] and genparts is not None:
+        # TODO here if I am running on signal samples do a gen matching (throwing away all but the one fatjet from the higgs)
+        mask_genB = abs(genparts.pdgId) == 5
+        mIdx = genparts.genPartIdxMother
+        mask_fromH = genparts.pdgId[mIdx] == 25
+        genB_fromH = genparts[mask_genB & mask_fromH]
+        HbbIdx = genB_fromH.genPartIdxMother[:,0]
 
-    n_save = 1 #with n_save==1 I guess padding is useless
-
-    fatjet_pt_padded = utils.pad_awkward_array(fatjets.pt, n_save, -9)
-    fatjet_eta_padded = utils.pad_awkward_array(fatjets.eta, n_save, -9)
-    fatjet_phi_padded = utils.pad_awkward_array(fatjets.phi, n_save, -9)
-    fatjet_mass_padded = utils.pad_awkward_array(fatjets.mass, n_save, -9)
-    fatjet_msoftdrop_padded = utils.pad_awkward_array(fatjets.msoftdrop, n_save, -9)
-    fatjet_btag_padded = utils.pad_awkward_array(fatjets.btagDDBvL_noMD, n_save, -9)
-    fatjet_deepbtag_md_padded = utils.pad_awkward_array(fatjets.deepTagMD_HbbvsQCD, n_save, -9)
+        Hbb_Pt = object_selections.getGenPartPtFromIdx(genparts,HbbIdx) 
+        Hbb_Eta = object_selections.getGenPartEtaFromIdx(genparts,HbbIdx) 
+        Hbb_Phi = object_selections.getGenPartPhiFromIdx(genparts,HbbIdx) 
+        dR_bb = object_selections.compute_deltaR(genB_fromH.phi[:,0], genB_fromH.phi[:,1], genB_fromH.eta[:,0], genB_fromH.eta[:,1])
     
-    if hasattr(fatjets,"particleNetMD_Xqq"):
-        fatjet_PNet_Xqq_padded = utils.pad_awkward_array(fatjets.particleNetMD_Xqq, n_save, -9)
-        fatjet_PNet_Xcc_padded = utils.pad_awkward_array(fatjets.particleNetMD_Xcc, n_save, -9)
-        fatjet_PNet_Xbb_padded = utils.pad_awkward_array(fatjets.particleNetMD_Xbb, n_save, -9)
-        fatjet_PNet_XQCD_padded = utils.pad_awkward_array(fatjets.particleNetMD_QCD, n_save, -9)
+        # matching fatjet to Hbb: #TODO cut also on bbDr
+        match_mask = object_selections.mask_nearest(Hbb_Eta,Hbb_Phi,fatjets.eta,fatjets.phi,threshold=0.4)
+        matched_fatjet = fatjets[match_mask]   
+
+        fatjet_pt_padded = utils.pad_awkward_array(matched_fatjet.pt, n_save, -9)
+        fatjet_eta_padded = utils.pad_awkward_array(matched_fatjet.eta, n_save, -9)
+        fatjet_phi_padded = utils.pad_awkward_array(matched_fatjet.phi, n_save, -9)
+        fatjet_mass_padded = utils.pad_awkward_array(matched_fatjet.mass, n_save, -9)
+        fatjet_msoftdrop_padded = utils.pad_awkward_array(matched_fatjet.msoftdrop, n_save, -9)
+        fatjet_btag_padded = utils.pad_awkward_array(matched_fatjet.btagDDBvL_noMD, n_save, -9)
+        fatjet_deepbtag_md_padded = utils.pad_awkward_array(matched_fatjet.deepTagMD_HbbvsQCD, n_save, -9)
+
+        if hasattr(matched_fatjet,"particleNetMD_Xqq"):
+            fatjet_PNet_Xqq_padded = utils.pad_awkward_array(matched_fatjet.particleNetMD_Xqq, n_save, -9)
+            fatjet_PNet_Xcc_padded = utils.pad_awkward_array(matched_fatjet.particleNetMD_Xcc, n_save, -9)
+            fatjet_PNet_Xbb_padded = utils.pad_awkward_array(matched_fatjet.particleNetMD_Xbb, n_save, -9)
+            fatjet_PNet_XQCD_padded = utils.pad_awkward_array(matched_fatjet.particleNetMD_QCD, n_save, -9)
+
+        events["Hbb_pt"] = Hbb_Pt
+        events["Hbb_eta"] = Hbb_Eta
+        events["Hbb_phi"] = Hbb_Phi
+        events["genBBfromH_delta_R"] = dR_bb
+
+    else :  
+        
+        fatjet_pt_padded = utils.pad_awkward_array(fatjets.pt, n_save, -9)
+        fatjet_eta_padded = utils.pad_awkward_array(fatjets.eta, n_save, -9)
+        fatjet_phi_padded = utils.pad_awkward_array(fatjets.phi, n_save, -9)
+        fatjet_mass_padded = utils.pad_awkward_array(fatjets.mass, n_save, -9)
+        fatjet_msoftdrop_padded = utils.pad_awkward_array(fatjets.msoftdrop, n_save, -9)
+        fatjet_btag_padded = utils.pad_awkward_array(fatjets.btagDDBvL_noMD, n_save, -9)
+        fatjet_deepbtag_md_padded = utils.pad_awkward_array(fatjets.deepTagMD_HbbvsQCD, n_save, -9)
+    
+        if hasattr(fatjets,"particleNetMD_Xqq"):
+            fatjet_PNet_Xqq_padded = utils.pad_awkward_array(fatjets.particleNetMD_Xqq, n_save, -9)
+            fatjet_PNet_Xcc_padded = utils.pad_awkward_array(fatjets.particleNetMD_Xcc, n_save, -9)
+            fatjet_PNet_Xbb_padded = utils.pad_awkward_array(fatjets.particleNetMD_Xbb, n_save, -9)
+            fatjet_PNet_XQCD_padded = utils.pad_awkward_array(fatjets.particleNetMD_QCD, n_save, -9)
 
     for i in range(n_save):
         events["fatjet%s_pt" % str(i+1)] = fatjet_pt_padded[:,i]

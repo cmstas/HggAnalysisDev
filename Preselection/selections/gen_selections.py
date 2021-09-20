@@ -32,6 +32,7 @@ def set_genInfo(events, genparts, selection_options, debug):
     if genparts is None:
         return events
     else:
+        # All genParts saving 
         n_save = 60
         GenPart_pt_padded = utils.pad_awkward_array(genparts.pt, n_save, -9)
         GenPart_eta_padded = utils.pad_awkward_array(genparts.eta, n_save, -9)
@@ -51,5 +52,10 @@ def set_genInfo(events, genparts, selection_options, debug):
             events["genPart%s_status" % str(i+1)] = GenPart_status_padded[:, i]
             events["genPart%s_statusFlags" % str(i+1)] = GenPart_statusFlags_padded[:, i]
             events["genPart%s_genPartIdxMother" % str(i+1)] = GenPart_genPartIdxMother_padded[:, i]
+        
+        # Helicity variables
+        # Find the higgs and the decay products
+        
+
 
     return events

@@ -257,6 +257,7 @@ class LoopHelper():
 
         elif "HHggbb_boosted_Presel" in self.selections:
             options["boosted"] = True  
+            options["signal"] = True if awkward.all(events["process_id"] < 0) else False # HH_ggbb pID = -1 and VBF_HHggbb pID = -2    
             if "GenInfo" in self.selections and not options["data"]:
                 gen_events = diphoton_events.GenPart
             else:
@@ -307,8 +308,8 @@ class LoopHelper():
             if events is None:
                 self.outputs.pop(output)
                 return
-            events = self.select_events(events, photons, selection_metadata)
             events["process_id"] = numpy.ones(len(events)) * process_id
+            events = self.select_events(events, photons, selection_metadata)
             if data:
                 events["weight"] = numpy.ones(len(events))
             else:

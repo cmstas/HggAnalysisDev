@@ -2,23 +2,8 @@ import awkward as ak
 import numpy as np
 import vector
 
-import selections.selection_utils as utils
 import selections.object_selections as object_selections
-
-# import logging
-
-# logger = logging.getLogger(__name__)
-# logger.setLevel(logging.INFO)
-
-# formatter = logging.Formatter('%(asctime)s:%(levelname)s:%(message)s')
-
-# call("mkdir -p logs", shell=True)
-# #file_handler = logging.FileHandler('logs/processor.log')
-# file_handler = logging.FileHandler('processor.log')
-# file_handler.setFormatter(formatter)
-
-# logger.addHandler(file_handler)
-
+import selections.selection_utils as utils
 
 
 def pvec(vec4):
@@ -51,29 +36,26 @@ def getcosthetastar_cs(events,diphoton, fatjet):
           t=np.ones(nevts)*beam_energy,
         )
 
-    #  ___________________  #
-    # |        _ _        | #
-    # |  /^^^\{6,6}/^^^\  | #
-    # |  \^^^/(""")\^^^/  | #
-    # |  /^^/  \"/  \^^\  | #
-    # | /'`    /|\    `'\ | #
-    # |___________________| #
-    #                       #
+    #  ___________________  # 
+    # |        _ _        | # 
+    # |  /^^^\{6,6}/^^^\  | # 
+    # |  \^^^/(""")\^^^/  | # 
+    # |  /^^/  \"/  \^^\  | # 
+    # | /'`    /|\    `'\ | # 
+    # |___________________| # 
+    #                       # 
            
-    ## check nan  
     hh = diphoton + fatjet
     boostvec = hh.to_beta3() * -1
 
     p1_boost = p1.boost(boostvec)
     p2_boost = p2.boost(boostvec)
- 
-    CSaxis = (pvec(p1_boost).unit() - pvec(p2_boost).unit()).unit()
-    diphoton_vec_unit = diphoton.to_beta3().unit()
 
-    # logger.debug(f"{p1_boost[0].to_list()}")
-    # logger.debug(f"{pvec(p1_boost)[0]}")
-    # logger.debug(f"{diphoton[0].to_list()}")
-    # logger.debug(f"{pvec(diphoton)[0]}")
+    CSaxis = (pvec(p1_boost).unit() - pvec(p2_boost).unit()).unit()
+    
+    diphoton_boost = diphoton.boost(boostvec)
+    diphoton_vec_unit = pvec(diphoton_boost).unit()
+
 
     return CSaxis.dot(diphoton_vec_unit)
 
@@ -87,16 +69,34 @@ def helicityCosTheta(booster, boosted):
     return np.cos(boosted.theta)
 
 
-def set_helicity(events,photons, fatjets, options, debug):
-    # FIXME I need to build the diphoton 4vector and the fatjet one 
+def set_helicity(events,photons, fatjets, bjets, options, debug):
+    
     photon1_p4 = utils.items2vector(photons[:,0])
     photon2_p4 = utils.items2vector(photons[:,1])
-    fatjet_p4 = utils.items2vector(fatjets,softDrop=True)
+    fatjets_p4 = utils.items2akvector(fatjets, softDrop=True)
+    
     diphoton = photon1_p4 + photon2_p4
     
-    events["costhetastar_cs"] = getcosthetastar_cs(events,diphoton, fatjet_p4) 
-    events["costheta_gg"] = helicityCosTheta(diphoton, photon1_p4)
-    events["costheta_bb"] = helicityCosTheta(diphoton, fatjet_p4)
+    n_save = 3 #Hardcoded same number of saved fatjets
+
+    costhetastar_padded = utils.pad_awkward_array(abs(getcosthetastar_cs(events, diphoton, fatjets_p4)),n_save,-9)
+    dphi_gg_fj_padded = utils.pad_awkward_array(object_selections.d_phi(diphoton.phi,fatjets_p4.phi) ,n_save, -9)
+    
+    # TODO costheta_bb still to be implemented
+    # bjet_padded_eta = utils.pad_awkward_array(bjets.eta,n_save,-9)
+    # bjet_padded_phi = utils.pad_awkward_array(bjets.phi,n_save,-9)
+    for i in range(n_save):
+      events["costhetastar_cs_%s" % str(i+1)] = costhetastar_padded[:,i]
+      events["diphoton_fatjet%s_dphi" % str(i+1)] = dphi_gg_fj_padded[:,i]
+
+      #find closest bjet TODO
+      # closest_bjet_mask = object_selections.mask_nearest(
+      #     fatjet_padded_eta[:, i], fatjet_padded_phi[:, i], bjet_padded_eta, bjet_padded_phi, threshold=0.4)
+      # subjet = bjet[closest_bjet_mask]
+      # subjet_p4 = utils.items2vector(subjet)
+      # events["costheta_bb_%s"% str(i+1)] = abs(helicityCosTheta(fatjet_p4, subjet_p4))
+    
+    events["costheta_gg"] = abs(helicityCosTheta(diphoton, photon1_p4) )
                    
     return events
 
