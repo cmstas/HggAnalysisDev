@@ -723,9 +723,9 @@ class Guided_Optimizer():
             #print("[GUIDED OPTIMIZER] Bkg events from fit: %
 
             yields[bin]["bkg"] = bkg_yield
-            if bkg_yield_raw < 8. or bkg_yield_raw_data < 8.:
-                print("[GUIDED OPTIMIZER] Only %.6f expected background events in one bin, disqualifying signal region set." % bkg_yield_raw)
-                disqualify_srs = True
+            # if bkg_yield_raw < 8. or bkg_yield_raw_data < 8.:
+            #     print("[GUIDED OPTIMIZER] Only %.6f expected background events in one bin, disqualifying signal region set." % bkg_yield_raw)
+            #     disqualify_srs = True
 
         datacard = makeCards(self.scanConfig["modelpath"], "CMS-HGG_mva_13TeV_datacard_" + str(idx) + ".txt",
                 { "sm_higgs_unc" : self.sm_higgs_unc },
@@ -753,9 +753,9 @@ class Guided_Optimizer():
         exp_lim, exp_lim_up1sigma, exp_lim_down1sigma, exp_lim_up2sigma, exp_lim_down2sigma = self.scanner.runCombine(combineConfig)
         if "Significance" in self.combineOption:
             exp_lim = 1. / exp_lim # make negative so that we can still minimize the POI
-        if disqualify_srs:
-            exp_lim *= 3 # double the expected limit if the SR combination is disqualified bc too few non-res bkg events
-            # the reason we double the exp_lim, is that we still want the expected limit to be a relatively smooth function of the cut values. this way, the optimization bdt can hopefully learn that cut values resulting in very narrow bins have a penalty applied on them
+        # if disqualify_srs:
+        #     exp_lim *= 3 # double the expected limit if the SR combination is disqualified bc too few non-res bkg events
+        #     # the reason we double the exp_lim, is that we still want the expected limit to be a relatively smooth function of the cut values. this way, the optimization bdt can hopefully learn that cut values resulting in very narrow bins have a penalty applied on them
 
         exp_lim_full = {}
         exp_lim_full["combined"] = [exp_lim, exp_lim_up1sigma, exp_lim_down1sigma, exp_lim_up2sigma, exp_lim_down2sigma]
