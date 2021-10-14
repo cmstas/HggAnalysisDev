@@ -6,10 +6,10 @@
         "FatJet_pt", "FatJet_eta", "FatJet_phi", "FatJet_mass", "FatJet_msoftdrop", "FatJet_btagDDBvL_noMD", "FatJet_deepTagMD_HbbvsQCD","FatJet_particleNetMD_Xbb","FatJet_particleNetMD_Xcc", "FatJet_particleNetMD_Xqq", "FatJet_particleNetMD_QCD",
         "Jet_pt", "Jet_eta", "Jet_phi", "Jet_mass", "Jet_btagDeepFlavB", "Jet_jetId",
         "Jet_neEmEF", "Jet_neHEF", "Jet_chHEF", "Jet_chEmEF", "Jet_nConstituents",
-        "gg_mass", "gg_pt", "gg_eta", "nJet", "MET_pt", "genWeight"
+        "gg_mass", "gg_pt", "gg_eta", "nJet", "MET_pt", "genWeight","event"
     ],
     "save_branches" : [
-        "gg_mass", "MET_pt",
+        "gg_mass", "MET_pt", "event",
         "diphoton_pt_mgg", "diphoton_rapidity", "diphoton_delta_R","costhetastar_cs_1", "costhetastar_cs_2","costhetastar_cs_3","costheta_gg","diphoton_fatjet1_dphi","diphoton_fatjet2_dphi","diphoton_fatjet3_dphi",
         "lead_pho_ptmgg", "sublead_pho_ptmgg", "lead_pho_eta", "sublead_pho_eta", "lead_pho_idmva", "sublead_pho_idmva", "lead_pixelSeed", "sublead_pixelSeed",
         "fatjet1_pt", "fatjet1_eta", "fatjet1_mass", "fatjet1_phi" ,"fatjet1_msoftdrop", "fatjet1_btag", "fatjet1_deepbtag_md","fatjet1_particleNet_Tbb","fatjet1_particleNet_Xbb","fatjet1_particleNet_Xcc","fatjet1_particleNet_Xqq","fatjet1_particleNet_XQCD",
