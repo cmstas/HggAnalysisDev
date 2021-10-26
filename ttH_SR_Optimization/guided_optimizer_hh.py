@@ -5,7 +5,7 @@ from json import JSONEncoder
 import json
 import math
 
-# Disable these, don't really need them 
+# Disable these, don't really need them
 #import tensorflow
 #import keras
 import xgboost
@@ -20,13 +20,14 @@ import root_numpy
 from scanClass import scanClass
 from makeModels import makeModel
 from cardMaker import makeCards
+from cardMaker_counting import makeCountingExperimentCards
 
 process_dict = {
     "data" : [0],
-    "HH_ggTauTau" : [-1, -2, -3, -4],
-    "ttH" : [-1],
+    "HH_ggTauTau" : [-1,-3, -4],
+    "ttH" : [10],
     "bkg" : [1, 2, 3, 4, 5, 6, 7, 8],
-    "sm_higgs" : [9,10]
+    "sm_higgs" : [9, 10, 11, 12]
 }
 
 
@@ -43,14 +44,14 @@ class Guided_Optimizer():
         self.channel = "FCNC_Hadronic" if "Hadronic" in self.input else "FCNC_Leptonic"
         self.diagnostic_mode = kwargs.get('diagnostic_mode', False)
 
-        self.mvas   =   kwargs.get('mvas', { "1d" : ["mva_score"], "2d" : ["mva_smhiggs_score", "mva_nonres_score"] }) 
-        self.n_bins =   kwargs.get('n_bins', [1, 2, 3, 4]) 
+        self.mvas   =   kwargs.get('mvas', { "1d" : ["mva_score"], "2d" : ["mva_smhiggs_score", "mva_nonres_score"] })
+        self.n_bins =   kwargs.get('n_bins', [1, 2, 3, 4])
         self.strategies = kwargs.get('strategies', ['random', 'guided'])
 
         self.nCores = kwargs.get('nCores', 12)
 
         self.verbose = kwargs.get('verbose', True)
-
+        self.countingExperiment = kwargs.get('counting', False)
         self.nrb_choice = kwargs.get('nrb_choice', 'bkg')
         self.combineOption = kwargs.get('combineOption', 'AsymptoticLimits -m 125 ')
         self.sm_higgs_unc  = kwargs.get('sm_higgs_unc', 0.4)
@@ -66,8 +67,9 @@ class Guided_Optimizer():
 
         if self.coupling == "HH":
             self.signal = ["HH_ggTauTau"]
-        #if "Leptonic" in kwargs.get('channel'):
-            #    self.resonant_bkgs = ['sm_higgs_nottHnoggH']
+
+        if "Leptonic" in kwargs.get('channel'):
+            self.resonant_bkgs = ['sm_higgs_nottHnoggH']
 
         self.points_per_epoch = kwargs.get('points_per_epoch', 200)
         self.initial_points = kwargs.get('initial_points', 48)
@@ -93,10 +95,10 @@ class Guided_Optimizer():
                                 'objective': 'reg:linear',
                                 'subsample': 1.0,
                                 'colsample_bytree': 1.0,
-                                'nthread' : 12, 
+                                'nthread' : 12,
                             })
 
-        user = getpass.getuser() 
+        user = getpass.getuser()
         current_dir = os.getcwd()
         self.modelpath = current_dir + "/models/" + self.tag
         self.plotpath = ("/home/users/%s/public_html/Binning/" % user) + self.tag
@@ -104,21 +106,22 @@ class Guided_Optimizer():
                                                      "filename" : self.input,
                                                      "selection" : "",
                                                      "sigName" : self.signal[0] + "_hgg",
-                                                     "var" : "mass",
+                                                     "var" : "mgg",
                                                      "weightVar" : "weight",
                                                      "modelpath" : self.modelpath,
-                                                     "plotpath" : self.plotpath, 
+                                                     "plotpath" : self.plotpath,
                                                      "combineEnv" : current_dir + "/CMSSW_10_2_13/src",
                                                     })
 
         # Setup
         f = ROOT.TFile(self.input)
         self.tree = f.Get("t")
-    
+        self.tempCounter = 0
+
         self.n_points = self.points_per_epoch
 
 
-    def optimize(self): 
+    def optimize(self):
         self.results = {}
         for dim, mvas in self.mvas.items():
             self.results[dim] = {}
@@ -136,7 +139,9 @@ class Guided_Optimizer():
     def find_optimal_binning(self, dim, mvas, n_bin, strategy): # find optimal binning for len(mvas)-D optimization with n_bin SRs
         if self.verbose:
             print("[GUIDED OPTIMIZER] Finding optimal binning for %s optimization in mva scores: %s with n_bin = %d, and %s optimiziation strategy" % (dim, mvas, n_bin, strategy))
-        
+            if self.countingExperiment:
+                print("[GUIDED OPTIMIZER] Using Counting Experiment mode for quick prototyping")
+
         self.iteration_ctr = 0
         self.results[dim][n_bin][strategy] = {
             "X" : [], # points actually tried
@@ -148,7 +153,7 @@ class Guided_Optimizer():
             "sample_best" : [], # best limit for sampled points vs. epoch
             "accuracy" : [], # dnn accuracy vs. epcoh
         }
-        
+
         self.n_bad_epochs = 0
 
         initial_results = self.initialize(mvas, n_bin)
@@ -166,11 +171,11 @@ class Guided_Optimizer():
 
             results = self.sample(mvas, n_bin, strategy)
             results["accuracy"] = accuracy
-            self.update_results(dim, n_bin, strategy, results) 
+            self.update_results(dim, n_bin, strategy, results)
 
             self.check_convergence(self.results[dim][n_bin][strategy])
-           
-            self.reset_mva(mvas, n_bin) 
+
+            self.reset_mva(mvas, n_bin)
 
     def reset_mva(self, mvas, n_bin):
         if self.mva == "dnn":
@@ -204,13 +209,13 @@ class Guided_Optimizer():
     def update_results(self, dim, n_bin, strategy, results):
         if not results:
             return
-        
+
         for field in ["X", "y", "exp_lim"]:
             if len(self.results[dim][n_bin][strategy][field]) == 0:
                 self.results[dim][n_bin][strategy][field] = numpy.array(results[field])
             else:
                 self.results[dim][n_bin][strategy][field] = numpy.concatenate([self.results[dim][n_bin][strategy][field], numpy.array(results[field])])
-        
+
         for field in ["eff", "sample_mean", "sample_std", "sample_best", "accuracy"]:
             self.results[dim][n_bin][strategy][field].append(results[field])
 
@@ -238,7 +243,7 @@ class Guided_Optimizer():
         # Calculate quantiles <-> mva scores
         if self.verbose:
             print("[GUIDED OPTIMIZER] Calculating quantiles to mva score function")
-    
+
         self.quantiles = {}
         for mva in mvas:
             scores, quantiles = self.scanner.quantiles_to_mva_score(5000, mva, self.base_selection() + "&&" + self.process_selection(self.signal[0]))
@@ -314,7 +319,7 @@ class Guided_Optimizer():
         model = keras.models.Model(inputs = [input_global], outputs = [output])
         optimizer = keras.optimizers.Adam(lr = learning_rate)
         model.compile(optimizer = 'adam', loss = loss, metrics = ['mae'])
-    
+
         if self.verbose:
             print("[GUIDED OPTIMIZER] DNN Model Summary:", model.summary())
             print("[GUIDED OPTIMIZER] DNN Config:", config)
@@ -344,13 +349,13 @@ class Guided_Optimizer():
         percent_error_mean = numpy.mean(percent_error)
         percent_error_std  = numpy.std(percent_error)
 
-        self.percent_error = numpy.sqrt(numpy.mean(percent_error**2)) # just use rms 
+        self.percent_error = numpy.sqrt(numpy.mean(percent_error**2)) # just use rms
 
         if self.verbose:
             print("[GUIDED OPTIMIZER] Finished training BDT with error %.3f +/- %.3f" % (percent_error_mean, percent_error_std))
 
-        return percent_error_std 
-        
+        return percent_error_std
+
     def train_dnn(self, X, y): # train dnn with early stopping
         X_train, X_test, y_train, y_test = train_test_split(X, y, train_size = 0.8)
 
@@ -374,11 +379,11 @@ class Guided_Optimizer():
         percent_error_mean = numpy.mean(percent_error)
         percent_error_std  = numpy.std(percent_error)
 
-        self.percent_error = numpy.sqrt(numpy.mean(percent_error**2)) # just use rms 
+        self.percent_error = numpy.sqrt(numpy.mean(percent_error**2)) # just use rms
 
         if self.verbose:
-            print("[GUIDED OPTIMIZER] Finished training DNN with error %.3f +/- %.3f" % (percent_error_mean, percent_error_std)) 
-        
+            print("[GUIDED OPTIMIZER] Finished training DNN with error %.3f +/- %.3f" % (percent_error_mean, percent_error_std))
+
         return percent_error_std
 
 
@@ -399,10 +404,10 @@ class Guided_Optimizer():
 
         results = {
             "X" : X_,
-            "y" : y, 
+            "y" : y,
             "exp_lim" : exp_limits,
             "eff" : eff,
-            "sample_mean" : sample_mean, 
+            "sample_mean" : sample_mean,
             "sample_std" : sample_std,
             "sample_best" : sample_best
          }
@@ -421,8 +426,8 @@ class Guided_Optimizer():
             n_total = 0
             while len(X) < N_combos:
                 n_total += N_combos
-                X += self.subsample(self.generate_random_cut_combos(N_combos, mvas, n_bin))          
-                
+                X += self.subsample(self.generate_random_cut_combos(N_combos, mvas, n_bin))
+
                 if self.verbose:
                     print("[GUIDED OPTIMIZER] Subsampling: %d accepted points with %d total points tried (%.3f acceptance rate)" % (len(X), n_total, float(len(X))/float(n_total)))
 
@@ -496,7 +501,7 @@ class Guided_Optimizer():
                 cuts_list = self.convert_eff_to_cut(mvas[0], effs_list)
             elif len(mvas) == 2:
                 effs_list = self.generate_effs_2d(n_bin)
-                cuts_list = self.convert_eff_to_cut(mvas[0], effs_list[:n_bin]) + self.convert_eff_to_cut(mvas[1], effs_list[n_bin:]) 
+                cuts_list = self.convert_eff_to_cut(mvas[0], effs_list[:n_bin]) + self.convert_eff_to_cut(mvas[1], effs_list[n_bin:])
             if self.verbose:
                 if i < 10:
                     print("[GUIDED_OPTIMIZER] the %d-th cut combo is " % i, cuts_list, " corresponding to effs of ", effs_list)
@@ -508,7 +513,7 @@ class Guided_Optimizer():
     def generate_random_cut_combos_old(self, N_combos, mvas, n_bin):
         if self.verbose:
             print("[GUIDED_OPTIMIZER] Calculating random cut combos for %d bins with mvas" % n_bin, mvas)
-        
+
         X = []
         for i in range(N_combos):
             cuts_list = []
@@ -533,7 +538,7 @@ class Guided_Optimizer():
                 if i < 10:
                     print("[GUIDED_OPTIMIZER] the %d-th cut combo is " % i, cuts_list, " corresponding to effs of ", effs_list)
             X.append(cuts_list)
-        return X 
+        return X
 
     def convert_eff_to_cut(self, mva, effs):
         cuts = []
@@ -553,7 +558,7 @@ class Guided_Optimizer():
     def subsample(self, X):
         pred = self.predict_limits(X)
         prob = self.calculate_probs(pred)
-   
+
         if self.verbose:
             print("[GUIDED OPTIMIZER] Here are the first few points, along with their predictions and accept probs")
             for i in range(3):
@@ -606,7 +611,12 @@ class Guided_Optimizer():
                 if i < 3:
                     print("[GUIDED OPTIMIZER] Point ", points[i], " was converted to selection string: %s" % selections[i])
 
-            running_procs.append(multiprocessing.Process(target = self.calculate_expected_limit, args = (selections[i], i + (len(selections) * self.iteration_ctr), points[i], temp_results)))
+            if self.countingExperiment:
+                expected_lim_function = self.calculate_expected_limit_counting_exp
+            else:
+                expected_lim_function = self.calculate_expected_limit
+
+            running_procs.append(multiprocessing.Process(target = expected_lim_function, args = (selections[i], i + (len(selections) * self.iteration_ctr), points[i], temp_results)))
             running_procs[-1].start()
 
             while True:
@@ -663,13 +673,64 @@ class Guided_Optimizer():
         return selection
 
     #def data_selection(self):
-    #    return "(mass > 100 && mass < 180 && 
+    #    return "(mgg > 100 && mgg < 180 &&
 
     def base_selection(self):
         if self.pt_selection == "":
-            return "(mass > 100 && mass < 180 && train_label == 2) "
+            return "(mgg > 100 && mgg < 180 && train_label == 2) "
         else:
-            return "(mass > 100 && mass < 180 && train_label == 2 && %s) " % self.pt_selection
+            return "(mgg > 100 && mgg < 180 && train_label == 2 && %s) " % self.pt_selection
+    def calculate_expected_limit_counting_exp(self, selections, idx, m_point, temp_results):
+        yields = {}
+        disqualify_srs = False
+
+        # selection refers to a BDT signal region score cut, so there will be n_SR (i.e., 2) for each idx
+        for i in range(len(selections)):
+            bin = "Bin_{}".format(i)
+            yields[bin] = {}
+            processes = ["HH_ggTauTau", "sm_higgs", "bkg"]
+            for process in processes:
+                selection = self.base_selection() + "&&" + self.process_selection(process) + "&&" + selections[i]
+
+                f = ROOT.TFile(self.input)
+                tree = f.Get("t")
+                yields[bin][process], raw_entry = self.countFromHistograms(tree, process, selection)
+                if process == "bkg":
+                    yields[bin][process] /= 7
+                    if raw_entry < 8:
+                        print("[GUIDED OPTIMIZER] Only %.6f expected background events in one bin, disqualifying signal region set." % raw_entry)
+                        disqualify_srs = True
+
+        datacard = makeCountingExperimentCards(self.scanConfig["modelpath"], "CMS_HGG_mva_13TeV_datacard_" + str(idx) + ".txt")
+        datacard.WriteCard(yields, processes)
+
+        combineConfig = {
+                "combineOption" : self.combineOption,
+                "combineOutName" : "counting_exp_" + str(idx),
+                "cardName" : "CMS_HGG_mva_13TeV_datacard_" + str(idx) + ".txt",
+                "outtxtName" : "sig_" + str(idx) + ".txt"}
+
+        exp_lim, exp_lim_up1sigma, exp_lim_down1sigma, exp_lim_up2sigma, exp_lim_down2sigma = self.scanner.runCombine(combineConfig)
+        if disqualify_srs:
+            exp_lim *= 3 # double the expected limit if the SR combination is disqualified bc too few non-res bkg events
+        exp_lim_full = {}
+        exp_lim_full["combined"] = [exp_lim, exp_lim_up1sigma, exp_lim_down1sigma, exp_lim_up2sigma, exp_lim_down2sigma]
+
+        result = {
+           "idx" : idx,
+           "x" : [float(x) for x in m_point],
+           "exp_lim" : [exp_lim, exp_lim_up1sigma, exp_lim_down1sigma, exp_lim_up2sigma, exp_lim_down2sigma],
+           "exp_lim_full" : exp_lim_full,
+           "selection" : selections,
+           "yields" : yields,
+           "disqualified" : str(disqualify_srs)
+        }
+
+        temp_results[",".join(selection) + str(idx)] = result
+
+        if self.verbose:
+            print("[GUIDED OPTIMIZER]", result)
+
 
     def calculate_expected_limit(self, selection, idx, m_point, temp_results):
         yields = {}
@@ -681,7 +742,7 @@ class Guided_Optimizer():
             yields[bin] = {}
             for process in self.signal + self.resonant_bkgs:
                 signalModelConfig = {
-                    "var" : "mass", "weightVar" : "weight",
+                    "var" : "mgg", "weightVar" : "weight",
                     "plotpath" : self.scanConfig["plotpath"],
                     "modelpath" : self.scanConfig["modelpath"],
                     "filename" : self.input,
@@ -693,15 +754,16 @@ class Guided_Optimizer():
                     simple = True # just fit a single gaussian
                 else:
                     simple = False
+
                 model = makeModel(signalModelConfig)
                 model.getTree(self.scanner.getTree())
                 sig_yield = model.makeSignalModel("wsig_13TeV",
                         { "replaceNorm" : False, "norm_in" : -1, "fixParameters" : True , "simple" : simple},
                 )
-                yields[bin][process] = sig_yield                
+                yields[bin][process] = sig_yield
 
             bkgModelConfig = {
-                "var" : "mass", "weightVar" : "weight",
+                "var" : "mgg", "weightVar" : "weight",
                 "plotpath" : self.scanConfig["plotpath"],
                 "modelpath" : self.scanConfig["modelpath"],
                 "filename" : self.input,
@@ -759,7 +821,7 @@ class Guided_Optimizer():
 
         exp_lim_full = {}
         exp_lim_full["combined"] = [exp_lim, exp_lim_up1sigma, exp_lim_down1sigma, exp_lim_up2sigma, exp_lim_down2sigma]
-        
+
         for tag in tagList:
             combineConfig["combineOutName"] = "sig_" + str(idx) + "_" + tag
             combineConfig["cardName"] = "CMS-HGG_mva_13TeV_datacard_" + str(idx) + "_" + tag + ".txt"
@@ -783,3 +845,11 @@ class Guided_Optimizer():
             print("[GUIDED OPTIMIZER]", result)
 
         return
+
+    def countFromHistograms(self, tree, process, selection):
+        mggHist = ROOT.TH1D("mgg_{}".format(self.tempCounter), "", 1, 100, 180)
+        mggHist.Sumw2()
+        self.tempCounter += 1
+        tree.Project(mggHist.GetName(), "mgg", "weight * ({})".format(selection))
+        return mggHist.Integral(), mggHist.GetEntries()
+

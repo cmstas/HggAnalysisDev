@@ -168,7 +168,7 @@ class makeModel():
 
         print("[MAKEMODELS] Info: h_mgg name: %s, var: %s, weightVar: %s, selection: %s" % (h_mgg.GetName(), self.var, self.weightVar, self.selection))
 
-        self.tree.Project(h_mgg.GetName(), self.var, self.weightVar + "*(" + self.selection + ")") 
+        self.tree.Project(h_mgg.GetName(), self.var, self.weightVar + "*(" + self.selection + ")")
         d_mgg = ROOT.RooDataHist("roohist_data_mass_" + datasetTag, "", ROOT.RooArgList(w.var(rooVar)), h_mgg, 1)
         print "bin dataset", h_mgg.Integral(), d_mgg.sumEntries(), d_mgg.numEntries()
 
@@ -184,7 +184,7 @@ class makeModel():
 
         # pdf
         #if norm >= 15.:
-        #    print "[MAKE_BACKGROUND_MODEL] At least 10 events in sideband (%.2f), fitting exponential" % norm 
+        #    print "[MAKE_BACKGROUND_MODEL] At least 10 events in sideband (%.2f), fitting exponential" % norm
         w.factory("Exponential:"+self.tag+"(" + rooVar + ", tau[-0.027,-0.05,-0.01])")
         #else:
         #    print "[MAKE_BACKGROUND_MODEL] Less than 10 events in sideband (%.2f), fixing decay of exponential to -0.027" % norm

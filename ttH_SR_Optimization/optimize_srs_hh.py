@@ -17,6 +17,8 @@ parser.add_argument("--nCores", help = "number of cores to use", type=int, defau
 parser.add_argument("--bins", help = "csv list of number of bins", type=str, default = "1,2,3,4,5")
 parser.add_argument("--metric", help = "optimize upper limit or significance", type=str, default = "limit")
 parser.add_argument("--pt_selection", help = "cut on dipho_pt", type=str, default="")
+parser.add_argument("--counting", help = "run a counting experiment instead of fit", action="store_true")
+
 args = parser.parse_args()
 
 mvas = args.mvas.split(",")
@@ -47,11 +49,12 @@ optimizer = guided_optimizer.Guided_Optimizer(
 
                 n_bins = bins,
                 mvas = mva_dict,
-                strategies = ['guided'],
-               
-                initial_points = 36,
-                points_per_epoch = 36,
-                n_epochs = 2,
+#                strategies = ['guided'],
+                strategies = ["random"],
+                counting= args.counting,
+                initial_points = 5000,
+                points_per_epoch = 5000,
+                n_epochs = 1,
                 verbose = True
 )
 
