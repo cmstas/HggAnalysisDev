@@ -2,6 +2,22 @@ import awkward as ak
 import numpy
 import selections.selection_utils as utils
 
+
+def filter_genHbb(events, genparts, options, debug):
+    if options["signal"]:
+        mask_genB = abs(genparts.pdgId) == 5
+        mIdx = genparts.genPartIdxMother
+        mask_fromH = genparts.pdgId[mIdx] == 25
+        genB_fromH = genparts[mask_genB & mask_fromH]
+
+        dR_bb = object_selections.compute_deltaR(
+            genB_fromH.phi[:, 0], genB_fromH.phi[:, 1], genB_fromH.eta[:, 0], genB_fromH.eta[:, 1])
+
+        gen_cut = dR_bb <= 0.8
+    else:
+        gen_cut = events["event"]>0 #dummy filter
+    return gen_cut
+
 def set_genZ(events, genBranches, selection_options, debug):
     if genBranches is None:
         events["genZ_decayMode"] = ak.from_numpy(-1 * numpy.ones(len(events)))
@@ -52,10 +68,5 @@ def set_genInfo(events, genparts, selection_options, debug):
             events["genPart%s_status" % str(i+1)] = GenPart_status_padded[:, i]
             events["genPart%s_statusFlags" % str(i+1)] = GenPart_statusFlags_padded[:, i]
             events["genPart%s_genPartIdxMother" % str(i+1)] = GenPart_genPartIdxMother_padded[:, i]
-        
-        # Helicity variables
-        # Find the higgs and the decay products
-        
-
 
     return events

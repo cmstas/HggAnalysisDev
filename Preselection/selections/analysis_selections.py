@@ -245,16 +245,16 @@ def ggbb_preselection(events, photons, electrons, muons, jets, fatjets, genparts
     selected_bjets = selected_bjets[all_cuts]
     selected_fatjets = selected_fatjets[all_cuts]
   
-    # Lead FatJet pt cut
+    # # Lead FatJet pt cut
     fatjet_pt_cut = selected_fatjets.pt[:, 0] >= 350
 
-    # Keep only selected events II
-    selected_events = selected_events[fatjet_pt_cut]
-    selected_photons = selected_photons[fatjet_pt_cut]
-    selected_jets = selected_jets[fatjet_pt_cut]
-    selected_bjets = selected_bjets[fatjet_pt_cut]
-    selected_fatjets = selected_fatjets[fatjet_pt_cut]
-    cut_diagnostics.add_cuts([fatjet_pt_cut], ["Lead FatJet pt > 350 GeV"])
+    # # Keep only selected events II
+    # selected_events = selected_events[fatjet_pt_cut]
+    # selected_photons = selected_photons[fatjet_pt_cut]
+    # selected_jets = selected_jets[fatjet_pt_cut]
+    # selected_bjets = selected_bjets[fatjet_pt_cut]
+    # selected_fatjets = selected_fatjets[fatjet_pt_cut]
+    # cut_diagnostics.add_cuts([fatjet_pt_cut], ["Lead FatJet pt > 350 GeV"])
 
     # Filter mjj #TODO Fix the "nearest" function
     # mjj_cut = mjj_selections.mjj_filter(events,selected_fatjets,selected_jets,[120,130],debug)
@@ -269,7 +269,8 @@ def ggbb_preselection(events, photons, electrons, muons, jets, fatjets, genparts
     if genparts is not None:
         selected_genparts = genparts[all_cuts]
         # selected_genparts = selected_genparts[mjj_cut]
-        selected_genparts = selected_genparts[fatjet_pt_cut]
+        # selected_genparts = selected_genparts[fatjet_pt_cut]
+        # selected_events = selected_events[gen_selections.filter_genHbb(selected_events,selected_genparts,options,debug)]
         selected_events = gen_selections.set_genInfo(selected_events,selected_genparts,options,debug)
         selected_events = jet_selections.set_fatjets(selected_events, selected_fatjets, selected_genparts , options, debug)
     else: 

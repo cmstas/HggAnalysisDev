@@ -102,16 +102,40 @@ def set_fatjets(events, fatjets, genparts, options, debug):
         Hbb_Eta = object_selections.getGenPartEtaFromIdx(genparts,HbbIdx) 
         Hbb_Phi = object_selections.getGenPartPhiFromIdx(genparts,HbbIdx) 
         dR_bb = object_selections.compute_deltaR(genB_fromH.phi[:,0], genB_fromH.phi[:,1], genB_fromH.eta[:,0], genB_fromH.eta[:,1])
-    
-        # matching fatjet to Hbb: 
-        #print("Hbb eta {} and fatjets eta {}".format(Hbb_Eta, fatjets.eta))
-        match_mask = object_selections.mask_nearest(Hbb_Eta,Hbb_Phi,fatjets.eta,fatjets.phi,threshold=0.4)
-        matched_fatjet = fatjets[match_mask]   
 
         events["Hbb_pt"] = Hbb_Pt
         events["Hbb_eta"] = Hbb_Eta
         events["Hbb_phi"] = Hbb_Phi
         events["genBBfromH_delta_R"] = dR_bb
+
+        # matching fatjet to Hbb: 
+    
+        # closest fatjet
+        # match_mask = object_selections.mask_nearest(Hbb_Eta,Hbb_Phi,fatjets.eta,fatjets.phi,threshold=0.4)
+        # matched_fatjet = fatjets[match_mask]   
+
+        # highest PNet fatjet
+        fatjets.Tbb = fatjets.particleNetMD_Xbb / \
+        (1 - fatjets.particleNetMD_Xqq - fatjets.particleNetMD_Xcc)
+        matched_fatjet = fatjets[awkward.argmax(fatjets.Tbb,axis=1,keepdims=True)]
+
+        try:
+            dR_HbbFatjet = object_selections.compute_deltaR(Hbb_Phi,matched_fatjet.phi,Hbb_Eta,matched_fatjet.eta)
+        except:
+            dR_HbbFatjet = -9
+            matched_fatjet.pt = -9
+            matched_fatjet.eta = -9
+            matched_fatjet.phi = -9
+            matched_fatjet.mass = -9
+            matched_fatjet.msoftdrop = -9
+            matched_fatjet.btagDDBvL_noMD = -9
+            matched_fatjet.deepTagMD_HbbvsQCD = -9
+            matched_fatjet.particleNetMD_Xqq = -9
+            matched_fatjet.particleNetMD_Xcc = -9
+            matched_fatjet.particleNetMD_Xbb = -9
+            matched_fatjet.particleNetMD_QCD = -9
+
+        events["HbbFatjet_delta_R"] = dR_HbbFatjet
         events["matched_fatjet_pt"] = matched_fatjet.pt
         events["matched_fatjet_eta"] = matched_fatjet.eta
         events["matched_fatjet_phi"] = matched_fatjet.phi
@@ -159,6 +183,16 @@ def set_fatjets(events, fatjets, genparts, options, debug):
             events["fatjet%s_particleNet_Xcc" % str(i+1)] = fatjet_PNet_Xcc_padded[:,i]
             events["fatjet%s_particleNet_Xbb" % str(i+1)] = fatjet_PNet_Xbb_padded[:,i]
             events["fatjet%s_particleNet_XQCD" % str(i+1)] = fatjet_PNet_XQCD_padded[:,i]
+
+    # for i in range(100,160):
+    #     print("\nmatched fatjet_pt : {}, Tbb : {}".format(matched_fatjet[i].pt, matched_fatjet.particleNetMD_Xbb[i]/(
+    #                                                                         1 - matched_fatjet.particleNetMD_Xcc[i]
+    #                                                                         - matched_fatjet.particleNetMD_Xqq[i])))
+    #     for j in range(n_save):
+    #         print("fatjet{}_pt: {}, Tbb : {}".format(
+    #             str(j+1), fatjet_pt_padded[i, j], fatjet_PNet_Xbb_padded[i, j] / (  
+    #                                                             1 - fatjet_PNet_Xcc_padded[i, j]
+    #                                                             - fatjet_PNet_Xqq_padded[i, j])))
                    
     return events
 
