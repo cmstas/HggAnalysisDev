@@ -141,6 +141,10 @@ class Plotter:
         """ Splits the master dataframe into one for each process"""
         self.master_dataframe = {}
         self.process_id_map = {}
+        if "samples_dict" not in self.input_options.keys():
+            self.input_options["samples_dict"] = self.input_opions["sample_id_map"]
+            for sample,id in self.input_opions["samples_dict"].items():
+                sample["process_id"] = id
         for sample, info in self.input_options["samples_dict"].items():
             if self.debug:
                 print("[plotter.py] sample = ", sample)

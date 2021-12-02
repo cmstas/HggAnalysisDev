@@ -113,9 +113,12 @@ class LoopHelper():
                 if year not in self.years:
                     continue
                 for path in year_info["paths"]:
-                    files += glob.glob(path + "/*.root")
-                    files += glob.glob(path + "/*/*.root")
-                    files += glob.glob(path + "/*/*/*/*.root") # to be compatible with CRAB
+                    if "redirector" in path:
+                        files += self.get_files_from_xrd(path)
+                    else:
+                        files += glob.glob(path + "/*.root")
+                        files += glob.glob(path + "/*/*.root")
+                        files += glob.glob(path + "/*/*/*/*.root") # to be compatible with CRAB
 
                 if len(files) == 0:
                     continue
@@ -371,3 +374,34 @@ class LoopHelper():
         df = awkward.to_pandas(events)
         df.to_pickle(output_name)
         return
+    
+    def get_files_from_xrd(self, directory):
+        """
+        Get list of files from an xrootd directory with xrdfs ls command"
+
+        :param directory: directory (in xrootd format) to glob files from
+        :type directory: str
+        :return: list of all root files from directory
+        :rtype: list of str
+        """
+        files = []
+
+        idx = directory.find("//store") + 1
+        redirector = directory[:idx]
+        dir = directory[idx:]
+
+        command = "xrdfs %s ls -R %s" % (redirector, dir)
+
+        if self.debug > 0: 
+            print("[LoopHelper : get_files_from_xrd] We will find files for dir '%s' with the command: \n %s" % (directory, command))
+
+        contents = os.popen(command).read().split("\n")
+        for x in contents:
+            if x.endswith(".root"):
+                files.append(redirector + x)
+
+        if self.debug > 0:
+            print("[LoopHelper : get_files_from_xrd] Found %d files in dir '%s'." % (len(files), directory))
+            
+        return files
+

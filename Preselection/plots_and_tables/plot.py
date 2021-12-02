@@ -1,6 +1,6 @@
 import json
 import argparse
-
+import pandas
 import plotter
 
 parser = argparse.ArgumentParser()
@@ -29,8 +29,13 @@ args = parser.parse_args()
 
 events_json = args.events.replace(".pkl", ".json") if args.events_options is None else args.events_options
 
+if ".parquet" in args.events:
+    input_df = pandas.read_parquet(args.events)
+else:
+    input_df = args.events, 
+
 plot_helper = plotter.Plotter(
-    df = args.events,
+    df = input_df,
     plot_options = args.plot_options,
     input_options = events_json,
     debug = args.debug,

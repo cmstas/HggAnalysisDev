@@ -127,34 +127,7 @@
     "output_dir": "./output",
     "output_name": ["MVAscore.pdf","MVAscore.png"]
   },
-  "gg_mass": {
-    "bin_type": "linspace",
-    "bins": [
-      0,
-      300,
-      50
-    ],
-    "processes": [
-      "WGamma",
-      "ZGamma",
-      "TTbar",
-      "TTGamma",
-      "TTGG",
-      "ttH",
-      "VH",
-      "signal",
-      
-      "DiPhoton",
-      "GJets"
-    ],
-    "signal_scaling": 1000,
-    "yaxis": "log",
-    "title": "Di-Photon Mass (GeV)",
-    "cms_label": 1,
-    "ratio_ylim": [0 ,2],
-    "output_dir": "./output",
-    "output_name": ["ggMass_fine.pdf","ggMass_fine.png"]
-  },
+  
   "gg_mass": {
     "bin_type": "list",
     "bins": [

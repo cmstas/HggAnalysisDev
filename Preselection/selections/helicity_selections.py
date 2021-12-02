@@ -16,6 +16,7 @@ def pvec(vec4):
 
 def getcosthetastar_cs(events,diphoton, fatjet):
 
+    print ("\n\n Hgg is {} and Hxx is {}".format(diphoton, fatjet))
     # https://github.com/cms-analysis/flashgg/blob/1453740b1e4adc7184d5d8aa8a981bdb6b2e5f8e/DataFormats/src/DoubleHTag.cc#L41
     beam_energy = 6500
     nevts = len(events)
@@ -35,15 +36,6 @@ def getcosthetastar_cs(events,diphoton, fatjet):
           z=np.ones(nevts)*beam_energy*(-1),
           t=np.ones(nevts)*beam_energy,
         )
-
-    #  ___________________  # 
-    # |        _ _        | # 
-    # |  /^^^\{6,6}/^^^\  | # 
-    # |  \^^^/(""")\^^^/  | # 
-    # |  /^^/  \"/  \^^\  | # 
-    # | /'`    /|\    `'\ | # 
-    # |___________________| # 
-    #                       # 
            
     hh = diphoton + fatjet
     boostvec = hh.to_beta3() * -1

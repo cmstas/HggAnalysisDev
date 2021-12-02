@@ -5,6 +5,7 @@ source env/bin/activate
 pip install --upgrade pip
 
 # For preselection
+pip install xrootd==5.1.1
 pip install uproot awkward
 pip install pandas
 pip install numba==0.50.1
@@ -15,6 +16,7 @@ pip install vector
 pip install yahist
 
 # For MVAs
+pip install pyarrow
 pip install tensorflow
 pip install xgboost==1.2.1 # negative weights disallowed in xgboost 1.3
 pip install scikit-learn
