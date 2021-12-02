@@ -23,14 +23,15 @@ class PrepHelper():
             print("[PrepHelper] Creating PrepHelper instance with options:")
             print("\n".join(["{0}={1!r}".format(a, b) for a, b in kwargs.items()]))
 
-        with open(self.input.replace(".pkl", ".json"), "r") as f_in:
+        with open(self.input.replace(".parquet", ".json"), "r") as f_in:
             self.input_config = json.load(f_in)
         self.make_process_id_map()
 
         with open(self.config_file, "r") as f_in:
             self.config = json.load(f_in)
 
-        self.df = pandas.read_pickle(self.input)
+        #self.df = pandas.read_pickle(self.input)
+        self.df = pandas.read_parquet(self.input)
         if self.debug > 0:
             print("[PrepHelper] Loaded file %s, containing %d events" % (self.input, len(self.df)))
 
@@ -43,12 +44,13 @@ class PrepHelper():
         return
 
     def apply_preselections(self):
-        self.df["weight"] *= 100
+        self.df["weight_central"] *= 100
 
     def make_process_id_map(self):
         self.process_id_map = {}
-        for sample, info in self.input_config["samples_dict"].items():
-            self.process_id_map[sample] = info["process_id"]
+        #for sample, info in self.input_config["samples_dict"].items():
+        for sample, info in self.input_config["sample_id_map"].items():
+            self.process_id_map[sample] = info
 
         if self.debug > 0:
             print("[PrepHelper] process_id map: ", self.process_id_map)
@@ -56,8 +58,8 @@ class PrepHelper():
 
     def preprocess(self):
         if self.config["preprocess"]["scale_signal"]: # scale signal yield to bkg yield
-            self.df.loc[self.df["label"] == 1, "weight"] *= self.n_background_weighted / self.n_signal_weighted
-            self.n_signal_reweighted = self.df["weight"][self.df["label"] == 1].sum()
+            self.df.loc[self.df["label"] == 1, "weight_central"] *= self.n_background_weighted / self.n_signal_weighted
+            self.n_signal_reweighted = self.df["weight_central"][self.df["label"] == 1].sum()
 
             if self.debug > 0:
                 print("[PrepHelper] After scaling signal yield, total weighted signal/background events are %.6f/%.6f" % (self.n_signal_reweighted, self.n_background_weighted))
@@ -92,10 +94,10 @@ class PrepHelper():
             self.df.loc[self.df["process_id"] == self.process_id_map[process], "label"] = 1
 
         self.n_signal = len(self.df[self.df["label"] == 1])
-        self.n_signal_weighted = self.df["weight"][self.df["label"] == 1].sum()
+        self.n_signal_weighted = self.df["weight_central"][self.df["label"] == 1].sum()
 
         self.n_background = len(self.df[self.df["label"] == 0])
-        self.n_background_weighted = self.df["weight"][self.df["label"] == 0].sum()
+        self.n_background_weighted = self.df["weight_central"][self.df["label"] == 0].sum()
 
         if self.debug > 0:
             print("[PrepHelper] After labeling, have %d signal events (%.6f weighted) and %d background events (%.6f weighted)" % (self.n_signal, self.n_signal_weighted, self.n_background, self.n_background_weighted))
@@ -105,7 +107,7 @@ class PrepHelper():
     def prepare_features(self):
         self.X = self.df[self.config["training_features"]]
         self.y = self.df["label"]
-        self.weight = self.df["weight"]
+        self.weight = self.df["weight_central"]
 
     def make_train_test_validation_split(self):
         """

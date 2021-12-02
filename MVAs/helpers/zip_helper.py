@@ -24,7 +24,8 @@ class ZipHelper():
             print("[ZipHelper] Creating ZipHelper instance with options:")
             print("\n".join(["{0}={1!r}".format(a, b) for a, b in kwargs.items()]))
 
-        self.df = pandas.read_pickle(self.input)
+        #self.df = pandas.read_pickle(self.input)
+        self.df = pandas.read_parquet(self.input)
         if self.debug > 0:
              print("[ZipHelper] Loaded file %s, containing %d events" % (self.input, len(self.df)))
 
