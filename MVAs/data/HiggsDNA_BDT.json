@@ -1,0 +1,29 @@
+{
+    "signal" : ["ttH_M125"],
+    "background" : ["Diphoton", "TTGG", "TTGamma", "VH_M125", "HH_ggbb", "WGamma", "ZGamma"],
+    "training_features" : [
+        "Diphoton_pt_mgg", "Diphoton_eta", "Diphoton_dR",
+        "LeadPhoton_mvaID", "SubleadPhoton_mvaID", "LeadPhoton_pt_mgg", "SubleadPhoton_pt_mgg", "LeadPhoton_eta", "SubleadPhoton_eta", "LeadPhoton_pixelSeed", "SubleadPhoton_pixelSeed",
+        "MET_pt",
+        "fatjet_1_pt", "fatjet_1_eta", "fatjet_1_mass",
+        "n_jets", "n_fatjets",
+        "jet_1_pt", "jet_1_eta", "jet_1_btagDeepFlavB",
+        "jet_2_pt", "jet_2_eta", "jet_2_btagDeepFlavB"
+    ],
+    "branches" : ["weight_central", "process_id", "Diphoton_mass"],
+    "preprocess" : {
+        "scale_signal" : true
+    },
+    "mva" : {
+        "type" : "binary_classification_bdt",
+        "param" : {
+            "max_depth": 4,
+            "eta" : 0.2,
+            "objective" : "binary:logistic",
+            "nthread" : 12
+        },
+        "n_trees" : 500,
+        "early_stopping" : true,
+        "early_stopping_rounds" : 5
+    }
+} 
