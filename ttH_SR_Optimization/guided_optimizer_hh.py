@@ -22,10 +22,10 @@ from makeModels import makeModel
 from cardMaker import makeCards
 
 process_dict = {
-    "data" : [0],
-    "HH_ggTauTau" : [-1, -2, -3, -4],
-    "ttH" : [-1],
-    "bkg" : [1, 2, 3, 4, 5, 6, 7, 8],
+    "data" : [14],
+    "HH_ggTauTau" : [1],
+    "ttH" : [1],
+    "bkg" : [0, 2, 3, 4, 5, 6, 7, 8, 11, 12, 13, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25],
     "sm_higgs" : [9,10]
 }
 
@@ -105,7 +105,7 @@ class Guided_Optimizer():
                                                      "selection" : "",
                                                      "sigName" : self.signal[0] + "_hgg",
                                                      "var" : "mass",
-                                                     "weightVar" : "weight",
+                                                     "weightVar" : "weight_central",
                                                      "modelpath" : self.modelpath,
                                                      "plotpath" : self.plotpath, 
                                                      "combineEnv" : current_dir + "/CMSSW_10_2_13/src",
@@ -681,7 +681,7 @@ class Guided_Optimizer():
             yields[bin] = {}
             for process in self.signal + self.resonant_bkgs:
                 signalModelConfig = {
-                    "var" : "mass", "weightVar" : "weight",
+                    "var" : "mass", "weightVar" : "weight_central",
                     "plotpath" : self.scanConfig["plotpath"],
                     "modelpath" : self.scanConfig["modelpath"],
                     "filename" : self.input,
@@ -701,7 +701,7 @@ class Guided_Optimizer():
                 yields[bin][process] = sig_yield                
 
             bkgModelConfig = {
-                "var" : "mass", "weightVar" : "weight",
+                "var" : "mass", "weightVar" : "weight_central",
                 "plotpath" : self.scanConfig["plotpath"],
                 "modelpath" : self.scanConfig["modelpath"],
                 "filename" : self.input,

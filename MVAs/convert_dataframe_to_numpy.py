@@ -39,8 +39,8 @@ def to_tensor(dataframe, columns = [], dtypes = {}):
     return numpy_buffer
 
 events = pandas.read_pickle(args.input)
-events = events.rename(columns = { "gg_mass" : "mass" } )
-events["weight"] = events["weight"] * 3
+events = events.rename(columns = { "Diphoton_mass" : "mass" } )
+events["weight_central"] = events["weight_central"] * 3
 events = to_tensor(events)
 
 output = "output/" + args.input.split("/")[-1].replace(".pkl", ".npz")
