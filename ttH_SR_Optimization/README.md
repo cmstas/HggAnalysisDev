@@ -14,9 +14,11 @@ git cms-init
 ```
 
 # Install combine
+```
 git clone git@github.com:cms-analysis/HiggsAnalysis-CombinedLimit.git HiggsAnalysis/CombinedLimit
-
+```
 # compile
+```
 cmsenv
 scram b -j 20
 ```
