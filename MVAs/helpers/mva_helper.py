@@ -46,6 +46,7 @@ class MVAHelper():
             self.events[split] = {}
             for data in ["X", "y", "weight"]:
                 self.events[split][data] = pandas.read_hdf(self.input, "%s_%s" % (data, split))
+            # self.events[split]["weight"].values.fill(1) # WARNING uncomment to run with no weigths
             for label, val in zip(["signal", "background"], [1, 0]):
                 self.events[split]["n_%s_raw" % label] = len(self.events[split]["y"].loc[self.events[split]["y"] == val])
                 self.events[split]["n_%s_weighted" % label] = (self.events[split]["weight"][self.events[split]["y"] == val]).sum()

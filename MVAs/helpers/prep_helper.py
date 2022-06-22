@@ -23,15 +23,23 @@ class PrepHelper():
             print("[PrepHelper] Creating PrepHelper instance with options:")
             print("\n".join(["{0}={1!r}".format(a, b) for a, b in kwargs.items()]))
 
-        with open(self.input.replace(".parquet", ".json"), "r") as f_in:
-            self.input_config = json.load(f_in)
+        if "parquet" in self.input:
+            with open(self.input.replace(".parquet", ".json"), "r") as f_in:
+                self.input_config = json.load(f_in)
+        else:
+            with open(self.input.replace(".pkl", ".json"), "r") as f_in:
+                self.input_config = json.load(f_in)
+        
         self.make_process_id_map()
 
         with open(self.config_file, "r") as f_in:
             self.config = json.load(f_in)
 
         #self.df = pandas.read_pickle(self.input)
-        self.df = pandas.read_parquet(self.input)
+        if "parquet" in self.input:
+            self.df = pandas.read_parquet(self.input)
+        else:
+            self.df = pandas.read_pickle(self.input)
         if self.debug > 0:
             print("[PrepHelper] Loaded file %s, containing %d events" % (self.input, len(self.df)))
 
@@ -57,6 +65,7 @@ class PrepHelper():
         return
 
     def preprocess(self):
+        if self.debug > 1: print("before preprocessing ... \n",self.df["label"])
         if self.config["preprocess"]["scale_signal"]: # scale signal yield to bkg yield
             self.df.loc[self.df["label"] == 1, "weight_central"] *= self.n_background_weighted / self.n_signal_weighted
             self.n_signal_reweighted = self.df["weight_central"][self.df["label"] == 1].sum()
@@ -65,8 +74,17 @@ class PrepHelper():
                 print("[PrepHelper] After scaling signal yield, total weighted signal/background events are %.6f/%.6f" % (self.n_signal_reweighted, self.n_background_weighted))
 
         #TODO: add options for feature preprocessing, scaling up resonant backgrounds, etc
-        return
+        if self.config["preprocess"]["scale_tth"]:
+            self.df.loc[self.df["label"] == 2, "weight_central"] *= 100 #scaling ttH
+            self.n_ttH_reweighted = self.df["weight_central"][self.df["label"] == 2].sum()
+            if self.debug > 0:
+                print("[PrepHelper] After scaling ttH yield, total weighted ttH events are %.6f before were %.6f" % (self.n_ttH_reweighted, self.n_ttH_weighted))
 
+        self.df.loc[self.df["label"] == 2, "label"] = 0 #rejoining ttH to the bkg
+        
+        if self.debug > 1: print("after preprocessing ... \n",self.df["label"])
+        return
+        
     def prepare_samples(self):
         """
         Select only the needed samples from the dataframe,
@@ -92,10 +110,15 @@ class PrepHelper():
         # Assign signal events label of 1
         for process in self.config["signal"]:
             self.df.loc[self.df["process_id"] == self.process_id_map[process], "label"] = 1
+        # Assign temporarly ttH events label of 2
+        self.df.loc[self.df["process_id"] == 10, "label"] = 2
 
         self.n_signal = len(self.df[self.df["label"] == 1])
         self.n_signal_weighted = self.df["weight_central"][self.df["label"] == 1].sum()
 
+        self.n_ttH = len(self.df[self.df["label"] == 2])
+        self.n_ttH_weighted = self.df["weight_central"][self.df["label"] == 2].sum()
+        
         self.n_background = len(self.df[self.df["label"] == 0])
         self.n_background_weighted = self.df["weight_central"][self.df["label"] == 0].sum()
 
@@ -151,11 +174,15 @@ class PrepHelper():
         return
 
     def write_hdf5(self):
+        if self.debug > 0:
+            print("[PrepHelper] Writing output hdf5")
         self.X_train.to_hdf(self.output, "X_train")
         self.y_train.to_hdf(self.output, "y_train")
         self.weight_train.to_hdf(self.output, "weight_train")
         self.X_test.to_hdf(self.output, "X_test")
         self.y_test.to_hdf(self.output, "y_test")
         self.weight_test.to_hdf(self.output, "weight_test")
+        if self.debug > 0:
+            print("[PrepHelper] Done")
 
         return

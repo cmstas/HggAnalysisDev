@@ -32,7 +32,7 @@ events_json = args.events.replace(".pkl", ".json") if args.events_options is Non
 if ".parquet" in args.events:
     input_df = pandas.read_parquet(args.events)
 else:
-    input_df = args.events, 
+    input_df = args.events
 
 plot_helper = plotter.Plotter(
     df = input_df,

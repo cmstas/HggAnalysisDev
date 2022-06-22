@@ -21,12 +21,13 @@ from scanClass import scanClass
 from makeModels import makeModel
 from cardMaker import makeCards
 
-process_dict = {
+process_dict = { ##TODO Is that ok?
     "data" : [14],
-    "HH_ggTauTau" : [1],
-    "ttH" : [1],
-    "bkg" : [0, 2, 3, 4, 5, 6, 7, 8, 11, 12, 13, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25],
-    "sm_higgs" : [9,10]
+    "ttHH" : [11,12,13],
+    # "ttH" : [10],
+    "ggHH" : [1, 2],
+    "bkg" : [0, 3, 4, 5, 6, 15, 16, 17, 18, 19, 20],
+    "sm_higgs" : [7, 8, 9, 10]
 }
 
 
@@ -65,7 +66,9 @@ class Guided_Optimizer():
             self.resonant_bkgs = ['sm_higgs']
 
         if self.coupling == "HH":
-            self.signal = ["HH_ggTauTau"]
+            self.signal = ["ggHH"]
+        if self.coupling == "ttHH":
+            self.signal = ["ttHH"]
         #if "Leptonic" in kwargs.get('channel'):
             #    self.resonant_bkgs = ['sm_higgs_nottHnoggH']
 
@@ -469,7 +472,7 @@ class Guided_Optimizer():
             delta_x = max(0.01, mag * math.cos(angle)) # also enforce that both dimensions must loosen by at least 1% in signal eff
             delta_y = max(0.01, mag * math.sin(angle))
 
-            print delta_x, delta_y
+            print (delta_x, delta_y)
 
             if len(effs_x) == 0:
                 effs_x.append(delta_x)
@@ -564,7 +567,7 @@ class Guided_Optimizer():
             print("[GUIDED OPTIMIZER] No accepted points, doubling all probabilities")
             prob *= 2
             accept_idx = numpy.nonzero(prob > numpy.random.rand(len(X)))[0]
-        print accept_idx
+        print (accept_idx)
 
         X = numpy.array(X)
 
@@ -660,6 +663,7 @@ class Guided_Optimizer():
                 selection += ") "
             else:
                 selection += " || "
+        print ("selection {}".format(selection))        
         return selection
 
     #def data_selection(self):

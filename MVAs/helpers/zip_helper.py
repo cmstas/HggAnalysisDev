@@ -24,16 +24,31 @@ class ZipHelper():
             print("[ZipHelper] Creating ZipHelper instance with options:")
             print("\n".join(["{0}={1!r}".format(a, b) for a, b in kwargs.items()]))
 
-        #self.df = pandas.read_pickle(self.input)
-        self.df = pandas.read_parquet(self.input)
+        if ".parquet" in self.input:
+            self.df = pandas.read_parquet(self.input)
+        elif ".pkl" in self.input:
+            self.df = pandas.read_pickle(self.input)
+        else:
+            print ("Unsupported input format, parquet or pickled df are supported")
+            return
         if self.debug > 0:
              print("[ZipHelper] Loaded file %s, containing %d events" % (self.input, len(self.df)))
 
     def run(self):
+        if self.debug > 0:
+             print("[ZipHelper] Running...")
         self.load_mvas()
+        if self.debug > 0:
+             print("[ZipHelper] BDT weights loaded...")
         self.label_events()
+        if self.debug > 0:
+             print("[ZipHelper] Labelling...")
         self.calculate_scores()
+        if self.debug > 0:
+             print("[ZipHelper] Scores calculated...")
         self.save_df()
+        if self.debug > 0:
+             print("[ZipHelper] Saved...")
         return
 
     def load_mvas(self):

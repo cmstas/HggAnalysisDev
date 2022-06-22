@@ -82,6 +82,8 @@ class Plotter:
         else:
             self.input_options = None
 
+        if self.debug:
+             print ("[plotter.py] Input type is {}".format(type(self.input)))
         if type(self.input) is str:
             # Open the file and store the dataframe in self.input
             if ".pkl" in self.input:

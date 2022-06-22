@@ -5,7 +5,7 @@ source env/bin/activate
 pip install --upgrade pip
 
 # For preselection
-pip install xrootd==5.1.1
+pip install xrootd
 pip install uproot awkward
 pip install pandas
 pip install numba==0.50.1
@@ -28,6 +28,6 @@ pip install zfit
 pip install tensorflow
 
 
-mkdir -p Preselection/output/
-mkdir -p MVAs/output/
-mkdir -p SR_Optimization/output/
+#mkdir -p Preselection/output/
+#mkdir -p MVAs/output/
+#mkdir -p SR_Optimization/output/

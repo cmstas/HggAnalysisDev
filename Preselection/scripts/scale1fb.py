@@ -108,6 +108,11 @@ for sample, info in samples.items():
             files += glob.glob(path + "/*.root")
             files += glob.glob(path + "/*/*/*/*.root") # to be compatible with CRAB
 
+        #Removing broken files... bad practice
+        files = [file for file in files if 
+        "GJets_HT-200To400_TuneCP5_13TeV-madgraphMLM-pythia8_private_mc17/skimNano-Hggselection-PnetAK8__v5/210611_150953/0000/tree_7.root" 
+        not in file] 
+
         if "xs" not in year_info["metadata"].keys():
             if args.debug > 0:
                 print("[scale1fb.py] Sample: %s, year %s, does not have a xs value, only grabbing events and weights." % (sample, year))
