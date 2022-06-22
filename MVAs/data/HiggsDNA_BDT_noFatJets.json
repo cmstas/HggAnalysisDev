@@ -143,8 +143,6 @@
         "ditau_sublead_lepton_charge",
         "costhetastar_cs_HHggqq",
         "costhetastar_cs_HHggtautau",
-        "costhetastar_cs_HHggbb_boosted",
-        "costhetastar_cs_HHggww_boosted",
         "costheta_gg",
         "costheta_bb",
         "costheta_qq",
@@ -157,7 +155,7 @@
     ],
     "preprocess": {
         "scale_signal": true,
-        "scale_tth": true
+        "scale_tth": false
     },
     "mva": {
         "type": "binary_classification_bdt",

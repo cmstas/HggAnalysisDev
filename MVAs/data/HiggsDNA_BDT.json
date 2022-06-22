@@ -193,7 +193,7 @@
     ],
     "preprocess": {
         "scale_signal": true,
-        "scale_tth": true
+        "scale_tth": false
     },
     "mva": {
         "type": "binary_classification_bdt",

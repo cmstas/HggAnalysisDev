@@ -1,0 +1,633 @@
+{
+    "Data": {
+        "2016": {
+            "metadata": {},
+            "paths": [
+                "root://redirector.t2.ucsd.edu//store/user/azecchin/skimNano-Hggselection-PnetAK8/DoubleEG_Run2016B_private_data16_2/",
+                "root://redirector.t2.ucsd.edu//store/user/azecchin/skimNano-Hggselection-PnetAK8/DoubleEG_Run2016B_private_data16/",
+                "root://redirector.t2.ucsd.edu//store/user/azecchin/skimNano-Hggselection-PnetAK8/DoubleEG_Run2016C_private_data16/",
+                "root://redirector.t2.ucsd.edu//store/user/azecchin/skimNano-Hggselection-PnetAK8/DoubleEG_Run2016D_private_data16/",
+                "root://redirector.t2.ucsd.edu//store/user/azecchin/skimNano-Hggselection-PnetAK8/DoubleEG_Run2016D_private_data16_2/",
+                "root://redirector.t2.ucsd.edu//store/user/azecchin/skimNano-Hggselection-PnetAK8/DoubleEG_Run2016E_private_data16/",
+                "root://redirector.t2.ucsd.edu//store/user/azecchin/skimNano-Hggselection-PnetAK8/DoubleEG_Run2016F_private_data16/",
+                "root://redirector.t2.ucsd.edu//store/user/azecchin/skimNano-Hggselection-PnetAK8/DoubleEG_Run2016G_private_data16/",
+                "root://redirector.t2.ucsd.edu//store/user/azecchin/skimNano-Hggselection-PnetAK8/DoubleEG_Run2016H_private_data16/"
+            ]
+        },
+        "2017": {
+            "metadata": {},
+            "paths": [
+                "root://redirector.t2.ucsd.edu//store/user/azecchin/skimNano-Hggselection-PnetAK8/DoubleEG_Run2017B_private_data17_2/",
+                "root://redirector.t2.ucsd.edu//store/user/azecchin/skimNano-Hggselection-PnetAK8/DoubleEG_Run2017B_private_data17/",
+                "   //store/user/azecchin/skimNano-Hggselection-PnetAK8/DoubleEG_Run2017C_private_data17/",
+                "root://redirector.t2.ucsd.edu//store/user/azecchin/skimNano-Hggselection-PnetAK8/DoubleEG_Run2017D_private_data17_2/",
+                "root://redirector.t2.ucsd.edu//store/user/azecchin/skimNano-Hggselection-PnetAK8/DoubleEG_Run2017E_private_data17_2/",
+                "root://redirector.t2.ucsd.edu//store/user/azecchin/skimNano-Hggselection-PnetAK8/DoubleEG_Run2017F_private_data17_2/"
+            ]
+        },
+        "2018": {
+            "metadata": {},
+            "paths": [
+                "root://redirector.t2.ucsd.edu//store/user/azecchin/skimNano-Hggselection-PnetAK8/EGamma_Run2018A_private_data18/",
+                "root://redirector.t2.ucsd.edu//store/user/azecchin/skimNano-Hggselection-PnetAK8/EGamma_Run2018A_private_data18_2/",
+                "root://redirector.t2.ucsd.edu//store/user/azecchin/skimNano-Hggselection-PnetAK8/EGamma_Run2018B_private_data18/",
+                "root://redirector.t2.ucsd.edu//store/user/azecchin/skimNano-Hggselection-PnetAK8/EGamma_Run2018B_private_data18_2/",
+                "root://redirector.t2.ucsd.edu//store/user/azecchin/skimNano-Hggselection-PnetAK8/EGamma_Run2018C_private_data18/",
+                "root://redirector.t2.ucsd.edu//store/user/azecchin/skimNano-Hggselection-PnetAK8/EGamma_Run2018C_private_data18_2/",
+                "root://redirector.t2.ucsd.edu//store/user/azecchin/skimNano-Hggselection-PnetAK8/EGamma_Run2018D_private_data18/"
+            ]
+        },
+        "fpo": 25,
+        "process_id": 0,
+        "resonant": false
+    },
+    "DiPhoton": {
+        "2016": {
+            "metadata": {
+                "xs": 84.4
+            },
+            "paths": [
+                "root://redirector.t2.ucsd.edu//store/user/azecchin/skimNano-Hggselection-PnetAK8/DiPhotonJetsBox_MGG-80toInf_13TeV-Sherpa_private_mc16/"
+            ]
+        },
+        "2017": {
+            "metadata": {
+                "xs": 84.4
+            },
+            "paths": [
+                "root://redirector.t2.ucsd.edu//store/user/azecchin/skimNano-Hggselection-PnetAK8/DiPhotonJetsBox_MGG-80toInf_13TeV-sherpa_private_mc17/"
+            ]
+        },
+        "2018": {
+            "metadata": {
+                "xs": 84.4
+            },
+            "paths": [
+                "root://redirector.t2.ucsd.edu//store/user/azecchin/skimNano-Hggselection-PnetAK8/DiPhotonJetsBox_MGG-80toInf_13TeV-sherpa_private_mc18/"
+            ]
+        },
+        "fpo": 10,
+        "process_id": 3,
+        "resonant": false
+    },
+    "DiPhoton1B": {
+        "2016": {
+            "metadata": {
+                "xs": 0.8674276
+            },
+            "paths": [
+                "root://redirector.t2.ucsd.edu//store/user/azecchin/skimNano-Hggselection-PnetAK8/DiPhotonJetsBox1BJet_MGG-80toInf_13TeV-sherpa_private_mc17/"
+            ]
+        },
+        "2017": {
+            "metadata": {
+                "xs": 0.8674276
+            },
+            "paths": [
+                "root://redirector.t2.ucsd.edu//store/user/azecchin/skimNano-Hggselection-PnetAK8/DiPhotonJetsBox1BJet_MGG-80toInf_13TeV-sherpa_private_mc17/"
+            ]
+        },
+        "2018": {
+            "metadata": {
+                "xs": 0.8674276
+            },
+            "paths": [
+                "root://redirector.t2.ucsd.edu//store/user/azecchin/skimNano-Hggselection-PnetAK8/DiPhotonJetsBox1BJet_MGG-80toInf_13TeV-sherpa_private_mc18/"
+            ]
+        },
+        "fpo": 10,
+        "process_id": 11,
+        "resonant": false
+    },
+    "DiPhoton2B": {
+        "2016": {
+            "metadata": {
+                "xs": 0.494
+            },
+            "paths": [
+                "root://redirector.t2.ucsd.edu//store/user/azecchin/skimNano-Hggselection-PnetAK8/DiPhotonJetsBox2BJet_MGG-80toInf_13TeV-sherpa_private_mc17/"
+            ]
+        },
+        "2017": {
+            "metadata": {
+                "xs": 0.494
+            },
+            "paths": [
+                "root://redirector.t2.ucsd.edu//store/user/azecchin/skimNano-Hggselection-PnetAK8/DiPhotonJetsBox2BJet_MGG-80toInf_13TeV-sherpa_private_mc17/"
+            ]
+        },
+        "2018": {
+            "metadata": {
+                "xs": 0.494
+            },
+            "paths": [
+                "root://redirector.t2.ucsd.edu//store/user/azecchin/skimNano-Hggselection-PnetAK8/DiPhotonJetsBox2BJet_MGG-80toInf_13TeV-sherpa_private_mc18/"
+            ]
+        },
+        "fpo": 10,
+        "process_id": 12,
+        "resonant": false
+    },
+    "GJets_HT-100To200": {
+        "2016": {
+            "metadata": {
+                "xs": 8631.0
+            },
+            "paths": [
+                "root://redirector.t2.ucsd.edu//store/user/azecchin/skimNano-Hggselection-PnetAK8/GJets_HT-100To200_TuneCUETP8M1_13TeV-madgraphMLM-pythia8_private_mc16",
+                "root://redirector.t2.ucsd.edu//store/user/azecchin/skimNano-Hggselection-PnetAK8/GJets_HT-100To200_TuneCUETP8M1_13TeV-madgraphMLM-pythia8_private_mc16_2"
+            ]
+        },
+        "2017": {
+            "metadata": {
+                "xs": 8631.0
+            },
+            "paths": [
+                "root://redirector.t2.ucsd.edu//store/user/azecchin/skimNano-Hggselection-PnetAK8/GJets_HT-100To200_TuneCP5_13TeV-madgraphMLM-pythia8_private_mc17"
+            ]
+        },
+        "2018": {
+            "metadata": {
+                "xs": 8631.0
+            },
+            "paths": [
+                "root://redirector.t2.ucsd.edu//store/user/azecchin/skimNano-Hggselection-PnetAK8/GJets_HT-100To200_TuneCP5_13TeV-madgraphMLM-pythia8_private_mc18"
+            ]
+        },
+        "fpo": 10,
+        "process_id": 8,
+        "resonant": false
+    },
+    "GJets_HT-200To400": {
+        "2016": {
+            "metadata": {
+                "xs": 2280.0
+            },
+            "paths": [
+                "root://redirector.t2.ucsd.edu//store/user/azecchin/skimNano-Hggselection-PnetAK8/GJets_HT-200To400_TuneCUETP8M1_13TeV-madgraphMLM-pythia8_private_mc16",
+                "root://redirector.t2.ucsd.edu//store/user/azecchin/skimNano-Hggselection-PnetAK8/GJets_HT-200To400_TuneCUETP8M1_13TeV-madgraphMLM-pythia8_private_mc16_2"
+            ]
+        },
+        "2017": {
+            "metadata": {
+                "xs": 2280.0
+            },
+            "paths": [
+                "root://redirector.t2.ucsd.edu//store/user/azecchin/skimNano-Hggselection-PnetAK8/GJets_HT-200To400_TuneCP5_13TeV-madgraphMLM-pythia8_private_mc17"
+            ]
+        },
+        "2018": {
+            "metadata": {
+                "xs": 2280.0
+            },
+            "paths": [
+                "root://redirector.t2.ucsd.edu//store/user/azecchin/skimNano-Hggselection-PnetAK8/GJets_HT-200To400_TuneCP5_13TeV-madgraphMLM-pythia8_private_mc18"
+            ]
+        },
+        "fpo": 10,
+        "process_id": 8,
+        "resonant": false
+    },
+    "GJets_HT-400To600": {
+        "2016": {
+            "metadata": {
+                "xs": 273.0
+            },
+            "paths": [
+                "root://redirector.t2.ucsd.edu//store/user/azecchin/skimNano-Hggselection-PnetAK8/GJets_HT-400To600_TuneCUETP8M1_13TeV-madgraphMLM-pythia8_private_mc16",
+                "root://redirector.t2.ucsd.edu//store/user/azecchin/skimNano-Hggselection-PnetAK8/GJets_HT-400To600_TuneCUETP8M1_13TeV-madgraphMLM-pythia8_private_mc16_2"
+            ]
+        },
+        "2017": {
+            "metadata": {
+                "xs": 273.0
+            },
+            "paths": [
+                "root://redirector.t2.ucsd.edu//store/user/azecchin/skimNano-Hggselection-PnetAK8/GJets_HT-400To600_TuneCP5_13TeV-madgraphMLM-pythia8_private_mc17"
+            ]
+        },
+        "2018": {
+            "metadata": {
+                "xs": 273.0
+            },
+            "paths": [
+                "root://redirector.t2.ucsd.edu//store/user/azecchin/skimNano-Hggselection-PnetAK8/GJets_HT-400To600_TuneCP5_13TeV-madgraphMLM-pythia8_private_mc18"
+            ]
+        },
+        "fpo": 10,
+        "process_id": 8,
+        "resonant": false
+    },
+    "GJets_HT-600ToInf": {
+        "2016": {
+            "metadata": {
+                "xs": 94.5
+            },
+            "paths": [
+                "root://redirector.t2.ucsd.edu//store/user/azecchin/skimNano-Hggselection-PnetAK8/GJets_HT-600ToInf_TuneCUETP8M1_13TeV-madgraphMLM-pythia8_private_mc16",
+                "root://redirector.t2.ucsd.edu//store/user/azecchin/skimNano-Hggselection-PnetAK8/GJets_HT-600ToInf_TuneCUETP8M1_13TeV-madgraphMLM-pythia8_private_mc16_2"
+            ]
+        },
+        "2017": {
+            "metadata": {
+                "xs": 94.5
+            },
+            "paths": [
+                "root://redirector.t2.ucsd.edu//store/user/azecchin/skimNano-Hggselection-PnetAK8/GJets_HT-600ToInf_TuneCP5_13TeV-madgraphMLM-pythia8_private_mc17"
+            ]
+        },
+        "2018": {
+            "metadata": {
+                "xs": 94.5
+            },
+            "paths": [
+                "root://redirector.t2.ucsd.edu//store/user/azecchin/skimNano-Hggselection-PnetAK8/GJets_HT-600ToInf_TuneCP5_13TeV-madgraphMLM-pythia8_private_mc18"
+            ]
+        },
+        "fpo": 10,
+        "process_id": 8,
+        "resonant": false
+    },
+    "GJets_HT40To100": {
+        "2016": {
+            "metadata": {
+                "xs": 23100.0
+            },
+            "paths": [
+                "root://redirector.t2.ucsd.edu//store/user/azecchin/skimNano-Hggselection-PnetAK8/GJets_HT-40To100_TuneCUETP8M1_13TeV-madgraphMLM-pythia8_private_mc16",
+                "root://redirector.t2.ucsd.edu//store/user/azecchin/skimNano-Hggselection-PnetAK8/GJets_HT-40To100_TuneCUETP8M1_13TeV-madgraphMLM-pythia8_private_mc16_2"
+            ]
+        },
+        "2017": {
+            "metadata": {
+                "xs": 23100.0
+            },
+            "paths": [
+                "root://redirector.t2.ucsd.edu//store/user/azecchin/skimNano-Hggselection-PnetAK8/GJets_HT-40To100_TuneCP5_13TeV-madgraphMLM-pythia8_private_mc17"
+            ]
+        },
+        "2018": {
+            "metadata": {
+                "xs": 23100.0
+            },
+            "paths": [
+                "root://redirector.t2.ucsd.edu//store/user/azecchin/skimNano-Hggselection-PnetAK8/GJets_HT-40To100_TuneCP5_13TeV-madgraphMLM-pythia8_private_mc18"
+            ]
+        },
+        "fpo": 10,
+        "process_id": 8,
+        "resonant": false
+    },
+    "HH_ggbb": {
+        "2016": {
+            "metadata": {
+                "xs": 8.2325e-05
+            },
+            "paths": [
+                "root://redirector.t2.ucsd.edu//store/user/azecchin/skimNano-Hggselection-PnetAK8/GluGluToHHTo2B2G_node_SM_13TeV-madgraph_TuneCP5_13TeV-pythia8_private_mc17/"
+            ]
+        },
+        "2017": {
+            "metadata": {
+                "xs": 8.2325e-05
+            },
+            "paths": [
+                "root://redirector.t2.ucsd.edu//store/user/azecchin/skimNano-Hggselection-PnetAK8/GluGluToHHTo2B2G_node_SM_13TeV-madgraph_TuneCP5_13TeV-pythia8_private_mc17/"
+            ]
+        },
+        "2018": {
+            "metadata": {
+                "xs": 8.2325e-05
+            },
+            "paths": [
+                "root://redirector.t2.ucsd.edu//store/user/azecchin/skimNano-Hggselection-PnetAK8/GluGluToHHTo2B2G_node_SM_13TeV-madgraph_TuneCP5_13TeV-pythia8_private_mc17/"
+            ]
+        },
+        "fpo": 10,
+        "process_id": -1,
+        "resonant": true
+    },
+    "QCD_Pt-30to40": {
+        "2016": {
+            "metadata": {
+                "xs": 22110.0
+            },
+            "paths": [
+                "root://redirector.t2.ucsd.edu//store/user/azecchin/skimNano-Hggselection-PnetAK8/QCD_Pt-30to40_DoubleEMEnriched_MGG-80toInf_TuneCUETP8M1_13TeV_Pythia8_private_mc16/"
+            ]
+        },
+        "2017": {
+            "metadata": {
+                "xs": 22110.0
+            },
+            "paths": [
+                "root://redirector.t2.ucsd.edu//store/user/azecchin/skimNano-Hggselection-PnetAK8/QCD_Pt-30to40_DoubleEMEnriched_MGG-80toInf_TuneCUETP8M1_13TeV_Pythia8_private_mc16/"
+            ]
+        },
+        "2018": {
+            "metadata": {
+                "xs": 22110.0
+            },
+            "paths": [
+                "root://redirector.t2.ucsd.edu//store/user/azecchin/skimNano-Hggselection-PnetAK8/QCD_Pt-30to40_DoubleEMEnriched_MGG-80toInf_TuneCUETP8M1_13TeV_Pythia8_private_mc16/"
+            ]
+        },
+        "fpo": 10,
+        "process_id": 15,
+        "resonant": false
+    },
+    "QCD_Pt-40toInf": {
+        "2016": {
+            "metadata": {
+                "xs": 113400.0
+            },
+            "paths": [
+                "root://redirector.t2.ucsd.edu//store/user/azecchin/skimNano-Hggselection-PnetAK8/QCD_Pt-40toInf_DoubleEMEnriched_MGG-80toInf_TuneCUETP8M1_13TeV_Pythia8_private_mc16/"
+            ]
+        },
+        "2017": {
+            "metadata": {
+                "xs": 113400.0
+            },
+            "paths": [
+                "root://redirector.t2.ucsd.edu//store/user/azecchin/skimNano-Hggselection-PnetAK8/QCD_Pt-40toInf_DoubleEMEnriched_MGG-80toInf_TuneCUETP8M1_13TeV_Pythia8_private_mc16/"
+            ]
+        },
+        "2018": {
+            "metadata": {
+                "xs": 113400.0
+            },
+            "paths": [
+                "root://redirector.t2.ucsd.edu//store/user/azecchin/skimNano-Hggselection-PnetAK8/QCD_Pt-40toInf_DoubleEMEnriched_MGG-80toInf_TuneCUETP8M1_13TeV_Pythia8_private_mc16/"
+            ]
+        },
+        "fpo": 10,
+        "process_id": 15,
+        "resonant": false
+    },
+    "TTGG": {
+        "2016": {
+            "metadata": {
+                "xs": 0.01731
+            },
+            "paths": [
+                "root://redirector.t2.ucsd.edu//store/user/azecchin/skimNano-Hggselection-PnetAK8/TTGG_0Jets_TuneCUETP8M1_13TeV_amcatnlo_madspin_pythia8_private_mc16"
+            ]
+        },
+        "2017": {
+            "metadata": {
+                "xs": 0.01687
+            },
+            "paths": [
+                "root://redirector.t2.ucsd.edu//store/user/azecchin/skimNano-Hggselection-PnetAK8/TTGG_0Jets_TuneCP5_13TeV-amcatnlo-madspin-pythia8_private_mc17"
+            ]
+        },
+        "2018": {
+            "metadata": {
+                "xs": 0.01687
+            },
+            "paths": [
+                "root://redirector.t2.ucsd.edu//store/user/azecchin/skimNano-Hggselection-PnetAK8/TTGG_0Jets_TuneCP5_13TeV-amcatnlo-madspin-pythia8_private_mc18"
+            ]
+        },
+        "fpo": 10,
+        "process_id": 7,
+        "resonant": false
+    },
+    "TTGamma": {
+        "2016": {
+            "metadata": {
+                "xs": 3.819
+            },
+            "paths": [
+                "root://redirector.t2.ucsd.edu//store/user/azecchin/skimNano-Hggselection-PnetAK8/TTGJets_TuneCUETP8M1_13TeV-amcatnloFXFX-madspin-pythia8_private_mc16",
+                "root://redirector.t2.ucsd.edu//store/user/azecchin/skimNano-Hggselection-PnetAK8/TTGJets_TuneCUETP8M1_13TeV-amcatnloFXFX-madspin-pythia8_private_mc16_2"
+            ]
+        },
+        "2017": {
+            "metadata": {
+                "xs": 4.078
+            },
+            "paths": [
+                "root://redirector.t2.ucsd.edu//store/user/azecchin/skimNano-Hggselection-PnetAK8/TTGJets_TuneCP5_13TeV-amcatnloFXFX-madspin-pythia8_private_mc17",
+                "root://redirector.t2.ucsd.edu//store/user/azecchin/skimNano-Hggselection-PnetAK8/TTGJets_TuneCP5_13TeV-amcatnloFXFX-madspin-pythia8_private_mc17_2"
+            ]
+        },
+        "2018": {
+            "metadata": {
+                "xs": 4.078
+            },
+            "paths": [
+                "root://redirector.t2.ucsd.edu//store/user/azecchin/skimNano-Hggselection-PnetAK8/TTGJets_TuneCP5_13TeV-amcatnloFXFX-madspin-pythia8_private_mc18"
+            ]
+        },
+        "fpo": 10,
+        "process_id": 6,
+        "resonant": false
+    },
+    "TTbar": {
+        "2016": {
+            "metadata": {
+                "xs": 831.76
+            },
+            "paths": [
+                "root://redirector.t2.ucsd.edu//store/user/azecchin/skimNano-Hggselection-PnetAK8/TTJets_TuneCUETP8M2T4_13TeV-amcatnloFXFX-pythia8_private_mc16"
+            ]
+        },
+        "2017": {
+            "metadata": {
+                "xs": 831.76
+            },
+            "paths": [
+                "root://redirector.t2.ucsd.edu//store/user/azecchin/skimNano-Hggselection-PnetAK8/TTJets_TuneCP5_13TeV-amcatnloFXFX-pythia8_private_mc17"
+            ]
+        },
+        "2018": {
+            "metadata": {
+                "xs": 831.76
+            },
+            "paths": [
+                "root://redirector.t2.ucsd.edu//store/user/azecchin/skimNano-Hggselection-PnetAK8/TTJets_TuneCP5_13TeV-amcatnloFXFX-pythia8_private_mc18"
+            ]
+        },
+        "fpo": 10,
+        "process_id": 5,
+        "resonant": false
+    },
+    "VBFH": {
+        "2016": {
+            "metadata": {
+                "xs": 0.00858514
+            },
+            "paths": [
+                "root://redirector.t2.ucsd.edu//store/user/azecchin/skimNano-Hggselection-PnetAK8/VBFHToGG_M125_13TeV_amcatnlo_pythia8_private_mc16/"
+            ]
+        },
+        "2017": {
+            "metadata": {
+                "xs": 0.00858514
+            },
+            "paths": [
+                "root://redirector.t2.ucsd.edu//store/user/azecchin/skimNano-Hggselection-PnetAK8/VBFHToGG_M125_TuneCP5_13TeV-amcatnlo-pythia8_storeWeights_private_mc17/"
+            ]
+        },
+        "2018": {
+            "metadata": {
+                "xs": 0.00858514
+            },
+            "paths": [
+                "root://redirector.t2.ucsd.edu//store/user/azecchin/skimNano-Hggselection-PnetAK8/VBFHToGG_M125_TuneCP5_13TeV-amcatnlo-pythia8_storeWeights_private_mc18/"
+            ]
+        },
+        "fpo": 10,
+        "process_id": 14,
+        "resonant": true
+    },
+    "VH": {
+        "2016": {
+            "metadata": {
+                "xs": 0.00512
+            },
+            "paths": [
+                "root://redirector.t2.ucsd.edu//store/user/azecchin/skimNano-Hggselection-PnetAK8/VHToGG_M125_13TeV_amcatnloFXFX_madspin_pythia8_private_mc16"
+            ]
+        },
+        "2017": {
+            "metadata": {
+                "xs": 0.00512
+            },
+            "paths": [
+                "root://redirector.t2.ucsd.edu//store/user/azecchin/skimNano-Hggselection-PnetAK8/VHToGG_M125_TuneCP5_13TeV-amcatnloFXFX-madspin-pythia8_private_mc17"
+            ]
+        },
+        "2018": {
+            "metadata": {
+                "xs": 0.00512
+            },
+            "paths": [
+                "root://redirector.t2.ucsd.edu//store/user/azecchin/skimNano-Hggselection-PnetAK8/VHToGG_M125_TuneCP5_13TeV-amcatnloFXFX-madspin-pythia8_private_mc18"
+            ]
+        },
+        "fpo": 10,
+        "process_id": 9,
+        "resonant": true
+    },
+    "WGamma": {
+        "2016": {
+            "metadata": {
+                "xs": 510.6
+            },
+            "paths": [
+                "root://redirector.t2.ucsd.edu//store/user/azecchin/skimNano-Hggselection-PnetAK8/WGToLNuG_TuneCUETP8M1_13TeV-amcatnloFXFX-pythia8_private_mc16_2",
+                "root://redirector.t2.ucsd.edu//store/user/azecchin/skimNano-Hggselection-PnetAK8/WGToLNuG_TuneCUETP8M1_13TeV-amcatnloFXFX-pythia8_private_mc16_3",
+                "root://redirector.t2.ucsd.edu//store/user/azecchin/skimNano-Hggselection-PnetAK8/WGToLNuG_TuneCUETP8M1_13TeV-amcatnloFXFX-pythia8_private_mc16"
+            ]
+        },
+        "2017": {
+            "metadata": {
+                "xs": 191.4
+            },
+            "paths": [
+                "root://redirector.t2.ucsd.edu//store/user/azecchin/skimNano-Hggselection-PnetAK8/WGToLNuG_01J_5f_TuneCP5_13TeV-amcatnloFXFX-pythia8_private_mc17"
+            ]
+        },
+        "2018": {
+            "metadata": {
+                "xs": 191.4
+            },
+            "paths": [
+                "root://redirector.t2.ucsd.edu//store/user/azecchin/skimNano-Hggselection-PnetAK8/WGToLNuG_01J_5f_TuneCP5_13TeV-amcatnloFXFX-pythia8_private_mc18"
+            ]
+        },
+        "fpo": 10,
+        "process_id": 4,
+        "resonant": false
+    },
+    "ZGamma": {
+        "2016": {
+            "metadata": {
+                "xs": 123.8
+            },
+            "paths": [
+                "root://redirector.t2.ucsd.edu//store/user/azecchin/skimNano-Hggselection-PnetAK8/ZGTo2LG_TuneCUETP8M1_13TeV-amcatnloFXFX-pythia8_private_mc16/"
+            ]
+        },
+        "2017": {
+            "metadata": {
+                "xs": 55.6
+            },
+            "paths": [
+                "root://redirector.t2.ucsd.edu//store/user/azecchin/skimNano-Hggselection-PnetAK8/ZGToLLG_01J_5f_TuneCP5_13TeV-amcatnloFXFX-pythia8_private_mc17/"
+            ]
+        },
+        "2018": {
+            "metadata": {
+                "xs": 55.6
+            },
+            "paths": [
+                "root://redirector.t2.ucsd.edu//store/user/azecchin/skimNano-Hggselection-PnetAK8/ZGToLLG_01J_5f_TuneCP5_13TeV-amcatnloFXFX-pythia8_private_mc18/"
+            ]
+        },
+        "fpo": 10,
+        "process_id": 2,
+        "resonant": false
+    },
+    "ggH": {
+        "2016": {
+            "metadata": {
+                "xs": 0.1118429
+            },
+            "paths": [
+                "root://redirector.t2.ucsd.edu//store/user/azecchin/skimNano-Hggselection-PnetAK8/GluGluHToGG_M125_13TeV_amcatnloFXFX_pythia8_private_mc16/"
+            ]
+        },
+        "2017": {
+            "metadata": {
+                "xs": 0.1118429
+            },
+            "paths": [
+                "root://redirector.t2.ucsd.edu//store/user/azecchin/skimNano-Hggselection-PnetAK8/GluGluHToGG_M125_TuneCP5_13TeV-amcatnloFXFX-pythia8_private_mc17/"
+            ]
+        },
+        "2018": {
+            "metadata": {
+                "xs": 0.1118429
+            },
+            "paths": [
+                "root://redirector.t2.ucsd.edu//store/user/azecchin/skimNano-Hggselection-PnetAK8/GluGluHToGG_M125_TuneCP5_13TeV-amcatnloFXFX-pythia8_storeWeights_private_mc18/"
+            ]
+        },
+        "fpo": 10,
+        "process_id": 13,
+        "resonant": true
+    },
+    "ttH": {
+        "2016": {
+            "metadata": {
+                "xs": 0.001151117
+            },
+            "paths": [
+                "root://redirector.t2.ucsd.edu//store/user/azecchin/skimNano-Hggselection-PnetAK8/ttHJetToGG_M125_TuneCP5_13TeV-amcatnloFXFX-madspin-pythia8_private_mc17/"
+            ]
+        },
+        "2017": {
+            "metadata": {
+                "xs": 0.001151117
+            },
+            "paths": [
+                "root://redirector.t2.ucsd.edu//store/user/azecchin/skimNano-Hggselection-PnetAK8/ttHJetToGG_M125_TuneCP5_13TeV-amcatnloFXFX-madspin-pythia8_private_mc17/"
+            ]
+        },
+        "2018": {
+            "metadata": {
+                "xs": 0.001151117
+            },
+            "paths": [
+                "root://redirector.t2.ucsd.edu//store/user/azecchin/skimNano-Hggselection-PnetAK8/ttHJetToGG_M125_TuneCP5_13TeV-amcatnloFXFX-madspin-pythia8_storeWeights_private_mc18/"
+            ]
+        },
+        "fpo": 10,
+        "process_id": 10,
+        "resonant": true
+    }
+}
