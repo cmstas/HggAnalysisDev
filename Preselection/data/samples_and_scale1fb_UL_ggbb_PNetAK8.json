@@ -1,0 +1,804 @@
+{
+    "Data": {
+        "2016": {
+            "metadata": {},
+            "paths": [
+                "/hadoop/cms/store/user/azecchin/skimNano-Hggselection-PnetAK8/DoubleEG_Run2016B_private_data16_2/",
+                "/hadoop/cms/store/user/azecchin/skimNano-Hggselection-PnetAK8/DoubleEG_Run2016B_private_data16/",
+                "/hadoop/cms/store/user/azecchin/skimNano-Hggselection-PnetAK8/DoubleEG_Run2016C_private_data16/",
+                "/hadoop/cms/store/user/azecchin/skimNano-Hggselection-PnetAK8/DoubleEG_Run2016D_private_data16/",
+                "/hadoop/cms/store/user/azecchin/skimNano-Hggselection-PnetAK8/DoubleEG_Run2016D_private_data16_2/",
+                "/hadoop/cms/store/user/azecchin/skimNano-Hggselection-PnetAK8/DoubleEG_Run2016E_private_data16/",
+                "/hadoop/cms/store/user/azecchin/skimNano-Hggselection-PnetAK8/DoubleEG_Run2016F_private_data16/",
+                "/hadoop/cms/store/user/azecchin/skimNano-Hggselection-PnetAK8/DoubleEG_Run2016G_private_data16/",
+                "/hadoop/cms/store/user/azecchin/skimNano-Hggselection-PnetAK8/DoubleEG_Run2016H_private_data16/"
+            ]
+        },
+        "2017": {
+            "metadata": {},
+            "paths": [
+                "/hadoop/cms/store/user/azecchin/skimNano-Hggselection-PnetAK8/DoubleEG_Run2017B_private_data17_2/",
+                "/hadoop/cms/store/user/azecchin/skimNano-Hggselection-PnetAK8/DoubleEG_Run2017B_private_data17/",
+                "/hadoop/cms/store/user/azecchin/skimNano-Hggselection-PnetAK8/DoubleEG_Run2017C_private_data17/",
+                "/hadoop/cms/store/user/azecchin/skimNano-Hggselection-PnetAK8/DoubleEG_Run2017D_private_data17_2/",
+                "/hadoop/cms/store/user/azecchin/skimNano-Hggselection-PnetAK8/DoubleEG_Run2017E_private_data17_2/",
+                "/hadoop/cms/store/user/azecchin/skimNano-Hggselection-PnetAK8/DoubleEG_Run2017F_private_data17_2/"
+            ]
+        },
+        "2018": {
+            "metadata": {},
+            "paths": [
+                "/hadoop/cms/store/user/azecchin/skimNano-Hggselection-PnetAK8/EGamma_Run2018A_private_data18/",
+                "/hadoop/cms/store/user/azecchin/skimNano-Hggselection-PnetAK8/EGamma_Run2018A_private_data18_2/",
+                "/hadoop/cms/store/user/azecchin/skimNano-Hggselection-PnetAK8/EGamma_Run2018B_private_data18/",
+                "/hadoop/cms/store/user/azecchin/skimNano-Hggselection-PnetAK8/EGamma_Run2018B_private_data18_2/",
+                "/hadoop/cms/store/user/azecchin/skimNano-Hggselection-PnetAK8/EGamma_Run2018C_private_data18/",
+                "/hadoop/cms/store/user/azecchin/skimNano-Hggselection-PnetAK8/EGamma_Run2018C_private_data18_2/",
+                "/hadoop/cms/store/user/azecchin/skimNano-Hggselection-PnetAK8/EGamma_Run2018D_private_data18/"
+            ]
+        },
+        "fpo": 25,
+        "process_id": 0,
+        "resonant": false
+    },
+    "DiPhoton": {
+        "2016": {
+            "metadata": {
+                "n_events": 53061022,
+                "scale1fb": 0.003363405392168486,
+                "sumWeights": 25093615,
+                "xs": 84.4
+            },
+            "paths": [
+                "/hadoop/cms/store/user/azecchin/skimNano-Hggselection-PnetAK8/DiPhotonJetsBox_MGG-80toInf_13TeV-Sherpa_private_mc16/"
+            ]
+        },
+        "2017": {
+            "metadata": {
+                "n_events": 14923895,
+                "scale1fb": 0.013079354177443445,
+                "sumWeights": 6452918,
+                "xs": 84.4
+            },
+            "paths": [
+                "/hadoop/cms/store/user/azecchin/skimNano-Hggselection-PnetAK8/DiPhotonJetsBox_MGG-80toInf_13TeV-sherpa_private_mc17/"
+            ]
+        },
+        "2018": {
+            "metadata": {
+                "n_events": 13452484,
+                "scale1fb": 0.01451049431958848,
+                "sumWeights": 5816480,
+                "xs": 84.4
+            },
+            "paths": [
+                "/hadoop/cms/store/user/azecchin/skimNano-Hggselection-PnetAK8/DiPhotonJetsBox_MGG-80toInf_13TeV-sherpa_private_mc18/"
+            ]
+        },
+        "fpo": 10,
+        "process_id": 3,
+        "resonant": false
+    },
+    "DiPhoton1B": {
+        "2016": {
+            "metadata": {
+                "n_events": 999931,
+                "scale1fb": 0.004823678313045316,
+                "sumWeights": 179827,
+                "xs": 0.8674276
+            },
+            "paths": [
+                "/hadoop/cms/store/user/azecchin/skimNano-Hggselection-PnetAK8/DiPhotonJetsBox1BJet_MGG-80toInf_13TeV-sherpa_private_mc17/"
+            ]
+        },
+        "2017": {
+            "metadata": {
+                "n_events": 999931,
+                "scale1fb": 0.004823678313045316,
+                "sumWeights": 179827,
+                "xs": 0.8674276
+            },
+            "paths": [
+                "/hadoop/cms/store/user/azecchin/skimNano-Hggselection-PnetAK8/DiPhotonJetsBox1BJet_MGG-80toInf_13TeV-sherpa_private_mc17/"
+            ]
+        },
+        "2018": {
+            "metadata": {
+                "n_events": 999909,
+                "scale1fb": 0.004823544196805907,
+                "sumWeights": 179832,
+                "xs": 0.8674276
+            },
+            "paths": [
+                "/hadoop/cms/store/user/azecchin/skimNano-Hggselection-PnetAK8/DiPhotonJetsBox1BJet_MGG-80toInf_13TeV-sherpa_private_mc18/"
+            ]
+        },
+        "fpo": 10,
+        "process_id": 11,
+        "resonant": false
+    },
+    "DiPhoton2B": {
+        "2016": {
+            "metadata": {
+                "xs": 0.494
+            },
+            "paths": [
+                "/hadoop/cms/store/user/azecchin/skimNano-Hggselection-PnetAK8/DiPhotonJetsBox2BJet_MGG-80toInf_13TeV-sherpa_private_mc17/"
+            ]
+        },
+        "2017": {
+            "metadata": {
+                "xs": 0.494
+            },
+            "paths": [
+                "/hadoop/cms/store/user/azecchin/skimNano-Hggselection-PnetAK8/DiPhotonJetsBox2BJet_MGG-80toInf_13TeV-sherpa_private_mc17/"
+            ]
+        },
+        "2018": {
+            "metadata": {
+                "xs": 0.494
+            },
+            "paths": [
+                "/hadoop/cms/store/user/azecchin/skimNano-Hggselection-PnetAK8/DiPhotonJetsBox2BJet_MGG-80toInf_13TeV-sherpa_private_mc18/"
+            ]
+        },
+        "fpo": 10,
+        "process_id": 12,
+        "resonant": false
+    },
+    "GJets_HT-100To200": {
+        "2016": {
+            "metadata": {
+                "n_events": 9814060,
+                "scale1fb": 0.8794525405387781,
+                "sumWeights": 9814060,
+                "xs": 8631.0
+            },
+            "paths": [
+                "/hadoop/cms/store/user/azecchin/skimNano-Hggselection-PnetAK8/GJets_HT-100To200_TuneCUETP8M1_13TeV-madgraphMLM-pythia8_private_mc16",
+                "/hadoop/cms/store/user/azecchin/skimNano-Hggselection-PnetAK8/GJets_HT-100To200_TuneCUETP8M1_13TeV-madgraphMLM-pythia8_private_mc16_2"
+            ]
+        },
+        "2017": {
+            "metadata": {
+                "n_events": 10135127,
+                "scale1fb": 0.8515926835450607,
+                "sumWeights": 10135127,
+                "xs": 8631.0
+            },
+            "paths": [
+                "/hadoop/cms/store/user/azecchin/skimNano-Hggselection-PnetAK8/GJets_HT-100To200_TuneCP5_13TeV-madgraphMLM-pythia8_private_mc17"
+            ]
+        },
+        "2018": {
+            "metadata": {
+                "n_events": 10002080,
+                "scale1fb": 0.8629205125333931,
+                "sumWeights": 10002080,
+                "xs": 8631.0
+            },
+            "paths": [
+                "/hadoop/cms/store/user/azecchin/skimNano-Hggselection-PnetAK8/GJets_HT-100To200_TuneCP5_13TeV-madgraphMLM-pythia8_private_mc18"
+            ]
+        },
+        "fpo": 10,
+        "process_id": 8,
+        "resonant": false
+    },
+    "GJets_HT-200To400": {
+        "2016": {
+            "metadata": {
+                "n_events": 20396385,
+                "scale1fb": 0.11178451475592366,
+                "sumWeights": 20396385,
+                "xs": 2280.0
+            },
+            "paths": [
+                "/hadoop/cms/store/user/azecchin/skimNano-Hggselection-PnetAK8/GJets_HT-200To400_TuneCUETP8M1_13TeV-madgraphMLM-pythia8_private_mc16",
+                "/hadoop/cms/store/user/azecchin/skimNano-Hggselection-PnetAK8/GJets_HT-200To400_TuneCUETP8M1_13TeV-madgraphMLM-pythia8_private_mc16_2"
+            ]
+        },
+        "2017": {
+            "metadata": {
+                "n_events": 14016776,
+                "scale1fb": 0.16266222703423383,
+                "sumWeights": 14016776,
+                "xs": 2280.0
+            },
+            "paths": [
+                "/hadoop/cms/store/user/azecchin/skimNano-Hggselection-PnetAK8/GJets_HT-200To400_TuneCP5_13TeV-madgraphMLM-pythia8_private_mc17"
+            ]
+        },
+        "2018": {
+            "metadata": {
+                "n_events": 19337662,
+                "scale1fb": 0.11790463604131668,
+                "sumWeights": 19337662,
+                "xs": 2280.0
+            },
+            "paths": [
+                "/hadoop/cms/store/user/azecchin/skimNano-Hggselection-PnetAK8/GJets_HT-200To400_TuneCP5_13TeV-madgraphMLM-pythia8_private_mc18"
+            ]
+        },
+        "fpo": 10,
+        "process_id": 8,
+        "resonant": false
+    },
+    "GJets_HT-400To600": {
+        "2016": {
+            "metadata": {
+                "n_events": 2892415,
+                "scale1fb": 0.09438479609599591,
+                "sumWeights": 2892415,
+                "xs": 273.0
+            },
+            "paths": [
+                "/hadoop/cms/store/user/azecchin/skimNano-Hggselection-PnetAK8/GJets_HT-400To600_TuneCUETP8M1_13TeV-madgraphMLM-pythia8_private_mc16",
+                "/hadoop/cms/store/user/azecchin/skimNano-Hggselection-PnetAK8/GJets_HT-400To600_TuneCUETP8M1_13TeV-madgraphMLM-pythia8_private_mc16_2"
+            ]
+        },
+        "2017": {
+            "metadata": {
+                "n_events": 3949516,
+                "scale1fb": 0.06912239373128251,
+                "sumWeights": 3949516,
+                "xs": 273.0
+            },
+            "paths": [
+                "/hadoop/cms/store/user/azecchin/skimNano-Hggselection-PnetAK8/GJets_HT-400To600_TuneCP5_13TeV-madgraphMLM-pythia8_private_mc17"
+            ]
+        },
+        "2018": {
+            "metadata": {
+                "n_events": 4653297,
+                "scale1fb": 0.058668079858216655,
+                "sumWeights": 4653297,
+                "xs": 273.0
+            },
+            "paths": [
+                "/hadoop/cms/store/user/azecchin/skimNano-Hggselection-PnetAK8/GJets_HT-400To600_TuneCP5_13TeV-madgraphMLM-pythia8_private_mc18"
+            ]
+        },
+        "fpo": 10,
+        "process_id": 8,
+        "resonant": false
+    },
+    "GJets_HT-600ToInf": {
+        "2016": {
+            "metadata": {
+                "n_events": 5080857,
+                "scale1fb": 0.018599224500906047,
+                "sumWeights": 5080857,
+                "xs": 94.5
+            },
+            "paths": [
+                "/hadoop/cms/store/user/azecchin/skimNano-Hggselection-PnetAK8/GJets_HT-600ToInf_TuneCUETP8M1_13TeV-madgraphMLM-pythia8_private_mc16",
+                "/hadoop/cms/store/user/azecchin/skimNano-Hggselection-PnetAK8/GJets_HT-600ToInf_TuneCUETP8M1_13TeV-madgraphMLM-pythia8_private_mc16_2"
+            ]
+        },
+        "2017": {
+            "metadata": {
+                "n_events": 4213039,
+                "scale1fb": 0.022430364399664945,
+                "sumWeights": 4213039,
+                "xs": 94.5
+            },
+            "paths": [
+                "/hadoop/cms/store/user/azecchin/skimNano-Hggselection-PnetAK8/GJets_HT-600ToInf_TuneCP5_13TeV-madgraphMLM-pythia8_private_mc17"
+            ]
+        },
+        "2018": {
+            "metadata": {
+                "n_events": 4741551,
+                "scale1fb": 0.01993018740070496,
+                "sumWeights": 4741551,
+                "xs": 94.5
+            },
+            "paths": [
+                "/hadoop/cms/store/user/azecchin/skimNano-Hggselection-PnetAK8/GJets_HT-600ToInf_TuneCP5_13TeV-madgraphMLM-pythia8_private_mc18"
+            ]
+        },
+        "fpo": 10,
+        "process_id": 8,
+        "resonant": false
+    },
+    "GJets_HT40To100": {
+        "2016": {
+            "metadata": {
+                "n_events": 9181051,
+                "scale1fb": 2.516051811497398,
+                "sumWeights": 9181051,
+                "xs": 23100.0
+            },
+            "paths": [
+                "/hadoop/cms/store/user/azecchin/skimNano-Hggselection-PnetAK8/GJets_HT-40To100_TuneCUETP8M1_13TeV-madgraphMLM-pythia8_private_mc16",
+                "/hadoop/cms/store/user/azecchin/skimNano-Hggselection-PnetAK8/GJets_HT-40To100_TuneCUETP8M1_13TeV-madgraphMLM-pythia8_private_mc16_2"
+            ]
+        },
+        "2017": {
+            "metadata": {
+                "n_events": 8935049,
+                "scale1fb": 2.5853243781875177,
+                "sumWeights": 8935049,
+                "xs": 23100.0
+            },
+            "paths": [
+                "/hadoop/cms/store/user/azecchin/skimNano-Hggselection-PnetAK8/GJets_HT-40To100_TuneCP5_13TeV-madgraphMLM-pythia8_private_mc17"
+            ]
+        },
+        "2018": {
+            "metadata": {
+                "n_events": 9331493,
+                "scale1fb": 2.4754881132097513,
+                "sumWeights": 9331493,
+                "xs": 23100.0
+            },
+            "paths": [
+                "/hadoop/cms/store/user/azecchin/skimNano-Hggselection-PnetAK8/GJets_HT-40To100_TuneCP5_13TeV-madgraphMLM-pythia8_private_mc18"
+            ]
+        },
+        "fpo": 10,
+        "process_id": 8,
+        "resonant": false
+    },
+    "HH_ggbb": {
+        "2016": {
+            "metadata": {
+                "n_events": 400000,
+                "scale1fb": 2.0581249999999998e-07,
+                "sumWeights": 400000,
+                "xs": 8.2325e-05
+            },
+            "paths": [
+                "/hadoop/cms/store/user/azecchin/skimNano-Hggselection-PnetAK8/GluGluToHHTo2B2G_node_SM_13TeV-madgraph_TuneCP5_13TeV-pythia8_private_mc17/"
+            ]
+        },
+        "2017": {
+            "metadata": {
+                "n_events": 400000,
+                "scale1fb": 2.0581249999999998e-07,
+                "sumWeights": 400000,
+                "xs": 8.2325e-05
+            },
+            "paths": [
+                "/hadoop/cms/store/user/azecchin/skimNano-Hggselection-PnetAK8/GluGluToHHTo2B2G_node_SM_13TeV-madgraph_TuneCP5_13TeV-pythia8_private_mc17/"
+            ]
+        },
+        "2018": {
+            "metadata": {
+                "n_events": 400000,
+                "scale1fb": 2.0581249999999998e-07,
+                "sumWeights": 400000,
+                "xs": 8.2325e-05
+            },
+            "paths": [
+                "/hadoop/cms/store/user/azecchin/skimNano-Hggselection-PnetAK8/GluGluToHHTo2B2G_node_SM_13TeV-madgraph_TuneCP5_13TeV-pythia8_private_mc17/"
+            ]
+        },
+        "fpo": 10,
+        "process_id": -1,
+        "resonant": true
+    },
+    "QCD_Pt-30to40": {
+        "2016": {
+            "metadata": {
+                "n_events": 17881688,
+                "scale1fb": 1.2364594132896627,
+                "sumWeights": 17881703,
+                "xs": 22110.0
+            },
+            "paths": [
+                "/hadoop/cms/store/user/azecchin/skimNano-Hggselection-PnetAK8/QCD_Pt-30to40_DoubleEMEnriched_MGG-80toInf_TuneCUETP8M1_13TeV_Pythia8_private_mc16/"
+            ]
+        },
+        "2017": {
+            "metadata": {
+                "n_events": 17881688,
+                "scale1fb": 1.2364594132896627,
+                "sumWeights": 17881703,
+                "xs": 22110.0
+            },
+            "paths": [
+                "/hadoop/cms/store/user/azecchin/skimNano-Hggselection-PnetAK8/QCD_Pt-30to40_DoubleEMEnriched_MGG-80toInf_TuneCUETP8M1_13TeV_Pythia8_private_mc16/"
+            ]
+        },
+        "2018": {
+            "metadata": {
+                "n_events": 17881688,
+                "scale1fb": 1.2364594132896627,
+                "sumWeights": 17881703,
+                "xs": 22110.0
+            },
+            "paths": [
+                "/hadoop/cms/store/user/azecchin/skimNano-Hggselection-PnetAK8/QCD_Pt-30to40_DoubleEMEnriched_MGG-80toInf_TuneCUETP8M1_13TeV_Pythia8_private_mc16/"
+            ]
+        },
+        "fpo": 10,
+        "process_id": 15,
+        "resonant": false
+    },
+    "QCD_Pt-40toInf": {
+        "2016": {
+            "metadata": {
+                "n_events": 16914982,
+                "scale1fb": 6.704115913336473,
+                "sumWeights": 16914982,
+                "xs": 113400.0
+            },
+            "paths": [
+                "/hadoop/cms/store/user/azecchin/skimNano-Hggselection-PnetAK8/QCD_Pt-40toInf_DoubleEMEnriched_MGG-80toInf_TuneCUETP8M1_13TeV_Pythia8_private_mc16/"
+            ]
+        },
+        "2017": {
+            "metadata": {
+                "n_events": 16914982,
+                "scale1fb": 6.704115913336473,
+                "sumWeights": 16914982,
+                "xs": 113400.0
+            },
+            "paths": [
+                "/hadoop/cms/store/user/azecchin/skimNano-Hggselection-PnetAK8/QCD_Pt-40toInf_DoubleEMEnriched_MGG-80toInf_TuneCUETP8M1_13TeV_Pythia8_private_mc16/"
+            ]
+        },
+        "2018": {
+            "metadata": {
+                "n_events": 16914982,
+                "scale1fb": 6.704115913336473,
+                "sumWeights": 16914982,
+                "xs": 113400.0
+            },
+            "paths": [
+                "/hadoop/cms/store/user/azecchin/skimNano-Hggselection-PnetAK8/QCD_Pt-40toInf_DoubleEMEnriched_MGG-80toInf_TuneCUETP8M1_13TeV_Pythia8_private_mc16/"
+            ]
+        },
+        "fpo": 10,
+        "process_id": 15,
+        "resonant": false
+    },
+    "TTGG": {
+        "2016": {
+            "metadata": {
+                "n_events": 1458516,
+                "scale1fb": 0.0006896963901506096,
+                "sumWeights": 25098,
+                "xs": 0.01731
+            },
+            "paths": [
+                "/hadoop/cms/store/user/azecchin/skimNano-Hggselection-PnetAK8/TTGG_0Jets_TuneCUETP8M1_13TeV_amcatnlo_madspin_pythia8_private_mc16"
+            ]
+        },
+        "2017": {
+            "metadata": {
+                "n_events": 1432000,
+                "scale1fb": 0.0007009306963603125,
+                "sumWeights": 24068,
+                "xs": 0.01687
+            },
+            "paths": [
+                "/hadoop/cms/store/user/azecchin/skimNano-Hggselection-PnetAK8/TTGG_0Jets_TuneCP5_13TeV-amcatnlo-madspin-pythia8_private_mc17"
+            ]
+        },
+        "2018": {
+            "metadata": {
+                "n_events": 1467000,
+                "scale1fb": 0.0006846590909090909,
+                "sumWeights": 24640,
+                "xs": 0.01687
+            },
+            "paths": [
+                "/hadoop/cms/store/user/azecchin/skimNano-Hggselection-PnetAK8/TTGG_0Jets_TuneCP5_13TeV-amcatnlo-madspin-pythia8_private_mc18"
+            ]
+        },
+        "fpo": 10,
+        "process_id": 7,
+        "resonant": false
+    },
+    "TTGamma": {
+        "2016": {
+            "metadata": {
+                "n_events": 11084054,
+                "scale1fb": 5.03347604250584e-05,
+                "sumWeights": 75872021,
+                "xs": 3.819
+            },
+            "paths": [
+                "/hadoop/cms/store/user/azecchin/skimNano-Hggselection-PnetAK8/TTGJets_TuneCUETP8M1_13TeV-amcatnloFXFX-madspin-pythia8_private_mc16",
+                "/hadoop/cms/store/user/azecchin/skimNano-Hggselection-PnetAK8/TTGJets_TuneCUETP8M1_13TeV-amcatnloFXFX-madspin-pythia8_private_mc16_2"
+            ]
+        },
+        "2017": {
+            "metadata": {
+                "n_events": 4885803,
+                "scale1fb": 0.00013316676711320314,
+                "sumWeights": 30623256,
+                "xs": 4.078
+            },
+            "paths": [
+                "/hadoop/cms/store/user/azecchin/skimNano-Hggselection-PnetAK8/TTGJets_TuneCP5_13TeV-amcatnloFXFX-madspin-pythia8_private_mc17",
+                "/hadoop/cms/store/user/azecchin/skimNano-Hggselection-PnetAK8/TTGJets_TuneCP5_13TeV-amcatnloFXFX-madspin-pythia8_private_mc17_2"
+            ]
+        },
+        "2018": {
+            "metadata": {
+                "n_events": 4698871,
+                "scale1fb": 0.00013824403163259388,
+                "sumWeights": 29498561,
+                "xs": 4.078
+            },
+            "paths": [
+                "/hadoop/cms/store/user/azecchin/skimNano-Hggselection-PnetAK8/TTGJets_TuneCP5_13TeV-amcatnloFXFX-madspin-pythia8_private_mc18"
+            ]
+        },
+        "fpo": 10,
+        "process_id": 6,
+        "resonant": false
+    },
+    "TTbar": {
+        "2016": {
+            "metadata": {
+                "n_events": 35668944,
+                "scale1fb": 1.0550232985881023e-05,
+                "sumWeights": 78838069369,
+                "xs": 831.76
+            },
+            "paths": [
+                "/hadoop/cms/store/user/azecchin/skimNano-Hggselection-PnetAK8/TTJets_TuneCUETP8M2T4_13TeV-amcatnloFXFX-pythia8_private_mc16"
+            ]
+        },
+        "2017": {
+            "metadata": {
+                "n_events": 119201391,
+                "scale1fb": 3.483111373475434e-06,
+                "sumWeights": 238797991455,
+                "xs": 831.76
+            },
+            "paths": [
+                "/hadoop/cms/store/user/azecchin/skimNano-Hggselection-PnetAK8/TTJets_TuneCP5_13TeV-amcatnloFXFX-pythia8_private_mc17"
+            ]
+        },
+        "2018": {
+            "metadata": {
+                "n_events": 148673502,
+                "scale1fb": 2.792052333612579e-06,
+                "sumWeights": 297902725528,
+                "xs": 831.76
+            },
+            "paths": [
+                "/hadoop/cms/store/user/azecchin/skimNano-Hggselection-PnetAK8/TTJets_TuneCP5_13TeV-amcatnloFXFX-pythia8_private_mc18"
+            ]
+        },
+        "fpo": 10,
+        "process_id": 5,
+        "resonant": false
+    },
+    "VBFH": {
+        "2016": {
+            "metadata": {
+                "n_events": 1198800,
+                "scale1fb": 1.8537186155009804e-06,
+                "sumWeights": 4631307,
+                "xs": 0.00858514
+            },
+            "paths": [
+                "/hadoop/cms/store/user/azecchin/skimNano-Hggselection-PnetAK8/VBFHToGG_M125_13TeV_amcatnlo_pythia8_private_mc16/"
+            ]
+        },
+        "2017": {
+            "metadata": {
+                "n_events": 1980400,
+                "scale1fb": 1.0656881446392664e-06,
+                "sumWeights": 8055959,
+                "xs": 0.00858514
+            },
+            "paths": [
+                "/hadoop/cms/store/user/azecchin/skimNano-Hggselection-PnetAK8/VBFHToGG_M125_TuneCP5_13TeV-amcatnlo-pythia8_storeWeights_private_mc17/"
+            ]
+        },
+        "2018": {
+            "metadata": {
+                "n_events": 1972000,
+                "scale1fb": 1.0718260296790465e-06,
+                "sumWeights": 8009826,
+                "xs": 0.00858514
+            },
+            "paths": [
+                "/hadoop/cms/store/user/azecchin/skimNano-Hggselection-PnetAK8/VBFHToGG_M125_TuneCP5_13TeV-amcatnlo-pythia8_storeWeights_private_mc18/"
+            ]
+        },
+        "fpo": 10,
+        "process_id": 14,
+        "resonant": true
+    },
+    "VH": {
+        "2016": {
+            "metadata": {
+                "n_events": 278811,
+                "scale1fb": 2.7494331979022683e-06,
+                "sumWeights": 1862202,
+                "xs": 0.00512
+            },
+            "paths": [
+                "/hadoop/cms/store/user/azecchin/skimNano-Hggselection-PnetAK8/VHToGG_M125_13TeV_amcatnloFXFX_madspin_pythia8_private_mc16"
+            ]
+        },
+        "2017": {
+            "metadata": {
+                "n_events": 468980,
+                "scale1fb": 1.5227304698664429e-06,
+                "sumWeights": 3362381,
+                "xs": 0.00512
+            },
+            "paths": [
+                "/hadoop/cms/store/user/azecchin/skimNano-Hggselection-PnetAK8/VHToGG_M125_TuneCP5_13TeV-amcatnloFXFX-madspin-pythia8_private_mc17"
+            ]
+        },
+        "2018": {
+            "metadata": {
+                "n_events": 461553,
+                "scale1fb": 1.5442231426569626e-06,
+                "sumWeights": 3315583,
+                "xs": 0.00512
+            },
+            "paths": [
+                "/hadoop/cms/store/user/azecchin/skimNano-Hggselection-PnetAK8/VHToGG_M125_TuneCP5_13TeV-amcatnloFXFX-madspin-pythia8_private_mc18"
+            ]
+        },
+        "fpo": 10,
+        "process_id": 9,
+        "resonant": true
+    },
+    "WGamma": {
+        "2016": {
+            "metadata": {
+                "n_events": 23608078,
+                "scale1fb": 2.246574622494815e-05,
+                "sumWeights": 22727934113,
+                "xs": 510.6
+            },
+            "paths": [
+                "/hadoop/cms/store/user/azecchin/skimNano-Hggselection-PnetAK8/WGToLNuG_TuneCUETP8M1_13TeV-amcatnloFXFX-pythia8_private_mc16_2",
+                "/hadoop/cms/store/user/azecchin/skimNano-Hggselection-PnetAK8/WGToLNuG_TuneCUETP8M1_13TeV-amcatnloFXFX-pythia8_private_mc16_3",
+                "/hadoop/cms/store/user/azecchin/skimNano-Hggselection-PnetAK8/WGToLNuG_TuneCUETP8M1_13TeV-amcatnloFXFX-pythia8_private_mc16"
+            ]
+        },
+        "2017": {
+            "metadata": {
+                "n_events": 28240165,
+                "scale1fb": 1.9003775926662726e-05,
+                "sumWeights": 10071682635,
+                "xs": 191.4
+            },
+            "paths": [
+                "/hadoop/cms/store/user/azecchin/skimNano-Hggselection-PnetAK8/WGToLNuG_01J_5f_TuneCP5_13TeV-amcatnloFXFX-pythia8_private_mc17"
+            ]
+        },
+        "2018": {
+            "metadata": {
+                "n_events": 25846436,
+                "scale1fb": 2.0769810088166138e-05,
+                "sumWeights": 9215298512,
+                "xs": 191.4
+            },
+            "paths": [
+                "/hadoop/cms/store/user/azecchin/skimNano-Hggselection-PnetAK8/WGToLNuG_01J_5f_TuneCP5_13TeV-amcatnloFXFX-pythia8_private_mc18"
+            ]
+        },
+        "fpo": 10,
+        "process_id": 4,
+        "resonant": false
+    },
+    "ZGamma": {
+        "2016": {
+            "metadata": {
+                "n_events": 14372682,
+                "scale1fb": 3.619151302512105e-05,
+                "sumWeights": 3420691473,
+                "xs": 123.8
+            },
+            "paths": [
+                "/hadoop/cms/store/user/azecchin/skimNano-Hggselection-PnetAK8/ZGTo2LG_TuneCUETP8M1_13TeV-amcatnloFXFX-pythia8_private_mc16/"
+            ]
+        },
+        "2017": {
+            "metadata": {
+                "n_events": 29973329,
+                "scale1fb": 1.7088017569117795e-05,
+                "sumWeights": 3253741973,
+                "xs": 55.6
+            },
+            "paths": [
+                "/hadoop/cms/store/user/azecchin/skimNano-Hggselection-PnetAK8/ZGToLLG_01J_5f_TuneCP5_13TeV-amcatnloFXFX-pythia8_private_mc17/"
+            ]
+        },
+        "2018": {
+            "metadata": {
+                "n_events": 28301231,
+                "scale1fb": 1.8101284572309993e-05,
+                "sumWeights": 3071605210,
+                "xs": 55.6
+            },
+            "paths": [
+                "/hadoop/cms/store/user/azecchin/skimNano-Hggselection-PnetAK8/ZGToLLG_01J_5f_TuneCP5_13TeV-amcatnloFXFX-pythia8_private_mc18/"
+            ]
+        },
+        "fpo": 10,
+        "process_id": 2,
+        "resonant": false
+    },
+    "ggH": {
+        "2016": {
+            "metadata": {
+                "n_events": 812652,
+                "scale1fb": 1.2536728163791783e-06,
+                "sumWeights": 89212192,
+                "xs": 0.1118429
+            },
+            "paths": [
+                "/hadoop/cms/store/user/azecchin/skimNano-Hggselection-PnetAK8/GluGluHToGG_M125_13TeV_amcatnloFXFX_pythia8_private_mc16/"
+            ]
+        },
+        "2017": {
+            "metadata": {
+                "n_events": 2089730,
+                "scale1fb": 4.874103969184921e-07,
+                "sumWeights": 229463509,
+                "xs": 0.1118429
+            },
+            "paths": [
+                "/hadoop/cms/store/user/azecchin/skimNano-Hggselection-PnetAK8/GluGluHToGG_M125_TuneCP5_13TeV-amcatnloFXFX-pythia8_private_mc17/"
+            ]
+        },
+        "2018": {
+            "metadata": {
+                "n_events": 2086998,
+                "scale1fb": 4.875634396921504e-07,
+                "sumWeights": 229391482,
+                "xs": 0.1118429
+            },
+            "paths": [
+                "/hadoop/cms/store/user/azecchin/skimNano-Hggselection-PnetAK8/GluGluHToGG_M125_TuneCP5_13TeV-amcatnloFXFX-pythia8_storeWeights_private_mc18/"
+            ]
+        },
+        "fpo": 10,
+        "process_id": 13,
+        "resonant": true
+    },
+    "ttH": {
+        "2016": {
+            "metadata": {
+                "n_events": 420302,
+                "scale1fb": 2.9115814021722084e-06,
+                "sumWeights": 395358,
+                "xs": 0.001151117
+            },
+            "paths": [
+                "/hadoop/cms/store/user/azecchin/skimNano-Hggselection-PnetAK8/ttHJetToGG_M125_TuneCP5_13TeV-amcatnloFXFX-madspin-pythia8_private_mc17/"
+            ]
+        },
+        "2017": {
+            "metadata": {
+                "n_events": 420302,
+                "scale1fb": 2.9115814021722084e-06,
+                "sumWeights": 395358,
+                "xs": 0.001151117
+            },
+            "paths": [
+                "/hadoop/cms/store/user/azecchin/skimNano-Hggselection-PnetAK8/ttHJetToGG_M125_TuneCP5_13TeV-amcatnloFXFX-madspin-pythia8_private_mc17/"
+            ]
+        },
+        "2018": {
+            "metadata": {
+                "n_events": 407199,
+                "scale1fb": 2.987578542490157e-06,
+                "sumWeights": 385301,
+                "xs": 0.001151117
+            },
+            "paths": [
+                "/hadoop/cms/store/user/azecchin/skimNano-Hggselection-PnetAK8/ttHJetToGG_M125_TuneCP5_13TeV-amcatnloFXFX-madspin-pythia8_storeWeights_private_mc18/"
+            ]
+        },
+        "fpo": 10,
+        "process_id": 10,
+        "resonant": true
+    }
+}
