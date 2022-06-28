@@ -10,6 +10,7 @@ parser = argparse.ArgumentParser()
 parser.add_argument("--tag", help = "tag to distinguish this optimization", type=str, default = "test")
 parser.add_argument("--channel", help = "leptonic or hadronic", type=str, default = "Hadronic")
 parser.add_argument("--file", help = "path to final fit tree", type=str)
+parser.add_argument("--proc_ids", help = "json file of sample names vs ids", type=str, default = "")
 parser.add_argument("--coupling", help = "coupling (Hut or Hct)", type=str)
 parser.add_argument("--mvas", help = "list of mva branches to perform Nd optimization with", type=str, default = "mva_score")
 parser.add_argument("--sm_higgs_unc", help = "value of unc on sm higgs processes", type=float, default = 0.1)
@@ -36,7 +37,39 @@ elif args.metric == "cl":
 
 optimizer = guided_optimizer.Guided_Optimizer(
                 input = args.file,
+                proc_ids = args.proc_ids,
                 tag = args.tag,
+                channel = args.channel,
+                coupling = args.coupling,
+                nCores = args.nCores,
+
+                sm_higgs_unc = args.sm_higgs_unc,
+                combineOption = combineOption,
+                pt_selection = args.pt_selection,
+
+                n_bins = bins,
+                mvas = mva_dict,
+                strategies = ['guided'],
+               
+                initial_points = 36,
+                points_per_epoch = 36,
+                n_epochs = 3,
+                verbose = True
+)
+
+optimizer.optimize()
+
+with open('guided_optimizer_hh.py','r') as f:
+    program=f.readlines()
+program[113] = program[113].replace('bkg','data') #Double check 113 is still the right line before
+with open('guided_optimizer_data.py', 'w') as f:
+    f.writelines(program)
+
+import guided_optimizer_data as guided_optimizer_data
+optimizer = guided_optimizer.Guided_Optimizer(
+                input = args.file,
+                proc_ids = args.proc_ids,
+                tag = args.tag+'_data_fit',
                 channel = args.channel,
                 coupling = args.coupling,
                 nCores = args.nCores,

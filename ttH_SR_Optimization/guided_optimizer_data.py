@@ -111,7 +111,7 @@ class Guided_Optimizer():
 
         self.verbose = kwargs.get('verbose', True)
 
-        self.nrb_choice = kwargs.get('nrb_choice', 'bkg')
+        self.nrb_choice = kwargs.get('nrb_choice', 'data')
         self.combineOption = kwargs.get('combineOption', 'AsymptoticLimits -m 125 ')
         self.sm_higgs_unc  = kwargs.get('sm_higgs_unc', 0.4)
 

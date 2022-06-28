@@ -32,6 +32,9 @@ effs = {}
 
 for i in range(len(files)):
   if not "dnn_roc" in inputs[i]:
+    print(files)
+    print(files[i])
+    print(files[i].keys())
     fpr = files[i]["fpr_test"]
     tpr = files[i]["tpr_test"]
   else:

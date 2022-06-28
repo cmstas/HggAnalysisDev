@@ -2,6 +2,8 @@ import h5py
 import pandas
 import json
 import xgboost
+import awkward as ak
+import numpy as np
 
 from . import utils
 
@@ -51,14 +53,17 @@ class BDTHelper():
         for split in self.events.keys():
             self.events[split]["dmatrix"] = xgboost.DMatrix(
                 self.events[split]["X"],
-                self.events[split]["y"],
-                weight = abs(self.events[split]["weight"])
+                ak.to_numpy(self.events[split]["y"]),
+                weight = ak.to_numpy(abs(self.events[split]['weight']))
             )
         self.made_dmatrix = True
         return
 
     def predict_from_df(self, df):
-        X = xgboost.DMatrix(df[self.config["training_features"]])
+        tdf = df[self.config['training_features']]
+        tdf = ak.to_numpy(ak.values_astype(tdf, np.float64))
+        tdf = tdf.view((float, len(tdf.dtype.names)))
+        X = xgboost.DMatrix(tdf)
         return self.bdt.predict(X)
 
     def predict(self):

@@ -16,12 +16,12 @@ so that it can be used with the ttH/FCNC binning scripts.
 def to_tensor(dataframe, columns = [], dtypes = {}):
     # Use all columns from data frame if none where listed when called
     if len(columns) <= 0:
-        columns = dataframe.columns
+        columns = dataframe.fields
     # Build list of dtypes to use, updating from any `dtypes` passed when called
     dtype_list = []
     for column in columns:
         if column not in dtypes.keys():
-            dtype_list.append(dataframe[column].dtype)
+            dtype_list.append(type(dataframe[column][0]))
         else:
             dtype_list.append(dtypes[column])
     # Build dictionary with lists of column names and formatting in the same order
@@ -39,12 +39,11 @@ def to_tensor(dataframe, columns = [], dtypes = {}):
     # Return results of conversion
     return numpy_buffer
 
-#events = pandas.read_pickle(args.input)
-events = pandas.read_parquet(args.input)
-events = events.rename(columns = { "Diphoton_mass" : "mass" } )
+events = ak.from_parquet(args.input)
+events['mass'] = events.Diphoton_mass
+f = events.fields.remove('Diphoton_mass')
 events["weight_central"] = events["weight_central"] * 3
 events = to_tensor(events)
 
-#output = "output/" + args.input.split("/")[-1].replace(".pkl", ".npz")
 output = "output/" + args.input.split("/")[-1].replace(".parquet", ".npz")
 numpy.savez(output, events = events)

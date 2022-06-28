@@ -1,5 +1,6 @@
 import numpy
 import random
+import awkward as ak
 from sklearn import metrics
 
 def calc_auc(y, pred, sample_weight, interp = 10000):
@@ -94,23 +95,42 @@ def calc_roc_and_unc(y, pred, sample_weight, n_bootstrap = 10, interp = 10000):
     return results
 
 def make_train_test_validation_split(df):
-    mgg = df["Diphoton_mass"].tolist()
+    mgg = ak.to_list(df.Diphoton_mass)
     digits = numpy.array([int(str(m).split(".")[1]) for m in mgg])
 
-    idx_train = numpy.argwhere(digits % 3 == 0).ravel() # ravel() to make it the right shape for slicing df
-    idx_test = numpy.argwhere(digits % 3 == 1).ravel()
-    idx_validation = numpy.argwhere(digits % 3 == 2).ravel()
+    train_label = ak.ones_like(df.Diphoton_mass) * -1
+    idx_train = ak.where(digits % 3 == 0, True, False)
+    idx_test = ak.where(digits % 3 == 1, True, False)
+    idx_validation = ak.where(digits % 3 == 2, True, False)
 
     # Record the test/train/validation split
     # Train = 0, Test = 1, Validation = 2
-    train_label = list(numpy.ones(len(df)) * -1)
     df["train_label"] = train_label
 
-    df.iloc[idx_train, df.columns.get_loc("train_label")] = 0
-    df.iloc[idx_test, df.columns.get_loc("train_label")] = 1
-    df.iloc[idx_validation, df.columns.get_loc("train_label")] = 2
+    df['train_label'] = ak.where(idx_train, 0, df.train_label)
+    df['train_label'] = ak.where(idx_test, 1, df.train_label)
+    df['train_label'] = ak.where(idx_validation, 2, df.train_label)
 
     return df, idx_train, idx_test, idx_validation
+
+#def make_train_test_validation_split(df):
+#    mgg = df["Diphoton_mass"].tolist()
+#    digits = numpy.array([int(str(m).split(".")[1]) for m in mgg])
+#
+#    idx_train = numpy.argwhere(digits % 3 == 0).ravel() # ravel() to make it the right shape for slicing df
+#    idx_test = numpy.argwhere(digits % 3 == 1).ravel()
+#    idx_validation = numpy.argwhere(digits % 3 == 2).ravel()
+#
+#    # Record the test/train/validation split
+#    # Train = 0, Test = 1, Validation = 2
+#    train_label = list(numpy.ones(len(df)) * -1)
+#    df["train_label"] = train_label
+#
+#    df.iloc[idx_train, df.columns.get_loc("train_label")] = 0
+#    df.iloc[idx_test, df.columns.get_loc("train_label")] = 1
+#    df.iloc[idx_validation, df.columns.get_loc("train_label")] = 2
+#
+#    return df, idx_train, idx_test, idx_validation
 
 def find_nearest(array,value):
     val = numpy.ones_like(array)*value

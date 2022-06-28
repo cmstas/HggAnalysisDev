@@ -53,8 +53,6 @@ class MVAHelper():
                 if self.debug > 0:
                     print("[MVAHelper] For set: %s and label: %s, loaded %.6f (%d) weighted (raw) events" % (split, label, self.events[split]["n_%s_weighted" % label], self.events[split]["n_%s_raw" % label]))
 
-        return
-
     def initialize_train_helper(self):
         if self.config["mva"]["type"] == "binary_classification_bdt":
             self.train_helper = bdt_helper.BDTHelper(
@@ -119,6 +117,7 @@ class MVAHelper():
             plt.xlabel("False Positive Rate")
             plt.ylabel("True Positive Rate")
             plt.legend(loc = "lower right")
+            self.output_tag = self.output_tag.replace('output/','')
             plot_name = "output/roc_comparison_%s_%s.pdf" % (self.output_tag, split)
             plt.savefig(plot_name)
             self.plots.append(plot_name)
