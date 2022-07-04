@@ -201,12 +201,20 @@ class Guided_Optimizer():
 #            'sm_higgs' : ['VBFH_M125', 'VH_M125', 'ggH_M125', 'HH_ggbb', 'HHggTauTau', 'HH_ggWW_di_lep', 'HH_ggWW_semi_lep', 'ttH_M125']
 #        }
         # ttHH Flash_gg sync
+#        self.process_dict = {
+#            'data' : ['Data'],
+#            'signal' : ['ttHH_ggbb', 'ttHH_ggWW', 'ttHH_ggTauTau'],
+#            'ttH' : ['ttH_M125'],
+#            'bkg' : ['DiPhoton',  'GJets_HT-40To100','GJets_HT-100To200', 'GJets_HT-200To400', 'GJets_HT-400To600', 'GJets_HT-600ToInf', 'TTGG', 'TTGamma', 'TTJets', 'WGamma', 'ZGamma'],
+#            'sm_higgs' : ['VBFH_M125', 'VH_M125', 'ggH_M125', 'ttH_M125']
+#        }
+
         self.process_dict = {
             'data' : ['Data'],
-            'signal' : ['ttHH_ggbb', 'ttHH_ggWW', 'ttHH_ggTauTau'],
+            'signal' : ['2HDM_M300'],
             'ttH' : ['ttH_M125'],
             'bkg' : ['DiPhoton',  'GJets_HT-40To100','GJets_HT-100To200', 'GJets_HT-200To400', 'GJets_HT-400To600', 'GJets_HT-600ToInf', 'TTGG', 'TTGamma', 'TTJets', 'WGamma', 'ZGamma'],
-            'sm_higgs' : ['VBFH_M125', 'VH_M125', 'ggH_M125', 'ttH_M125']
+            'sm_higgs' : ['VBFH_M125', 'VH_M125', 'ggH_M125', 'ttH_M125', 'ttHH_ggbb', 'ttHH_ggWW', 'ttHH_ggTauTau']
         }
 
 

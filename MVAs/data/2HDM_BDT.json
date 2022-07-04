@@ -1,6 +1,6 @@
 {
-    "signal" : ["ttHH_ggbb", "ttHH_ggWW", "ttHH_ggTauTau"],
-    "background" : ["DiPhoton", "TTGG", "TTGamma", "TTJets", "VBFH_M125", "VH_M125", "WGamma", "ZGamma", "ggH_M125", "ttH_M125", "GJets_HT-100To200", "GJets_HT-200To400", "GJets_HT-400To600", "GJets_HT-40To100", "GJets_HT-600ToInf"],
+    "signal" : ["2HDM_M300"],
+    "background" : ["DiPhoton", "TTGG", "TTGamma", "TTJets", "VBFH_M125", "VH_M125", "WGamma", "ZGamma", "ggH_M125", "ttH_M125", "GJets_HT-100To200", "GJets_HT-200To400", "GJets_HT-400To600", "GJets_HT-40To100", "GJets_HT-600ToInf",  "ttHH_ggbb", "ttHH_ggWW", "ttHH_ggTauTau"],
     "training_features" : [
         "Diphoton_eta", "Diphoton_pt_mgg", "Diphoton_dR", "Diphoton_helicity",
         "LeadPhoton_mvaID", "SubleadPhoton_mvaID", "LeadPhoton_eta", "SubleadPhoton_eta", "LeadPhoton_pixelSeed", "SubleadPhoton_pixelSeed", "LeadPhoton_pt_mgg", "SubleadPhoton_pt_mgg",
@@ -21,6 +21,7 @@
         "di_pt", "di_eta", "di_mass", "di_score",
         "pt_gg_Mggjj", "pt_jj_Mggjj", "Mx"
     ],
+    "comment" : ["costhetastar_cs_HHggbb_cand", "costheta_bb_cand","di_pt", "di_eta", "di_mass", "di_score"],
 
     "branches" : ["weight_central", "process_id", "Diphoton_mass"],
     "preprocess" : {

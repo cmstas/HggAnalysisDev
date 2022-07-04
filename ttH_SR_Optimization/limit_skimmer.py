@@ -2,7 +2,7 @@ import json
 
 in_dir = 'optimization_results/'
 base = 'guided_optimizer_results_HH_FCNC_Leptonic_'
-tag = 'higgs_cand_fixed_data'
+tag = '2HDM_with_ttHH_04Jul22'
 with open(in_dir+base+tag+'.json', 'r') as f_in:
     results = json.load(f_in)
 
