@@ -18,7 +18,7 @@
         "lepton_2_pt", "lepton_2_eta", "lepton_2_mass", "lepton_2_charge", "lepton_2_id",
         "lepton_3_pt", "lepton_3_eta", "lepton_3_mass", "lepton_3_charge", "lepton_3_id",
         "costhetastar_cs_HHggbb", "costheta_bb", "costheta_gg", "costheta_TauTau", "costhetastar_cs_HHggTauTau",
-        "di_pt", "di_eta", "di_mass", "di_score",
+        "Dijet_pt", "Dijet_eta", "Dijet_mass", "Dijet_score",
         "pt_gg_Mggjj", "pt_jj_Mggjj", "Mx"
     ],
 
