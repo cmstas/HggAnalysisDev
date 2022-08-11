@@ -180,3 +180,5 @@ plot_temp_options.json
 *.hdf5
 *.pdf
 BDT_distributions/
+ttH_SR_Optimization/inputs/
+MVAs/*/

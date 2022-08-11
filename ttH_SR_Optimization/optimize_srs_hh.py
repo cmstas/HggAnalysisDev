@@ -58,7 +58,7 @@ optimizer = guided_optimizer.Guided_Optimizer(
 )
 
 optimizer.optimize()
-
+quit()
 with open('guided_optimizer_hh.py','r') as f:
     program=f.readlines()
 program[113] = program[113].replace('bkg','data') #Double check 113 is still the right line before

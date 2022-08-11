@@ -4,12 +4,18 @@ in_dir = 'optimization_results/'
 base = 'guided_optimizer_results_HH_FCNC_Leptonic_'
 tags = [
         #'ttHH_04Jul22',
-        '2HDM_03Jul22',
-        '2HDM_M300_29Jul22',
+        #'2HDM_03Jul22',
+        #'2HDM_M300_29Jul22',
         #'ttHH_02Aug22',
-        #'2HDM_M250_02Aug22',
-        '2HDM_M300_02Aug22',
-        '2HDM_M300_02Aug22_check',
+        '2HDM_M250_02Aug22',
+        '2HDM_M250_02Aug22_v2',
+        '2HDM_M250_11Aug22',
+        '2HDM_M250_11Aug22_broken_cand',
+        #'2HDM_M300_02Aug22',
+        #'2HDM_M300_02Aug22_v2',
+        #'2HDM_M300_02Aug22_check',
+        #'Tprime_08Aug22',
+        #'Tprime_09Aug22_no_lep_no_tau',
         #'2HDM_M350_02Aug22'
         ]
 

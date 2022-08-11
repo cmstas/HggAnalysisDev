@@ -189,9 +189,6 @@ class Guided_Optimizer():
 #            'sm_higgs' : ['VBFH_M125', 'VH_M125', 'ggH_M125', 'ttH_M125']
 #        }
 
-
-
-
         # ttHH my dfs
 #        self.process_dict = {
 #            'data' : ['Data'],
@@ -200,6 +197,7 @@ class Guided_Optimizer():
 #            'bkg' : ['Diphoton',  'GJets_HT-40To100','GJets_HT-100To200', 'GJets_HT-200To400', 'GJets_HT-400To600', 'GJets_HT-600ToInf', 'TTGG', 'TTGamma', 'TTJets', 'WGamma', 'ZGamma'],
 #            'sm_higgs' : ['VBFH_M125', 'VH_M125', 'ggH_M125', 'HH_ggbb', 'HHggTauTau', 'HH_ggWW_di_lep', 'HH_ggWW_semi_lep', 'ttH_M125']
 #        }
+
         # ttHH Flash_gg sync
 #        self.process_dict = {
 #            'data' : ['Data'],
@@ -208,14 +206,44 @@ class Guided_Optimizer():
 #            'bkg' : ['DiPhoton',  'GJets_HT-40To100','GJets_HT-100To200', 'GJets_HT-200To400', 'GJets_HT-400To600', 'GJets_HT-600ToInf', 'TTGG', 'TTGamma', 'TTJets', 'WGamma', 'ZGamma'],
 #            'sm_higgs' : ['VBFH_M125', 'VH_M125', 'ggH_M125', 'ttH_M125']
 #        }
+#        self.process_dict = {
+#            'data' : ['Data'],
+#            'signal' : ['ttHH_ggbb', 'ttHH_ggWW', 'ttHH_ggTauTau'],
+#            'ttH' : ['ttH_M125'],
+#            'bkg' : ['DiPhoton',  'GJets/QCD(Data)', 'TTGG', 'TTGamma', 'TTJets', 'WGamma', 'ZGamma'],
+#            'sm_higgs' : ['VBFH_M125', 'VH_M125', 'ggH_M125', 'ttH_M125']
+#        }
 
         self.process_dict = {
             'data' : ['Data'],
-            'signal' : ['2HDM_M300'],
+            'signal' : ['2HDM_M250'],
             'ttH' : ['ttH_M125'],
             'bkg' : ['DiPhoton',  'GJets_HT-40To100','GJets_HT-100To200', 'GJets_HT-200To400', 'GJets_HT-400To600', 'GJets_HT-600ToInf', 'TTGG', 'TTGamma', 'TTJets', 'WGamma', 'ZGamma'],
             'sm_higgs' : ['VBFH_M125', 'VH_M125', 'ggH_M125', 'ttH_M125', 'ttHH_ggbb', 'ttHH_ggWW', 'ttHH_ggTauTau']
         }
+#        self.process_dict = {
+#            'data' : ['Data'],
+#            'signal' : ['2HDM_M300'],
+#            'ttH' : ['ttH_M125'],
+#            'bkg' : ['DiPhoton',  'GJets_HT-40To100','GJets_HT-100To200', 'GJets_HT-200To400', 'GJets_HT-400To600', 'GJets_HT-600ToInf', 'TTGG', 'TTGamma', 'TTJets', 'WGamma', 'ZGamma'],
+#            'sm_higgs' : ['VBFH_M125', 'VH_M125', 'ggH_M125', 'ttH_M125', 'ttHH_ggbb', 'ttHH_ggWW', 'ttHH_ggTauTau']
+#        }
+#        self.process_dict = {
+#            'data' : ['Data'],
+#            'signal' : ['2HDM_M350'],
+#            'ttH' : ['ttH_M125'],
+#            'bkg' : ['DiPhoton',  'GJets_HT-40To100','GJets_HT-100To200', 'GJets_HT-200To400', 'GJets_HT-400To600', 'GJets_HT-600ToInf', 'TTGG', 'TTGamma', 'TTJets', 'WGamma', 'ZGamma'],
+#            'sm_higgs' : ['VBFH_M125', 'VH_M125', 'ggH_M125', 'ttH_M125', 'ttHH_ggbb', 'ttHH_ggWW', 'ttHH_ggTauTau']
+#        }
+#        self.process_dict = {
+#            'data' : ['Data'],
+#            'signal' : ['Tprime_M1000'],
+#            'ttH' : ['ttH_M125'],
+#            'bkg' : ['DiPhoton',  'GJets_HT-40To100','GJets_HT-100To200', 'GJets_HT-200To400', 'GJets_HT-400To600', 'GJets_HT-600ToInf', 'TTGG', 'TTGamma', 'TTJets', 'WGamma', 'ZGamma'],
+#            'sm_higgs' : ['VBFH_M125', 'VH_M125', 'ggH_M125', 'ttH_M125', 'ttHH_ggbb', 'ttHH_ggWW', 'ttHH_ggTauTau']
+#        }
+
+
 
 
 
@@ -829,6 +857,7 @@ class Guided_Optimizer():
                 "tag" : "CMS_hgg_bkgshape_" + self.channel + "_" + str(i) + "_" + str(idx),
                 "selection" : self.base_selection() + "&&" + self.process_selection(self.nrb_choice) + " && " + selection[i],
             }
+            print("bkgModelConfig selections: ", bkgModelConfig['selection'])
 
             model = makeModel(bkgModelConfig)
             model.getTree(self.scanner.getTree())
@@ -846,16 +875,16 @@ class Guided_Optimizer():
             if bkg_yield_raw < 5. or bkg_yield_raw_data < 5.:
                 print("[GUIDED OPTIMIZER] Only %.6f expected background events in one bin, disqualifying signal region set." % bkg_yield_raw)
                 disqualify_srs = True
-
+        
         datacard = makeCards(self.scanConfig["modelpath"], "CMS-HGG_mva_13TeV_datacard_" + str(idx) + ".txt",
                 { "sm_higgs_unc" : self.sm_higgs_unc },
         )
         tagList = [self.channel + "_" + str(x) for x in range(len(selection))]
         sigList = [self.signal[0] + "_hgg"]
         bkgList = ["bkg_mass"]
+        #bkgList = ["data_obs"]
         for bkg in self.resonant_bkgs:
             bkgList.append(bkg + "_hgg")
-
         datacard.WriteCard(sigList, bkgList, tagList, "_" + str(idx))
         for tag in tagList:
             datacard = makeCards(self.scanConfig["modelpath"], "CMS-HGG_mva_13TeV_datacard_" + str(idx) + "_" + tag + ".txt",

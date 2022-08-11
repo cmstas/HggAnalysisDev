@@ -61,9 +61,9 @@ plt.ylim(0,1)
 plt.xlim(0,1)
 
 if args.log:
-    plt.xlim(0.005, 1)
-    if effs[labels[0]]["auc"] > 0.95:
-        plt.xlim(0.0005, 1)
+    plt.xlim(0.00005, 1)
+    #if effs[labels[0]]["auc"] > 0.95:
+    #    plt.xlim(0.0005, 1)
     ax1.set_xscale("log")
 
 plt.xlabel('False Positive Rate (Background Efficiency)')
