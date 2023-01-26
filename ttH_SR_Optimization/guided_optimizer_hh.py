@@ -21,13 +21,30 @@ from scanClass import scanClass
 from makeModels import makeModel
 from cardMaker import makeCards
 
-process_dict = { ##TODO Is that ok?
-    "data" : [14],
-    "ttHH" : [11,12,13],
-    # "ttH" : [10],
-    "ggHH" : [1, 2],
-    "bkg" : [0, 3, 4, 5, 6, 15, 16, 17, 18, 19, 20],
-    "sm_higgs" : [7, 8, 9, 10]
+process_dict = { ##TODO Update this to match the DF campaign you are using!
+    # Var XChecks  
+    # "data" : [14],
+    # "ttHH" : [11,12,13],
+    # "ggHH" : [1, 2],
+    # "bkg" : [0, 3, 4, 5, 6, 15, 16, 17, 18, 19, 20],
+    # "sm_higgs" : [7, 8, 9, 10]
+
+    #Ian Spike check 
+    # 20 = 2HDM 300
+    # 19 = 2HDM 250
+    "data" : [0],
+    "ttHH" : [19],#[2,3,4],
+    # "ggHH" : [],
+    "bkg" : [8,9,10,11,12,13,14,15,16,17,18],
+    "sm_higgs" : [1,5,6,7,2,3,4],
+
+    #c2=6 training
+    "data" : [0],
+    "ttHH" : [36],
+    # "ggHH" : [],
+    "bkg" : [-99,13,14,15,16,17,18],
+    "sm_higgs" : [1,2,5,6,7,19,20,21,22],
+
 }
 
 
@@ -727,9 +744,9 @@ class Guided_Optimizer():
             #print("[GUIDED OPTIMIZER] Bkg events from fit: %
 
             yields[bin]["bkg"] = bkg_yield
-            # if bkg_yield_raw < 8. or bkg_yield_raw_data < 8.:
-            #     print("[GUIDED OPTIMIZER] Only %.6f expected background events in one bin, disqualifying signal region set." % bkg_yield_raw)
-            #     disqualify_srs = True
+            if bkg_yield_raw < 5. or bkg_yield_raw_data < 5.:
+                print("[GUIDED OPTIMIZER] Only %.6f expected background events in one bin, disqualifying signal region set." % bkg_yield_raw)
+                disqualify_srs = True
 
         datacard = makeCards(self.scanConfig["modelpath"], "CMS-HGG_mva_13TeV_datacard_" + str(idx) + ".txt",
                 { "sm_higgs_unc" : self.sm_higgs_unc },
@@ -757,9 +774,9 @@ class Guided_Optimizer():
         exp_lim, exp_lim_up1sigma, exp_lim_down1sigma, exp_lim_up2sigma, exp_lim_down2sigma = self.scanner.runCombine(combineConfig)
         if "Significance" in self.combineOption:
             exp_lim = 1. / exp_lim # make negative so that we can still minimize the POI
-        # if disqualify_srs:
-        #     exp_lim *= 3 # double the expected limit if the SR combination is disqualified bc too few non-res bkg events
-        #     # the reason we double the exp_lim, is that we still want the expected limit to be a relatively smooth function of the cut values. this way, the optimization bdt can hopefully learn that cut values resulting in very narrow bins have a penalty applied on them
+        if disqualify_srs:
+            exp_lim *= 3 # triple the expected limit if the SR combination is disqualified bc too few non-res bkg events
+            # the reason we triple the exp_lim, is that we still want the expected limit to be a relatively smooth function of the cut values. this way, the optimization bdt can hopefully learn that cut values resulting in very narrow bins have a penalty applied on them
 
         exp_lim_full = {}
         exp_lim_full["combined"] = [exp_lim, exp_lim_up1sigma, exp_lim_down1sigma, exp_lim_up2sigma, exp_lim_down2sigma]

@@ -24,6 +24,8 @@ pip install tables
 pip install matplotlib
 
 # For SR Optimization
+pip install root
+pip install root_numpy
 pip install zfit
 pip install tensorflow
 

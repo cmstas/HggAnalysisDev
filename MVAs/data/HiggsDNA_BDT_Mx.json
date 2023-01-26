@@ -6,6 +6,7 @@
         
     ],
     "background": [
+        
         "DiPhoton",
         "TTGamma",
         "TTGG",
@@ -23,6 +24,7 @@
         "TTJets"
     ],
     "training_features": [
+        "Mx",
         "Diphoton_pt_mgg",
         "Diphoton_eta",
         "Diphoton_phi",
@@ -101,6 +103,7 @@
         "ditau_phi",
         "ditau_mass",
         "ditau_dR"
+
     ],
     "branches": [
         "weight_central",

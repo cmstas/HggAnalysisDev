@@ -6,6 +6,7 @@
         
     ],
     "background": [
+        
         "DiPhoton",
         "TTGamma",
         "TTGG",
@@ -23,10 +24,12 @@
         "TTJets"
     ],
     "training_features": [
+
         "Diphoton_pt_mgg",
         "Diphoton_eta",
         "Diphoton_phi",
         "Diphoton_dR",
+        "Diphoton_helicity",
         "LeadPhoton_pt_mgg",
         "LeadPhoton_eta",
         "LeadPhoton_phi",
@@ -71,6 +74,9 @@
         "jet_6_phi",
         "jet_6_mass",
         "jet_6_btagDeepFlavB",
+        "b_jet_1_btagDeepFlavB", "b_jet_2_btagDeepFlavB", "b_jet_3_btagDeepFlavB", 
+        "b_jet_4_btagDeepFlavB",
+        "Dijet_pt", "Dijet_eta", "Dijet_mass", "Dijet_score",
      
         "lepton_1_pt",
         "lepton_1_eta",
@@ -96,11 +102,18 @@
         "n_electrons",
         "n_muons",
         "n_taus",
+
         "ditau_pt",
         "ditau_eta",
         "ditau_phi",
         "ditau_mass",
-        "ditau_dR"
+        "ditau_dR",
+        "ditau_helicity",
+
+        "Mx","pt_gg_Mggjj", "pt_jj_Mggjj",
+
+        "costhetastar_cs_HHggbb", "costheta_bb", "costheta_gg", "costheta_TauTau", 
+        "costhetastar_cs_HHggTauTau"
     ],
     "branches": [
         "weight_central",

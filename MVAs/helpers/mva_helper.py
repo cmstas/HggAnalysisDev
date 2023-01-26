@@ -2,7 +2,9 @@ import h5py
 import pandas
 import json
 import numpy
+import matplotlib
 import matplotlib.pyplot as plt
+matplotlib.use('Agg')
 
 from . import utils
 from . import bdt_helper
@@ -124,6 +126,17 @@ class MVAHelper():
             plt.savefig(plot_name)
             self.plots.append(plot_name)
             plt.clf()
+
+    def rank_variables(self):
+        feature_important = self.mva.get_score(importance_type='gain')
+        keys = list(feature_important.keys())
+        values = list(feature_important.values())
+
+        data = pandas.DataFrame(data=values, index=keys, columns=["score"]).sort_values(by = "score", ascending=False)
+        plt.figure()
+        data.nlargest(20, columns="score").plot(kind='barh', figsize = (20,10)) 
+        plot_name = "output/gain_20.pdf"
+        plt.savefig(plot_name)
 
     def save_performance(self):
         """

@@ -85,6 +85,8 @@ class ZipHelper():
         return
 
     def save_df(self):
-        self.df.to_pickle(self.output)
+        if ".parquet" in self.output:
+            self.df.to_parquet(self.output)
+        else: self.df.to_pickle(self.output)
         return
 

@@ -6,6 +6,7 @@
         
     ],
     "background": [
+        
         "DiPhoton",
         "TTGamma",
         "TTGG",
@@ -23,6 +24,7 @@
         "TTJets"
     ],
     "training_features": [
+        "pt_gg/m_ggjj",
         "Diphoton_pt_mgg",
         "Diphoton_eta",
         "Diphoton_phi",

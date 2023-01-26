@@ -58,6 +58,9 @@ class BDTHelper():
         return
 
     def predict_from_df(self, df):
+        # for newV in ["Mx","pt_jj/m_ggjj",  "pt_gg/m_ggjj"]:
+        #   if newV in df.columns:
+        #     df = df.astype({newV: 'float64'}, errors='raise') 
         X = xgboost.DMatrix(df[self.config["training_features"]])
         return self.bdt.predict(X)
 

@@ -3,6 +3,7 @@ import pandas
 import json
 import numpy as np
 import random
+import os
 
 from helpers import utils
 
@@ -24,8 +25,16 @@ class PrepHelper():
             print("\n".join(["{0}={1!r}".format(a, b) for a, b in kwargs.items()]))
 
         if "parquet" in self.input:
+          if os.path.isfile(self.input.replace(".parquet", ".json") ):
             with open(self.input.replace(".parquet", ".json"), "r") as f_in:
-                self.input_config = json.load(f_in)
+              self.input_config = json.load(f_in)
+          elif os.path.isfile(self.input.rstrip(self.input.split("/")[-1])+"summary.json"):
+            with open(self.input.rstrip(self.input.split("/")[-1])+"summary.json", "r") as f_in:
+              self.input_config = json.load(f_in)
+          else:
+            print ("[PrepHelper] No json found, couldn't convert process ids")
+            # summaryFile = self.input.rstrip(self.input.split("/")[-1])+"summary.json"
+            # print ("[PrepHelper] You tried to open this {}".format(summaryFile))
         else:
             with open(self.input.replace(".pkl", ".json"), "r") as f_in:
                 self.input_config = json.load(f_in)
@@ -35,7 +44,6 @@ class PrepHelper():
         with open(self.config_file, "r") as f_in:
             self.config = json.load(f_in)
 
-        #self.df = pandas.read_pickle(self.input)
         if "parquet" in self.input:
             self.df = pandas.read_parquet(self.input)
         else:
@@ -129,6 +137,9 @@ class PrepHelper():
 
     def prepare_features(self):
         self.X = self.df[self.config["training_features"]]
+        # for newV in ["Mx","pt_jj/m_ggjj",  "pt_gg/m_ggjj"]:
+        #   if newV in self.X.columns:
+        #     self.X = self.X.astype({newV: 'float64'}, errors='raise') 
         self.y = self.df["label"]
         self.weight = self.df["weight_central"]
 
