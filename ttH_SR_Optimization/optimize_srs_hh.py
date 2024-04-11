@@ -18,6 +18,7 @@ parser.add_argument("--nCores", help = "number of cores to use", type=int, defau
 parser.add_argument("--bins", help = "csv list of number of bins", type=str, default = "1,2,3,4,5")
 parser.add_argument("--metric", help = "optimize upper limit or significance", type=str, default = "limit")
 parser.add_argument("--pt_selection", help = "cut on dipho_pt", type=str, default="")
+parser.add_argument("--mva_score", help = "name of mva score to use for optimization", type=str, default = "mva_score")
 args = parser.parse_args()
 
 mvas = args.mvas.split(",")

@@ -43,6 +43,7 @@ events = ak.from_parquet(args.input)
 events['mass'] = events.Diphoton_mass
 f = events.fields.remove('Diphoton_mass')
 events["weight_central"] = events["weight_central"] * 3
+events['weight_central'] = ak.where(events["process_id"]==0,events["weight_central"]/3,events["weight_central"])
 events = to_tensor(events)
 
 output = "output/" + args.input.split("/")[-1].replace(".parquet", ".npz")

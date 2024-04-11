@@ -1,0 +1,131 @@
+{
+    "signal": [
+        "2HDM_bb_Mdummy",
+        "2HDM_WW_Mdummy",
+        "2HDM_TAUTAU_Mdummy"
+    ],
+    "background": [
+        "ttHH_ggbb",
+        "ttHH_ggWW",
+        "ttHH_ggTauTau",
+        "DiPhoton",
+        "TTGamma",
+        "TTGG",
+        "WGamma",
+        "ZGamma",
+        "ggH_M125",
+        "VBFH_M125",
+        "VH_M125",
+        "ttH_M125",
+        "DataDrivenGJets",
+        "HHggbb",
+        "HHggTauTau",
+        "HHggWW_dileptonic",
+        "HHggWW_semileptonic",
+        "TTJets",
+        "THQ_M125",
+        "THW_M125"
+    ],
+    "training_features": [
+
+        "Diphoton_pt_mgg",
+        "Diphoton_eta",
+        "Diphoton_dR",
+        "Diphoton_helicity",
+
+        "LeadPhoton_pt_mgg",
+        "LeadPhoton_eta",
+        "LeadPhoton_mvaID",
+        "LeadPhoton_pixelSeed",
+
+        "SubleadPhoton_pt_mgg",
+        "SubleadPhoton_eta",
+        "SubleadPhoton_mvaID",
+        "SubleadPhoton_pixelSeed",
+
+        "MET_pt",
+      
+        "jet_1_pt",
+        "jet_1_eta",
+        "jet_1_btagDeepFlavB",
+
+        "jet_2_pt",
+        "jet_2_eta",
+        "jet_2_btagDeepFlavB",
+
+        "jet_3_pt",
+        "jet_3_eta",
+        "jet_3_btagDeepFlavB",
+
+        "jet_4_pt",
+        "jet_4_eta",
+        "jet_4_btagDeepFlavB",
+
+        "jet_5_pt",
+        "jet_5_eta",
+        "jet_5_btagDeepFlavB",
+
+        "jet_6_pt",
+        "jet_6_eta",
+        "jet_6_btagDeepFlavB",
+
+        "b_jet_1_btagDeepFlavB", 
+        "b_jet_2_btagDeepFlavB", 
+        "b_jet_3_btagDeepFlavB", 
+        "b_jet_4_btagDeepFlavB",
+
+        "Dijet_pt",
+        "Dijet_eta",
+        "Dijet_mass",
+        "Dijet_score",
+     
+        "lepton_1_pt",
+        "lepton_1_eta",
+        "lepton_1_charge",
+        "lepton_1_id",
+
+        "lepton_2_pt",
+        "lepton_2_eta",
+        "lepton_2_charge",
+        "lepton_2_id",
+
+        "lepton_3_pt",
+        "lepton_3_eta",
+        "lepton_3_charge",
+        "lepton_3_id",
+  
+        "n_jets",
+        "n_leptons",
+        "n_electrons",
+        "n_muons",
+
+        "Mx",
+        "pt_gg_Mggjj",
+        "pt_jj_Mggjj",
+
+        "costhetastar_cs_HHggbb",
+        "costheta_bb",
+        "costheta_gg"
+    ],
+    "branches": [
+        "weight_central",
+        "process_id",
+        "Diphoton_mass"
+    ],
+    "preprocess": {
+        "scale_signal": true,
+        "scale_tth": false
+    },
+    "mva": {
+        "type": "binary_classification_bdt",
+        "param": {
+            "max_depth": 4,
+            "eta": 0.2,
+            "objective": "binary:logistic",
+            "nthread": 12
+        },
+        "n_trees": 500,
+        "early_stopping": true,
+        "early_stopping_rounds": 5
+    }
+}

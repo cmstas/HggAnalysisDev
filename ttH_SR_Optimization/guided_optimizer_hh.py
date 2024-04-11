@@ -20,74 +20,6 @@ import root_numpy
 from scanClass import scanClass
 from makeModels import makeModel
 from cardMaker import makeCards
-# Process id likely to change for next run, will need to fix
-# ggHH to XX no data
-#process_dict = {
-#    "data" : [1],
-#    "signal" : [7, 8, 9, 10],
-#    "ttH" : [22],
-#    "bkg" : [0, 2, 3, 4, 5, 6, 11, 12, 13, 16, 17, 19, 20, 21],
-#    "sm_higgs" : [14, 15, 18, 22] 
-#}
-# bb UL data
-#process_dict = {
-#    "data" : [1],
-#    "signal" : [7],
-#    "ttH" : [16],
-#    "bkg" : [0, 2, 3, 4, 5, 6, 8, 9, 10, 13, 14],
-#    "sm_higgs" : [11, 12, 15, 16] 
-#}
-# bb data
-#process_dict = {
-#    "data" : [1],
-#    "signal" : [7],
-#    "ttH" : [22],
-#    "bkg" : [0, 2, 3, 4, 5, 6, 8, 9, 10, 11, 12, 13, 16, 17, 19, 20, 21],
-#    "sm_higgs" : [14, 15, 18, 22] 
-#}
-# WW TauTau data
-#process_dict = {
-#    "data" : [1],
-#    "signal" : [8, 9, 10],
-#    "ttH" : [22],
-#    "bkg" : [0, 2, 3, 4, 5, 6, 7, 11, 12, 13, 16, 17, 19, 20, 21],
-#    "sm_higgs" : [14, 15, 18, 22]
-#}
-
-# HH to ggXX no data
-#process_dict = {
-#    "data" : [-1],
-#    "signal" : [6, 7, 8, 9],
-#    "ttH" : [21],
-#    "bkg" : [0, 1, 2, 3, 4, 5, 10, 11, 12, 15, 16, 18, 19, 20],
-#    "sm_higgs" : [13, 14, 17, 21]
-#}
-# HH to ggbb
-#process_dict = {
-#    "data" : [-1],
-#    "signal" : [6],
-#    "ttH" : [21],
-#    "bkg" : [0, 1, 2, 3, 4, 5, 7, 8, 9, 10, 11, 12, 15, 16, 18, 19, 20],
-#    "sm_higgs" : [13, 14, 17, 21]
-#}
-# HH to ggWW + ggTauTau
-#process_dict = {
-#    "data" : [-1],
-#    "signal" : [7, 8, 9],
-#    "ttH" : [21],
-#    "bkg" : [0, 1, 2, 3, 4, 5, 6, 10, 11, 12, 15, 16, 18, 19, 20],
-#    "sm_higgs" : [13, 14, 17, 21]
-#}
-# ttHH
-#process_dict = {
-#    "data" : [14],
-#    "signal" : [11, 12, 13],
-#    "ttH" : [10],
-#    "bkg" : [0, 3, 4, 5, 6, 15, 16, 17, 18, 19, 20],
-#    "sm_higgs" : [1, 2, 21, 22, 7, 8, 9, 10]
-#}
-
-
 
 class NumpyArrayEncoder(JSONEncoder):
     def default(self, obj):
@@ -180,73 +112,29 @@ class Guided_Optimizer():
 
     def optimize(self): 
         self.results = {}
-        # HH->ggbb
-#        self.process_dict = {
-#            'data' : ['Data'],
-#            'signal' : ['HH_ggbb'],
-#            'ttH' : ['ttH_M125'],
-#            'bkg' : ['Diphoton', 'GJets_HT-40To100','GJets_HT-100To200', 'GJets_HT-200To400', 'GJets_HT-400To600', 'GJets_HT-600ToInf', 'TTGG', 'TTGamma', 'TTJets', 'WGamma', 'ZGamma'],
-#            'sm_higgs' : ['VBFH_M125', 'VH_M125', 'ggH_M125', 'ttH_M125']
-#        }
 
-        # ttHH my dfs
+        # ttHH Full
 #        self.process_dict = {
 #            'data' : ['Data'],
 #            'signal' : ['ttHH_ggbb', 'ttHH_ggWW', 'ttHH_ggTauTau'],
 #            'ttH' : ['ttH_M125'],
-#            'bkg' : ['Diphoton',  'GJets_HT-40To100','GJets_HT-100To200', 'GJets_HT-200To400', 'GJets_HT-400To600', 'GJets_HT-600ToInf', 'TTGG', 'TTGamma', 'TTJets', 'WGamma', 'ZGamma'],
-#            'sm_higgs' : ['VBFH_M125', 'VH_M125', 'ggH_M125', 'HH_ggbb', 'HHggTauTau', 'HH_ggWW_di_lep', 'HH_ggWW_semi_lep', 'ttH_M125']
+#            'bkg' : ['DiPhoton', 'DataDrivenGJets', 'TTGG', 'TTGamma', 'TTJets', 'WGamma', 'ZGamma'],
+#            'sm_higgs' : ['VBFH_M125', 'VH_M125', 'ggH_M125', 'ttH_M125', 'HHggbb', 'HHggTauTau', 'HHggWW_dileptonic', 'HHggWW_semileptonic','THQ_M125','THW_M125']
 #        }
-
-        # ttHH Flash_gg sync
+#        self.process_dict = {
+#            'data' : ['Data'],
+#            'signal' : ['2HDM_bb_Mdummy', '2HDM_WW_Mdummy', '2HDM_TAUTAU_Mdummy'],
+#            'ttH' : ['ttH_M125'],
+#            'bkg' : ['DiPhoton', 'DataDrivenGJets', 'TTGG', 'TTGamma', 'TTJets', 'WGamma', 'ZGamma'],
+#            'sm_higgs' : ['VBFH_M125', 'VH_M125', 'ggH_M125', 'ttH_M125', 'HHggbb', 'HHggTauTau', 'HHggWW_dileptonic', 'HHggWW_semileptonic', 'ttHH_ggbb', 'ttHH_ggWW', 'ttHH_ggTauTau']
+#        }
         self.process_dict = {
             'data' : ['Data'],
-            'signal' : ['ttHH_ggbb', 'ttHH_ggWW', 'ttHH_ggTauTau'],
+            'signal' : ['Tprime_BB_Mdummy', 'Tprime_WW_Mdummy', 'Tprime_TAUTAU_Mdummy'],
             'ttH' : ['ttH_M125'],
-            'bkg' : ['DiPhoton',  'GJets_HT-40To100','GJets_HT-100To200', 'GJets_HT-200To400', 'GJets_HT-400To600', 'GJets_HT-600ToInf', 'TTGG', 'TTGamma', 'TTJets', 'WGamma', 'ZGamma'],
-            'sm_higgs' : ['VBFH_M125', 'VH_M125', 'ggH_M125', 'ttH_M125']
+            'bkg' : ['DiPhoton', 'DataDrivenGJets', 'TTGG', 'TTGamma', 'TTJets', 'WGamma', 'ZGamma'],
+            'sm_higgs' : ['VBFH_M125', 'VH_M125', 'ggH_M125', 'ttH_M125', 'HHggbb', 'HHggTauTau', 'HHggWW_dileptonic', 'HHggWW_semileptonic', 'ttHH_ggbb', 'ttHH_ggWW', 'ttHH_ggTauTau','THQ_M125','THW_M125']
         }
-#        self.process_dict = {
-#            'data' : ['Data'],
-#            'signal' : ['ttHH_ggbb', 'ttHH_ggWW', 'ttHH_ggTauTau'],
-#            'ttH' : ['ttH_M125'],
-#            'bkg' : ['DiPhoton',  'GJets/QCD(Data)', 'TTGG', 'TTGamma', 'TTJets', 'WGamma', 'ZGamma'],
-#            'sm_higgs' : ['VBFH_M125', 'VH_M125', 'ggH_M125', 'ttH_M125']
-#        }
-
-#        self.process_dict = {
-#            'data' : ['Data'],
-#            'signal' : ['2HDM_M250'],
-#            'ttH' : ['ttH_M125'],
-#            'bkg' : ['DiPhoton',  'GJets_HT-40To100','GJets_HT-100To200', 'GJets_HT-200To400', 'GJets_HT-400To600', 'GJets_HT-600ToInf', 'TTGG', 'TTGamma', 'TTJets', 'WGamma', 'ZGamma'],
-#            'sm_higgs' : ['VBFH_M125', 'VH_M125', 'ggH_M125', 'ttH_M125', 'ttHH_ggbb', 'ttHH_ggWW', 'ttHH_ggTauTau']
-#        }
-#        self.process_dict = {
-#            'data' : ['Data'],
-#            'signal' : ['2HDM_M300'],
-#            'ttH' : ['ttH_M125'],
-#            'bkg' : ['DiPhoton',  'GJets_HT-40To100','GJets_HT-100To200', 'GJets_HT-200To400', 'GJets_HT-400To600', 'GJets_HT-600ToInf', 'TTGG', 'TTGamma', 'TTJets', 'WGamma', 'ZGamma'],
-#            'sm_higgs' : ['VBFH_M125', 'VH_M125', 'ggH_M125', 'ttH_M125', 'ttHH_ggbb', 'ttHH_ggWW', 'ttHH_ggTauTau']
-#        }
-#        self.process_dict = {
-#            'data' : ['Data'],
-#            'signal' : ['2HDM_M350'],
-#            'ttH' : ['ttH_M125'],
-#            'bkg' : ['DiPhoton',  'GJets_HT-40To100','GJets_HT-100To200', 'GJets_HT-200To400', 'GJets_HT-400To600', 'GJets_HT-600ToInf', 'TTGG', 'TTGamma', 'TTJets', 'WGamma', 'ZGamma'],
-#            'sm_higgs' : ['VBFH_M125', 'VH_M125', 'ggH_M125', 'ttH_M125', 'ttHH_ggbb', 'ttHH_ggWW', 'ttHH_ggTauTau']
-#        }
-#        self.process_dict = {
-#            'data' : ['Data'],
-#            'signal' : ['Tprime_M1000'],
-#            'ttH' : ['ttH_M125'],
-#            'bkg' : ['DiPhoton',  'GJets_HT-40To100','GJets_HT-100To200', 'GJets_HT-200To400', 'GJets_HT-400To600', 'GJets_HT-600ToInf', 'TTGG', 'TTGamma', 'TTJets', 'WGamma', 'ZGamma'],
-#            'sm_higgs' : ['VBFH_M125', 'VH_M125', 'ggH_M125', 'ttH_M125', 'ttHH_ggbb', 'ttHH_ggWW', 'ttHH_ggTauTau']
-#        }
-
-
-
-
-
 
         self.proc_id_mapper()
         for dim, mvas in self.mvas.items():
@@ -810,9 +698,6 @@ class Guided_Optimizer():
                 selection += " || "
         return selection
 
-    #def data_selection(self):
-    #    return "(mass > 100 && mass < 180 && 
-
     def base_selection(self):
         if self.pt_selection == "":
             return "(mass > 100 && mass < 180 && train_label == 2) "
@@ -863,6 +748,7 @@ class Guided_Optimizer():
             model.getTree(self.scanner.getTree())
             bkg_yield, bkg_yield_full, bkg_yield_raw = model.makeBackgroundModel("wbkg_13TeV", self.channel + "_" + str(i) + "_" + str(idx))
 
+            # Delete this line if Data > 0
             bkgModelConfig["selection"] = self.base_selection() + "&&" + self.process_selection("data") + " && " + selection[i]
             bkgModelConfig["savename"] = "dummy"
             model2 = makeModel(bkgModelConfig)
@@ -872,6 +758,8 @@ class Guided_Optimizer():
             #print("[GUIDED OPTIMIZER] Bkg events from fit: %
 
             yields[bin]["bkg"] = bkg_yield
+            yields[bin]["data"] = bkg_yield_data
+            yields[bin]["data_raw"] = bkg_yield_raw_data
             if bkg_yield_raw < 5. or bkg_yield_raw_data < 5.:
                 print("[GUIDED OPTIMIZER] Only %.6f expected background events in one bin, disqualifying signal region set." % bkg_yield_raw)
                 disqualify_srs = True

@@ -72,14 +72,15 @@ class scanClass():
 
     def quantiles_to_mva_score(self, n_quantiles, mvaName, selection = ""):
         # for given selection, return mva_scores corresponding to each quantile in n_quantiles
-
+        print(n_quantiles)
         # get a numpy array from tree
         print("[SCANCLASS] Calculating quantile -> mva score function for %s with %d quantiles" % (mvaName, n_quantiles))
         print("[SCANCLASS]", self.selection + selection)
         print("[SCANCLASS]", [mvaName])
         mva_scores = (root_numpy.tree2array(self.getTree(), branches = [mvaName], selection = self.selection + selection))
-
+        print(mva_scores)
         sorted_mva = numpy.flip(numpy.sort(mva_scores), 0)
+        print(sorted_mva)
         quantiles = []
         mva = []
         for i in range(n_quantiles):
